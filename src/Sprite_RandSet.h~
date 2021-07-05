@@ -1,0 +1,34 @@
+#ifndef SPRITE_RANDSET
+#define SPRITE_RANDSET
+
+#include "Map_Objects.h"
+
+struct Elems_Indexes
+{
+    const int m_x;
+    const int m_y;
+    char m_elem;
+
+Elems_Indexes(const int x, const int y, char elem) : m_x(x), m_y(y), m_elem(elem) {}
+};
+
+class Sprite_RandSet
+{
+
+    const int m_width;
+    const int m_height;
+    char** Sprite_SetArray;
+
+public:
+    Sprite_RandSet(const int width, const int height);
+
+    ~Sprite_RandSet();
+    
+    void setRandSprite(Sprite_Indexes& spr_ind, const int arr_range);
+
+    const int getWidth() const;
+    const int getHeight() const;
+    char** getSprite_SetArray() const;
+};
+
+#endif
