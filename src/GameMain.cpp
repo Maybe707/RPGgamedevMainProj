@@ -23,6 +23,211 @@
 #include "Stack_Engine.h"
 #include "ElementsForRandSprites.h"
 
+#define wall_size1 10
+#define wall_size2 4
+#define rand_sprite_size 7
+
+void set_offset_for_pipe(int& rand_id, int& offset1, int& offset2, int& rand_wall,
+                         int& l_height, int& l_width)
+{
+    switch(rand_id)
+    {
+    case 1:
+        offset1 = 1;
+        offset2 = rand_wall - 2;
+        break;
+    case 2:
+        offset1 = rand_wall - 2;
+        offset2 = 1;
+        break;
+    case 3:
+        offset1 = l_height;
+        offset2 = rand_wall - 2;
+        break;
+    case 4:
+        offset1 = rand_wall - 2;
+        offset2 = l_width;
+        break;
+    }
+}
+
+int getRandomNumber2(int min, int max)
+{
+    static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0); 
+    // Равномерно распределяем рандомное число в нашем диапазоне
+    return static_cast<int>(rand() * fraction * (max - min + 1) + min);
+}
+
+char** gen_Random_Level(const int l_height, const int l_width)
+{
+    
+    char** arr_ptr = new char*[l_height];
+
+    for(int r = 0; r < l_height; ++r)
+        arr_ptr[r] = new char[l_width];
+
+    for(int r2 = 0; r2 < l_height; ++r2)
+        for(int c2 = 0; c2 < l_width; ++c2)
+        {
+            if(r2 == 0 || r2 == (l_height - 1) || c2 == 0 || c2 == (l_width - 1))
+                arr_ptr[r2][c2] = '0';
+            else
+                arr_ptr[r2][c2] = ' ';
+        }
+    
+    return arr_ptr;
+}
+
+void create_hole_inwall_next_level(char** arr_ptr, int rand_wall, int rand_id_next_level,
+                                   int level_height, int level_width)
+{
+    switch(rand_id_next_level)
+    {
+    case 1:
+        arr_ptr[0][rand_wall-1] = ' ';
+        arr_ptr[0][rand_wall] = ' ';
+        break;
+    case 2:
+        arr_ptr[rand_wall-1][0] = ' ';
+        arr_ptr[rand_wall][0] = ' ';
+        break;
+    case 3:
+        arr_ptr[0][rand_wall-1] = ' ';
+        arr_ptr[0][rand_wall] = ' ';
+        break;
+    case 4:
+        arr_ptr[rand_wall-1][0] = ' ';
+        arr_ptr[rand_wall][0] = ' ';
+        break;
+    }
+}
+
+const int create_Hole_InWall(char** arr_ptr, const int l_height, const int l_width,
+    int rand_id)
+{
+    int rand_wall = 0;
+
+    switch(rand_id)
+    {
+    case 1:
+        rand_wall = getRandomNumber2(1, l_width-3);
+        arr_ptr[0][rand_wall] = ' ';
+        ++rand_wall;
+        arr_ptr[0][rand_wall] = ' ';
+        break;
+    case 2:
+        rand_wall = getRandomNumber2(1, l_height-3);
+        arr_ptr[rand_wall][0] = ' ';
+        ++rand_wall;
+        arr_ptr[rand_wall][0] = ' ';
+        break;
+    case 3:
+        rand_wall = getRandomNumber2(1, l_width-3);
+        arr_ptr[l_height-1][rand_wall] = ' ';
+        ++rand_wall;
+        arr_ptr[l_height-1][rand_wall] = ' ';
+        break;
+    case 4:
+        rand_wall = getRandomNumber2(1, l_height-3);
+        arr_ptr[rand_wall][l_width-1] = ' ';
+        ++rand_wall;
+        arr_ptr[rand_wall][l_width-1] = ' ';
+        break;
+    }
+
+    return rand_wall;
+}
+
+int level_in_rand_id(int rand_id)
+{
+    switch(rand_id)
+    {
+    case 4:
+        return rand_id = 2;
+        break;
+    case 2:
+        return rand_id = 4;
+        break;
+    case 3:
+        return rand_id = 1;
+        break;
+    case 1:
+        return rand_id = 3;
+        break;
+    }
+}
+
+void next_level_offset(int* offset1, int* offset2, int rand_id)
+{
+    switch(rand_id)
+    {
+    case 4:
+        *offset2 += 10;
+        *offset1 = 0;
+        break;
+    case 2:
+        *offset2 += 10;
+        *offset1 = 0;
+        break;
+    case 1:
+        *offset1 += 10;
+        *offset2 = 0;
+        break;
+    case 3:
+        *offset1 += 10;
+        *offset2 = 0;
+        break;
+    }
+}
+
+char** create_Pipe(const int rand_id, const int size_1 = 4, const int size_2 = 10)
+{
+    char** arr_ptr = nullptr;
+    
+    if(rand_id == 1 || rand_id == 3)
+    {
+        arr_ptr = new char*[size_2];
+
+        for(int r = 0; r < size_2; ++r)
+            arr_ptr[r] = new char[size_1];
+
+        for(int r2 = 0; r2 < size_2; ++r2)
+            for(int c2 = 0; c2 < size_1; ++c2)
+            {
+                if(c2 == 0 || c2 == (size_1 - 1))
+                    arr_ptr[r2][c2] = '0';
+                else
+                    arr_ptr[r2][c2] = ' ';
+            }
+    }
+    if(rand_id == 2 || rand_id == 4)
+    {
+        arr_ptr = new char*[size_1];
+
+        for(int l = 0; l < size_1; ++l)
+            arr_ptr[l] = new char[size_2];
+
+        for(int n2 = 0; n2 < size_1; ++n2)
+            for(int m2 = 0; m2 < size_2; ++m2)
+            {
+                if(n2 == 0 || n2 == (size_1 - 1))
+                    arr_ptr[n2][m2] = '0';
+                else
+                    arr_ptr[n2][m2] = ' ';
+            }
+    }
+
+    return arr_ptr;
+}
+
+void summon_Destructor3000(char** arr_obj, const int height, const int width)
+{
+    for(int count = 0; count < height; ++count)
+		delete [] arr_obj[count];
+	delete [] arr_obj;
+    arr_obj = nullptr;
+}
+        
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void Input_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -161,27 +366,61 @@ int main()
     ourShader.setInt("texture2", 1);
 
     srand(static_cast<unsigned int>(time(0)));
+
+    int l_height = getRandomNumber2(4, 7) * 7 + 2;
+    int l_width = getRandomNumber2(4, 7) * 7 + 2;
+    int l_height2 = getRandomNumber2(4, 7) * 7 + 2;
+    int l_width2 = getRandomNumber2(4, 7) * 7 + 2;
     
     Camera_2D Camera_View(0.0f, 0.0f, 0.0f, SCR_WIDTH, SCR_HEIGHT, 0.0f, 100.0f);
-    WorldMap Tile_Map(SCR_WIDTH, SCR_HEIGHT, map_height, map_width);
-    WorldMap Tile_Map2(SCR_WIDTH, SCR_HEIGHT, map_height2, map_width2);
-        
-    Tile_Map.Initializing(Map_Array);
-    Tile_Map2.Initializing(Map_Array2);
+    WorldMap Tile_Map(SCR_WIDTH, SCR_HEIGHT, l_height, l_width); 
+    WorldMap Tile_Map2(SCR_WIDTH, SCR_HEIGHT, l_height2, l_width2);
 
-    Sprite_RandSet RandSprite(7, 7);
+    char** level_array1 = gen_Random_Level(l_height, l_width);
+    int rand_id = getRandomNumber2(1, 4);
+    int rand_wall = create_Hole_InWall(level_array1, l_height, l_width, rand_id);
+    WorldMap* Pipe = nullptr;
+    if(rand_id == 1 || rand_id == 3)
+    {
+        Pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, wall_size1, wall_size2);
+    }
+    if(rand_id == 2 || rand_id == 4)
+    {
+        Pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, wall_size2, wall_size1);
+    }
+    char** pipe_ptr = create_Pipe(rand_id);
+    Pipe->Initializing(pipe_ptr);
+
+    int offset1 = 0;
+    int offset2 = 0;
+
+    set_offset_for_pipe(rand_id, offset1, offset2, rand_wall, l_height, l_width);
+    
+    int offset1_1 = offset1;
+    int offset2_2 = offset2;
+
+    int rand_id_2 = level_in_rand_id(rand_id);
+    next_level_offset(&offset1_1, &offset2_2, rand_id_2);
+    
+    Tile_Map.Initializing(level_array1);
+
+    char** level_array2 = gen_Random_Level(l_height2, l_width2);
+    create_hole_inwall_next_level(level_array2, rand_wall, rand_id_2, l_height2, l_width2);
+    Tile_Map2.Initializing(level_array2);
+
+    Sprite_RandSet RandSprite(rand_sprite_size, rand_sprite_size);
 //    RandSprite.setRandSprite(Array_Sprites_Set, 1);
     Tile_Map.set_RandomSprites(Array_Sprites_Set, RandSprite);
+    Tile_Map2.set_RandomSprites(Array_Sprites_Set, RandSprite);
         
-    Player_Implementation Player_Hero(450.0f, -150.0f, 1.0f);
+    Player_Implementation Player_Hero(450.0f, -150.0f, 2.0f);  // 450.0f, -150.0f
     Input_Notifier.Attach(&Player_Hero);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   	Camera_View.Set_View(ourShader);
 
-	Camera_View.Set_View(ourShader);
-
-	const int anim_index_array = 3;
+   	const int anim_index_array = 3;
 	int anim_count = 0;
 	float* Vertex_Animation[4][anim_index_array] = {
 		{vertices, vertices2, vertices3},
@@ -191,12 +430,15 @@ int main()
 	};
 	float Delta_Time = 0;
 	float Animation_Delta = 0;
-	const int Map_Objects_Row = 23;
-	const int Map_Objects_Col = 31;
+    const int Map_Objects_Row = l_height;
+	const int Map_Objects_Col = l_width;
 
-	const int Map_Objects_Row2 = 15;
-	const int Map_Objects_Col2 = 24;
-   
+//	const int Map_Objects_Row = map_height;
+//	const int Map_Objects_Col = map_width;
+
+	const int Map_Objects_Row2 = l_height2;
+	const int Map_Objects_Col2 = l_width2;
+    
 	Map_Objects** Map_Objects_Pointer = new Map_Objects*[Map_Objects_Row];
 	for(int counter = 0; counter < Map_Objects_Row; ++counter)
 		Map_Objects_Pointer[counter] = new Map_Objects[Map_Objects_Col];
@@ -221,11 +463,14 @@ int main()
 		Delta_Time = Chrono.get_Delta();
         Process_Input(window, Player_Hero, Delta_Time);
 
-		Tile_Map.Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1);
+		Tile_Map.Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1, 0, 0, 3, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, Tile_Map, SCR_WIDTH, SCR_HEIGHT, window);
 
-        //Tile_Map2.Render(Map_Objects_Pointer2, ourShader, VAO_Walls, texture1);
-		//Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, SCR_WIDTH, SCR_HEIGHT, window);
+        Pipe->Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1, offset1, offset2, rand_id, 0);
+		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, SCR_WIDTH, SCR_HEIGHT, window);
+
+        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, VAO_Walls, texture1, offset1_1, offset2_2, 0, rand_id_2);
+		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, SCR_WIDTH, SCR_HEIGHT, window);
 
 		Camera_View.Set_Position(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
 		Camera_View.Set_View(ourShader);
@@ -348,6 +593,10 @@ int main()
 	for(int counter3 = 0; counter3 < Map_Objects_Row2; ++counter3)
 		delete [] Map_Objects_Pointer2[counter3];
 	delete [] Map_Objects_Pointer2;
+
+    summon_Destructor3000(level_array1, 23, 37);
+//    summon_Destructor3000(level_array2, 16, 24);
+    
     return 0;
 }
 
@@ -372,3 +621,5 @@ void Input_Callback(GLFWwindow* window, int key, int scancode, int action, int m
 		Input_Notifier.Notifier(stack.getElement(), action);
 	}
 }
+
+  

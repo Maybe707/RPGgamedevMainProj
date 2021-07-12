@@ -20,9 +20,9 @@ class WorldMap
 			 const int map_h, const int map_w);
 
 	~WorldMap();
-
-	void Initializing(const char** array);
-
+    
+	void Initializing(char** array);
+    
     void set_RandomSprites(const char*** Sprite_Set, Sprite_RandSet& sprite_obj);
     
 	char getMapKey(const int i, const int j);
@@ -30,7 +30,7 @@ class WorldMap
 	const int getMapHeight();
 	const int getMapWidth();
 
-	void Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, unsigned int texture1);
+	void Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, unsigned int texture1, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level);
 
 	void MapDraw(const int SCR_WIDTH, const int SCR_HEIGHT, float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1);
 };
