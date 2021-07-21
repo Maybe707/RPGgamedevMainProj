@@ -24,6 +24,8 @@
 #define wall_size2 4
 #define rand_sprite_size 7
 
+// Никто не забыт, ничто не забыто
+
 void set_offset_for_pipe(int& rand_id, int& offset1, int& offset2, int& rand_wall,
                          int& l_height, int& l_width)
 {
