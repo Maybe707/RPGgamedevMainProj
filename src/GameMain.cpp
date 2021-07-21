@@ -263,7 +263,7 @@ int main()
     }
 
     // Компилирование нашей шейдерной программы
-    Shader ourShader("../src/shader.vs", "../src/shader.fs");
+    Shader ourShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
     
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
