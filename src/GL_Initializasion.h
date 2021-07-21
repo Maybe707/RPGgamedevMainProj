@@ -54,7 +54,7 @@ void Texture_Creator(unsigned int& texture1, unsigned int& texture2, int& width,
     // Загрузка изображения, создание текстуры и генерирование мипмап-уровней
 
 	stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load("../textures/enemy.png", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("../res/textures/enemy.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -76,7 +76,7 @@ void Texture_Creator(unsigned int& texture1, unsigned int& texture2, int& width,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	data = stbi_load("../textures/hero.png", &width, &height, &nrChannels, 0);
+	data = stbi_load("../res/textures/hero.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
