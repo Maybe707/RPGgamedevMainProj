@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <bits/types/stack_t.h>
+#include "window/Window.h"
 #include "shader.h"
 #include <stb_image.h>
 #include <iostream>
@@ -225,8 +225,8 @@ void summon_Destructor3000(char** arr_obj, const int height, const int width)
     arr_obj = nullptr;
 }
         
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-void Input_Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void inputCallback(Window* window, int key, int scancode, int action, int mods);
+void resizeCallback(Window* window, int width, int height);
 
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 1280;
@@ -238,22 +238,12 @@ int main()
 {
     // fglfw: инициализация и конфигурирование
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    // glfw: создание окна
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "RPG", NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-	//glfwSwapInterval(1); - Turn on vertical synchronization.
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetKeyCallback(window, Input_Callback);
+    // Создание окна
+    Window window(800, 800, "TRUE RPG");
+    window.makeContextCurrent();
+    window.setInputCallback(inputCallback);
+	window.setResizeCallback(resizeCallback);
     
     // glad: загрузка всех указателей на OpenGL-функции
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -450,7 +440,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
-    while (!glfwWindowShouldClose(window))
+    while (window.isOpen())
     {
         // Рендеринг
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -458,16 +448,16 @@ int main()
         
 		Chrono.set_New_Frame_Time();
 		Delta_Time = Chrono.get_Delta();
-        Process_Input(window, Player_Hero, Delta_Time);
+        Process_Input(window.getGLFWwindow(), Player_Hero, Delta_Time);
 
 		Tile_Map.Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1, 0, 0, 3, 0);
-		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, Tile_Map, SCR_WIDTH, SCR_HEIGHT, window);
+		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, Tile_Map, window.getGLFWwindow());
 
         Pipe->Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1, offset1, offset2, rand_id, 0);
-		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, SCR_WIDTH, SCR_HEIGHT, window);
+		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, window.getGLFWwindow());
 
         Tile_Map2.Render(Map_Objects_Pointer2, ourShader, VAO_Walls, texture1, offset1_1, offset2_2, 0, rand_id_2);
-		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, SCR_WIDTH, SCR_HEIGHT, window);
+		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, window.getGLFWwindow());
 
 		Camera_View.Set_Position(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
 		Camera_View.Set_View(ourShader);
@@ -476,7 +466,7 @@ int main()
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-		if(Player_Hero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		if(Player_Hero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
 		{
 			Animation_Delta += Delta_Time;
 			if(Animation_Delta > 30.0f)
@@ -499,7 +489,7 @@ int main()
 				Animation_Delta = 0;
 			}
 		}
-		else if(Player_Hero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		else if(Player_Hero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
 		{
 			Animation_Delta += Delta_Time;
 			if(Animation_Delta > 30.0f)
@@ -522,7 +512,7 @@ int main()
 				Animation_Delta = 0;
 			}
 		}
-		else if(Player_Hero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		else if(Player_Hero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
 		{
 			Animation_Delta += Delta_Time;
 			if(Animation_Delta > 30.0f)
@@ -545,7 +535,7 @@ int main()
 				Animation_Delta = 0;
 			}
 		} 
-		else if(Player_Hero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		else if(Player_Hero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
 		{
 			Animation_Delta += Delta_Time;
 			if(Animation_Delta > 30.0f)
@@ -572,7 +562,7 @@ int main()
 		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, VAO, texture2);
 
         // glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
-        glfwSwapBuffers(window);
+        window.swapBuffers();
         glfwPollEvents();
     }
 
@@ -597,15 +587,7 @@ int main()
     return 0;
 }
 
-// glfw: всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // Убеждаемся, что окно просмотра соответствует новым размерам окна.
-    // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
-    glViewport(0, 0, width, height);
-}
-
-void Input_Callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void inputCallback(Window* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
@@ -619,4 +601,12 @@ void Input_Callback(GLFWwindow* window, int key, int scancode, int action, int m
 	}
 }
 
-  
+// всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
+void resizeCallback(Window* window, int width, int height)
+{
+    // Убеждаемся, что окно просмотра соответствует новым размерам окна.
+    // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
+    glViewport(0, 0, width, height);
+}
+
+

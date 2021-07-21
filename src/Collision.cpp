@@ -59,7 +59,7 @@ bool Collision::Detection_Box(Player_Implementation& player, Map_Objects& map_ob
 	return state_x;
 }
 
-void Collision::Detection(Map_Objects** Map_Objects_Pointer, Player_Implementation& Player_Hero, float& Delta_Time, WorldMap& Tile_Map, float SCR_WIDTH, float SCR_HEIGHT, GLFWwindow* window)
+void Collision::Detection(Map_Objects** Map_Objects_Pointer, Player_Implementation& Player_Hero, float& Delta_Time, WorldMap& Tile_Map, GLFWwindow* window)
 {
 	for(int i = 0; i < Tile_Map.getMapHeight(); ++i)
 		for(int j = 0; j < Tile_Map.getMapWidth(); ++j)

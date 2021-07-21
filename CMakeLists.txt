@@ -7,7 +7,8 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 file(GLOB SOURCES src/*.cpp)
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
+file(GLOB WINDOW_SOURCES src/window/*.cpp)
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES} ${WINDOW_SOURCES})
 target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 add_subdirectory(libs/glad)
