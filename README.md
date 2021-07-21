@@ -9,7 +9,7 @@
 git clone --recurse-submodules https://github.com/rpgdeveloper707/RPGgamedevMainProj
 ```
 
-###TODO
+### TODO
 - [ ] Отрефакторить код.
 - [ ] Исправить вылет при запуске.
 - [ ] Заменить кастомную математику на glm.
