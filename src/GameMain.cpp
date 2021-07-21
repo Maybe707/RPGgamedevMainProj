@@ -1,9 +1,6 @@
-#include "glad.h"
-#include "glfw3.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <bits/types/stack_t.h>
-#include <cmath>
-#include <cstddef>
-#include "VertexMath.h"
 #include "shader.h"
 #include <stb_image.h>
 #include <iostream>

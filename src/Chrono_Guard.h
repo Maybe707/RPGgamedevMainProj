@@ -1,4 +1,4 @@
-#include "glfw3.h"
+#include <GLFW/glfw3.h>
 class Chrono_Guard
 {
 	float m_Prev_Frame_Time;

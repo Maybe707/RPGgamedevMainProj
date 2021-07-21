@@ -1,6 +1,5 @@
 #include "Key_Input_Notifier.h"
 #include "Player_Implementation.h"
-#include <list>
 
 void Key_Input_Notifier::Attach(Player_Implementation *player_hero)
 {

@@ -1,5 +1,4 @@
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "Map.h"
 #include "VertexMath.h"
 #include <iostream>
