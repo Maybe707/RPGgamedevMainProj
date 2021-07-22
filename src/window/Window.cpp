@@ -1,11 +1,12 @@
 #include "Window.h"
 
 #include <iostream>
+#include <cassert>
 
 Window::Window(int width, int height, const std::string &title)
 {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
@@ -20,7 +21,7 @@ Window::Window(int width, int height, const std::string &title)
     }
 
     glfwMakeContextCurrent(m_window);
-    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+    assert(gladLoadGL(glfwGetProcAddress));
     //glfwSwapInterval(1); - Turn on vertical synchronization.
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, glfwKeyCallback);
