@@ -15,9 +15,9 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 add_subdirectory(libs/glad)
 add_subdirectory(libs/glfw)
 find_package(OpenGL REQUIRED)
-
 add_subdirectory(libs/stb_image)
+add_subdirectory(libs/glm)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})

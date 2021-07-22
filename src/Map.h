@@ -2,7 +2,6 @@
 #define MAP_H
 
 #include <string>
-#include "VertexMath.h"
 #include "graphics/Shader.h"
 #include "Map_Objects.h"
 #include "Sprite_RandSet.h"
@@ -32,7 +31,7 @@ class WorldMap
 
 	void Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, unsigned int texture1, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level);
 
-	void MapDraw(const int SCR_WIDTH, const int SCR_HEIGHT, float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1);
+	void MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1);
 };
 
 #endif

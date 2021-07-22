@@ -2,7 +2,6 @@
 #define PLAYER_IMPLEMENTATION
 
 #include "Unit_Interface.h"
-#include "VertexMath.h"
 
 class Player_Implementation : public Unit_Interface
 {

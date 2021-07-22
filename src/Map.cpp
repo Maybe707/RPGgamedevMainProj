@@ -1,7 +1,8 @@
 #include <glad/glad.h>
 #include "Map.h"
-#include "VertexMath.h"
 #include <iostream>
+
+#include <glm/gtc/matrix_transform.hpp>
 
 WorldMap::WorldMap(const unsigned int scr_width, const unsigned int scr_height, const int map_h, const int map_w) : m_scr_width(scr_width), m_scr_height(scr_height), map_height(map_h), map_width(map_w)
 {
@@ -90,18 +91,17 @@ void WorldMap::Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsi
 				Map_Objects_Pointer[i][j].set_Symbol('0');
 				Map_Objects_Pointer[i][j].setI(i);
 				Map_Objects_Pointer[i][j].setJ(j);
-				MapDraw(m_scr_width, m_scr_height, tempCol, tempRow, ourShader, VAO, texture1);
+				MapDraw(tempCol, tempRow, ourShader, VAO, texture1);
 			}
 		}
 }
 
-void WorldMap::MapDraw(const int SCR_WIDTH, const int SCR_HEIGHT, float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1)
+void WorldMap::MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1)
 {
-	Matrix<float, 4> trans(64.0f);
-
-	trans = Translate(trans, Vector<float, 4> (coordX, coordY, 0.0f, 1.0f));
-
-	ourShader.setUniform("model", true, &trans[0][0]);
+    glm::mat4 transformMat = glm::mat4(1.f);
+    transformMat = glm::translate(transformMat, glm::vec3(coordX, coordY, 0.f));
+    transformMat = glm::scale(transformMat, glm::vec3(64.f));
+    ourShader.setUniform("model", transformMat);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);
