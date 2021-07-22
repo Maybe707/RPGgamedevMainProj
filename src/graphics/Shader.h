@@ -8,7 +8,8 @@
 #include <sstream>
 #include <iostream>
 
-class Shader {
+class Shader
+{
 private:
     unsigned int m_id;
 public:
