@@ -1,6 +1,7 @@
 #include "Shader.h"
 
-Shader::Shader(const char *vertexPath, const char *fragmentPath) {
+Shader::Shader(const char *vertexPath, const char *fragmentPath)
+{
     // 1. Получение исходного кода вершинного/фрагментного шейдера из переменной filePath
     std::string vertexCode;
     std::string fragmentCode;
@@ -10,7 +11,8 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
     // Убеждаемся, что объекты ifstream могут выбросить исключение:
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try {
+    try
+    {
         // Открываем файлы
         vShaderFile.open(vertexPath);
         fShaderFile.open(fragmentPath);
@@ -28,7 +30,8 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
     }
-    catch (std::ifstream::failure &e) {
+    catch (std::ifstream::failure &e)
+    {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
     }
     const char *vShaderCode = vertexCode.c_str();
@@ -61,41 +64,52 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
     glDeleteShader(fragment);
 }
 
-void Shader::use() const {
+void Shader::use() const
+{
     glUseProgram(m_id);
 }
 
-void Shader::setUniform(const std::string &name, bool value) const {
+void Shader::setUniform(const std::string &name, bool value) const
+{
     glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
-void Shader::setUniform(const std::string &name, int value) const {
+void Shader::setUniform(const std::string &name, int value) const
+{
     glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
-void Shader::setUniform(const std::string &name, float value) const {
+void Shader::setUniform(const std::string &name, float value) const
+{
     glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
 // TODO: По какой-то причине в коде используются транспонированные и нетранспонированные матрицы одновременно,
 //  поэтому добавил тут параметр transpose. По хорошему нужно остановиться на каком-то одном варианте.
-void Shader::setUniform(const std::string &name, bool transpose, float *mat) const {
+void Shader::setUniform(const std::string &name, bool transpose, float *mat) const
+{
     glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, transpose ? GL_TRUE : GL_FALSE, mat);
 }
 
-void Shader::checkCompileErrors(unsigned int shader, const std::string &type) {
+void Shader::checkCompileErrors(unsigned int shader, const std::string &type)
+{
     int success;
     char infoLog[1024];
-    if (type != "PROGRAM") {
+    if (type != "PROGRAM")
+    {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-        if (!success) {
+        if (!success)
+        {
             glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
             std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog
                       << "\n -- --------------------------------------------------- -- " << std::endl;
         }
-    } else {
+    }
+    else
+    {
         glGetProgramiv(shader, GL_LINK_STATUS, &success);
-        if (!success) {
+        if (!success)
+        {
             glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
             std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog
                       << "\n -- --------------------------------------------------- -- " << std::endl;

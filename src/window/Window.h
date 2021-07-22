@@ -10,7 +10,8 @@ class Window;
 using InputCallback = void (*)(Window *, int, int, int, int);
 using ResizeCallback = void (*)(Window *, int, int);
 
-class Window {
+class Window
+{
 private:
     GLFWwindow *m_window;
     InputCallback m_inputCallback;
@@ -18,8 +19,11 @@ private:
 public:
     Window(int width, int height, const std::string &title);
 
+    ~Window();
+
     // TODO: в идеале нужно избавиться от этого метода
-    inline GLFWwindow *getGLFWwindow() {
+    inline GLFWwindow *getGLFWwindow()
+    {
         return m_window;
     }
 
