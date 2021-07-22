@@ -84,11 +84,9 @@ void Shader::setUniform(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
-// TODO: По какой-то причине в коде используются транспонированные и нетранспонированные матрицы одновременно,
-//  поэтому добавил тут параметр transpose. По хорошему нужно остановиться на каком-то одном варианте.
-void Shader::setUniform(const std::string &name, bool transpose, float *mat) const
+void Shader::setUniform(const std::string &name, const glm::mat4& mat) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, transpose ? GL_TRUE : GL_FALSE, mat);
+    glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 void Shader::checkCompileErrors(unsigned int shader, const std::string &type)

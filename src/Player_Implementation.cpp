@@ -1,5 +1,7 @@
 #include "Player_Implementation.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 Player_Implementation::Player_Implementation(float xAxis, float yAxis, float speed) : m_xAxis(xAxis), m_yAxis(yAxis), m_Speed(speed) {}
 
 void Player_Implementation::set_xAxis(float xAxis) { m_xAxis = xAxis; }
@@ -12,11 +14,10 @@ float Player_Implementation::get_yRange() { return m_yRange; }
 
 void Player_Implementation::Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, unsigned int texture2)
 {
-	Matrix<float, 4> trans(64.0f);
-
-	trans = Translate(trans, Vector<float, 4> (m_xAxis, m_yAxis, 0.0f, 1.0f));
-
-	ourShader.setUniform("model", true, &trans[0][0]);
+    glm::mat4 transformMat = glm::mat4(1.f);
+    transformMat = glm::translate(transformMat, glm::vec3(m_xAxis, m_yAxis, 0.f));
+    transformMat = glm::scale(transformMat, glm::vec3(64.f));
+    ourShader.setUniform("model", transformMat);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture2);

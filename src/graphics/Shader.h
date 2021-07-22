@@ -2,6 +2,7 @@
 #define RPG_SHADER_H
 
 #include <glad/gl.h>
+#include <glm/glm.hpp>
 
 #include <string>
 #include <fstream>
@@ -25,7 +26,7 @@ public:
 
     void setUniform(const std::string &name, float value) const;
 
-    void setUniform(const std::string &name, bool transpose, float *mat) const;
+    void setUniform(const std::string &name, const glm::mat4& mat) const;
 
 private:
     // Полезные функции для проверки ошибок компиляции/связывания шейдеров

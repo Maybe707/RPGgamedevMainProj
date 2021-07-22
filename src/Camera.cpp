@@ -1,4 +1,8 @@
 #include "Camera.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 Camera_2D::Camera_2D(float xAxis, float yAxis, float zAxis,
 					 float width, float height, float zn, float zf) :
 	m_width(width), m_height(height), m_zn(zn), m_zf(zf)
@@ -46,18 +50,10 @@ void Camera_2D::Set_Position(float xAxis, float yAxis, float zAxis, float distan
 
 void Camera_2D::Set_View(Shader ourShader)
 {
-	float Matrix_Ortho[16] = {};
-	Matrix_Ortho[0]  = 2/m_width;
-	//Matrix_Ortho[3]  -= 1;
-	//Matrix_Ortho[7]  -= 1;
-	Matrix_Ortho[5]  = 2/m_height;
-	Matrix_Ortho[10] = 1/(m_zf-m_zn);
-	Matrix_Ortho[15] = 1.0f;
-	//Matrix_Ortho[14] = -m_zn/(m_zf-m_zn);
+    glm::mat4 projMat = glm::ortho(-m_width / 2, m_width / 2, -m_height / 2, m_height / 2, 0.0f, 100.0f);
+	ourShader.setUniform("projection", projMat);
 
-	ourShader.setUniform("projection", false, &Matrix_Ortho[0]);
-
-	float Matrix_View[16] =
+	float viewArray[16] =
 		{Matrix_Transform[0], Matrix_Transform[4], Matrix_Transform[8],  0.0f,
 		 Matrix_Transform[1], Matrix_Transform[5], Matrix_Transform[9],  0.0f,
 		 Matrix_Transform[2], Matrix_Transform[6], Matrix_Transform[10], 0.0f,
@@ -73,6 +69,6 @@ void Camera_2D::Set_View(Shader ourShader)
 		 (Matrix_Transform[8]*Matrix_Transform[12] +
 		  Matrix_Transform[9]*Matrix_Transform[13] +
 		  Matrix_Transform[10]*Matrix_Transform[14]), 1.0f};
-
-	ourShader.setUniform("view", false, &Matrix_View[0]);
+    glm::mat4 viewMat = glm::make_mat4(viewArray);
+	ourShader.setUniform("view", viewMat);
 }
