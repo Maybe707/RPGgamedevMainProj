@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "shader.h"
+#include "graphics/Shader.h"
 class Camera_2D
 {
 	float m_width;

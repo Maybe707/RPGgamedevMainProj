@@ -55,8 +55,7 @@ void Camera_2D::Set_View(Shader ourShader)
 	Matrix_Ortho[15] = 1.0f;
 	//Matrix_Ortho[14] = -m_zn/(m_zf-m_zn);
 
-	unsigned int cameraLoc = glGetUniformLocation(ourShader.ID, "projection");
-	glUniformMatrix4fv(cameraLoc, 1, GL_FALSE, &Matrix_Ortho[0]);
+	ourShader.setUniform("projection", false, &Matrix_Ortho[0]);
 
 	float Matrix_View[16] =
 		{Matrix_Transform[0], Matrix_Transform[4], Matrix_Transform[8],  0.0f,
@@ -75,6 +74,5 @@ void Camera_2D::Set_View(Shader ourShader)
 		  Matrix_Transform[9]*Matrix_Transform[13] +
 		  Matrix_Transform[10]*Matrix_Transform[14]), 1.0f};
 
-	unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &Matrix_View[0]);
+	ourShader.setUniform("view", false, &Matrix_View[0]);
 }

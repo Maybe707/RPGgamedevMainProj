@@ -1,7 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "window/Window.h"
-#include "shader.h"
+#include "graphics/Shader.h"
 #include <stb_image.h>
 #include <iostream>
 #include <vector>
@@ -230,8 +230,8 @@ void summon_Destructor3000(char** arr_obj, const int height, const int width)
 void inputCallback(Window* window, int key, int scancode, int action, int mods);
 void resizeCallback(Window* window, int width, int height);
 
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 1280;
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 800;
 
 Key_Input_Notifier Input_Notifier;
 Stack_Engine stack(4);
@@ -242,14 +242,13 @@ int main()
     glfwInit();
     
     // Создание окна
-    Window window(800, 800, "TRUE RPG");
+    Window window(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
     window.setInputCallback(inputCallback);
 	window.setResizeCallback(resizeCallback);
     
     // glad: загрузка всех указателей на OpenGL-функции
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
@@ -349,10 +348,8 @@ int main()
     // Указываем OpenGL какой сэмплер к какому текстурному блоку принадлежит (это нужно сделать единожды)
     ourShader.use(); // не забудьте активировать шейдер перед настройкой uniform-переменных!
 
-	// Устанавливаем вручную…
-    glUniform1i(glGetUniformLocation(ourShader.ID, "tex"), 0);
-    // …или с помощью шейдерного класса
-    ourShader.setInt("texture2", 1);
+    ourShader.setUniform("tex", 0);
+    ourShader.setUniform("texture2", 1);
 
     srand(static_cast<unsigned int>(time(0)));
 

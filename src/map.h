@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "VertexMath.h"
-#include "shader.h"
+#include "graphics/Shader.h"
 #include "Map_Objects.h"
 
 class WorldMap

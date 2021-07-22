@@ -16,8 +16,7 @@ void Player_Implementation::Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Sha
 
 	trans = Translate(trans, Vector<float, 4> (m_xAxis, m_yAxis, 0.0f, 1.0f));
 
-	unsigned int transformtLoc = glGetUniformLocation(ourShader.ID, "model");
-	glUniformMatrix4fv(transformtLoc, 1, GL_TRUE, &trans[0][0]);
+	ourShader.setUniform("model", true, &trans[0][0]);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture2);

@@ -3,7 +3,7 @@
 
 #include <string>
 #include "VertexMath.h"
-#include "shader.h"
+#include "graphics/Shader.h"
 #include "Map_Objects.h"
 #include "Sprite_RandSet.h"
 

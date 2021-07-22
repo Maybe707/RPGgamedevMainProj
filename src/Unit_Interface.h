@@ -1,7 +1,7 @@
 #ifndef UNIT_INTERFACE_H
 #define UNIT_INTERFACE_H
 
-#include "shader.h"
+#include "graphics/Shader.h"
 
 class Unit_Interface
 {

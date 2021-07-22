@@ -101,8 +101,7 @@ void WorldMap::MapDraw(const int SCR_WIDTH, const int SCR_HEIGHT, float coordX, 
 
 	trans = Translate(trans, Vector<float, 4> (coordX, coordY, 0.0f, 1.0f));
 
-	unsigned int transformtLoc = glGetUniformLocation(ourShader.ID, "model");
-	glUniformMatrix4fv(transformtLoc, 1, GL_TRUE, &trans[0][0]);
+	ourShader.setUniform("model", true, &trans[0][0]);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);

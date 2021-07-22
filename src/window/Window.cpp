@@ -2,17 +2,16 @@
 
 #include <iostream>
 
-Window::Window(int width, int height, const std::string& title) {
+Window::Window(int width, int height, const std::string &title) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-    m_inputCallback = [](Window*, int, int, int, int){};
-    m_resizeCallback = [](Window*, int, int){};
+    m_inputCallback = [](Window *, int, int, int, int) {};
+    m_resizeCallback = [](Window *, int, int) {};
 
-    if (m_window == nullptr)
-    {
+    if (m_window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return;
@@ -68,4 +67,14 @@ void Window::onKey(int key, int scancode, int actions, int mods) {
 
 void Window::onResize(int width, int height) {
     m_resizeCallback(this, width, height);
+}
+
+void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int actions, int mods) {
+    auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    win->onKey(key, scancode, actions, mods);
+}
+
+void Window::glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height) {
+    auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    win->onResize(width, height);
 }
