@@ -1,7 +1,7 @@
 #ifndef RPG_SHADER_H
 #define RPG_SHADER_H
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <string>
 #include <fstream>

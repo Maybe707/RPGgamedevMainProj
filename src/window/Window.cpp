@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include <iostream>
+#include <cassert>
 
 Window::Window(int width, int height, const std::string &title)
 {
@@ -20,7 +21,7 @@ Window::Window(int width, int height, const std::string &title)
     }
 
     glfwMakeContextCurrent(m_window);
-    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+    assert(gladLoadGL(glfwGetProcAddress));
     //glfwSwapInterval(1); - Turn on vertical synchronization.
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, glfwKeyCallback);

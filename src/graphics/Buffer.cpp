@@ -1,5 +1,5 @@
 #include "Buffer.h"
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 Buffer::Buffer(unsigned int target) : m_target(target)
 {

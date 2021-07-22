@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include "window/Window.h"
 #include "graphics/Shader.h"
@@ -245,12 +245,6 @@ int main()
     window.makeContextCurrent();
     window.setInputCallback(inputCallback);
 	window.setResizeCallback(resizeCallback);
-    
-    // glad: загрузка всех указателей на OpenGL-функции
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
 
     // Компилирование нашей шейдерной программы
     Shader ourShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
