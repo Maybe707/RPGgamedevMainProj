@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include "window/Window.h"
 #include "graphics/Shader.h"
+#include "graphics/Buffer.h"
 #include <stb_image.h>
 #include <iostream>
 #include <vector>
@@ -26,7 +27,7 @@
 
 // Никто не забыт, ничто не забыто
 
-void set_offset_for_pipe(int& rand_id, int& offset1, int& offset2, int& rand_wall,
+void setOffsetForPipe(int& rand_id, int& offset1, int& offset2, int& rand_wall,
                          int& l_height, int& l_width)
 {
     switch(rand_id)
@@ -57,7 +58,7 @@ int getRandomNumber2(int min, int max)
     return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
 
-char** gen_Random_Level(const int l_height, const int l_width)
+char** genRandomLevel(const int l_height, const int l_width)
 {
     
     char** arr_ptr = new char*[l_height];
@@ -77,7 +78,7 @@ char** gen_Random_Level(const int l_height, const int l_width)
     return arr_ptr;
 }
 
-void create_hole_inwall_next_level(char** arr_ptr, int rand_wall, int rand_id_next_level,
+void createHoleInWallNextLevel(char** arr_ptr, int rand_wall, int rand_id_next_level,
                                    int level_height, int level_width)
 {
     switch(rand_id_next_level)
@@ -101,7 +102,7 @@ void create_hole_inwall_next_level(char** arr_ptr, int rand_wall, int rand_id_ne
     }
 }
 
-const int create_Hole_InWall(char** arr_ptr, const int l_height, const int l_width,
+const int createHoleInWall(char** arr_ptr, const int l_height, const int l_width,
     int rand_id)
 {
     int rand_wall = 0;
@@ -137,26 +138,24 @@ const int create_Hole_InWall(char** arr_ptr, const int l_height, const int l_wid
     return rand_wall;
 }
 
-int level_in_rand_id(int rand_id)
+int levelInRandId(int rand_id)
 {
     switch(rand_id)
     {
     case 4:
-        return rand_id = 2;
-        break;
+        return 2;
     case 2:
-        return rand_id = 4;
-        break;
+        return 4;
     case 3:
-        return rand_id = 1;
-        break;
+        return 1;
     case 1:
-        return rand_id = 3;
-        break;
+        return 3;
     }
+
+    return 0;
 }
 
-void next_level_offset(int* offset1, int* offset2, int rand_id)
+void nextLevelOffset(int* offset1, int* offset2, int rand_id)
 {
     switch(rand_id)
     {
@@ -179,7 +178,7 @@ void next_level_offset(int* offset1, int* offset2, int rand_id)
     }
 }
 
-char** create_Pipe(const int rand_id, const int size_1 = 4, const int size_2 = 10)
+char** createPipe(const int rand_id, const int size_1 = 4, const int size_2 = 10)
 {
     char** arr_ptr = nullptr;
     
@@ -219,7 +218,7 @@ char** create_Pipe(const int rand_id, const int size_1 = 4, const int size_2 = 1
     return arr_ptr;
 }
 
-void summon_Destructor3000(char** arr_obj, const int height, const int width)
+void summonDestructor3000(char** arr_obj, const int height, const int width)
 {
     for(int count = 0; count < height; ++count)
 		delete [] arr_obj[count];
@@ -256,14 +255,14 @@ int main()
     // Компилирование нашей шейдерной программы
     Shader ourShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
     
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    unsigned int vao;
+    glGenVertexArrays(1, &vao);
+    Buffer vbo(GL_ARRAY_BUFFER);
     
-    glBindVertexArray(VAO);
+    glBindVertexArray(vao);
     
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    vbo.bind();
+    vbo.setBufferData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
     // Координатные атрибуты
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -273,16 +272,17 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	unsigned int VBO_Walls, VAO_Walls;
-	glGenVertexArrays(1, &VAO_Walls);
-    glGenBuffers(1, &VBO_Walls);
+	vbo.unbind();
 
-    glBindVertexArray(VAO_Walls);
+	unsigned int vaoWalls;
+	glGenVertexArrays(1, &vaoWalls);
+    Buffer vboWalls(GL_ARRAY_BUFFER);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_Walls);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindVertexArray(vaoWalls);
+
+    vboWalls.bind();
+    vboWalls.setBufferData(vertices, sizeof(vertices), GL_STATIC_DRAW);
     
     // Координатные атрибуты
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -362,9 +362,9 @@ int main()
     WorldMap Tile_Map(SCR_WIDTH, SCR_HEIGHT, l_height, l_width); 
     WorldMap Tile_Map2(SCR_WIDTH, SCR_HEIGHT, l_height2, l_width2);
 
-    char** level_array1 = gen_Random_Level(l_height, l_width);
+    char** level_array1 = genRandomLevel(l_height, l_width);
     int rand_id = getRandomNumber2(1, 4);
-    int rand_wall = create_Hole_InWall(level_array1, l_height, l_width, rand_id);
+    int rand_wall = createHoleInWall(level_array1, l_height, l_width, rand_id);
     WorldMap* Pipe = nullptr;
     if(rand_id == 1 || rand_id == 3)
     {
@@ -374,24 +374,24 @@ int main()
     {
         Pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, wall_size2, wall_size1);
     }
-    char** pipe_ptr = create_Pipe(rand_id);
+    char** pipe_ptr = createPipe(rand_id);
     Pipe->Initializing(pipe_ptr);
 
     int offset1 = 0;
     int offset2 = 0;
 
-    set_offset_for_pipe(rand_id, offset1, offset2, rand_wall, l_height, l_width);
+    setOffsetForPipe(rand_id, offset1, offset2, rand_wall, l_height, l_width);
     
     int offset1_1 = offset1;
     int offset2_2 = offset2;
 
-    int rand_id_2 = level_in_rand_id(rand_id);
-    next_level_offset(&offset1_1, &offset2_2, rand_id_2);
+    int rand_id_2 = levelInRandId(rand_id);
+    nextLevelOffset(&offset1_1, &offset2_2, rand_id_2);
     
     Tile_Map.Initializing(level_array1);
 
-    char** level_array2 = gen_Random_Level(l_height2, l_width2);
-    create_hole_inwall_next_level(level_array2, rand_wall, rand_id_2, l_height2, l_width2);
+    char** level_array2 = genRandomLevel(l_height2, l_width2);
+    createHoleInWallNextLevel(level_array2, rand_wall, rand_id_2, l_height2, l_width2);
     Tile_Map2.Initializing(level_array2);
 
     Sprite_RandSet RandSprite(rand_sprite_size, rand_sprite_size);
@@ -449,13 +449,13 @@ int main()
 		Delta_Time = Chrono.get_Delta();
         Process_Input(window.getGLFWwindow(), Player_Hero, Delta_Time);
 
-		Tile_Map.Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1, 0, 0, 3, 0);
+		Tile_Map.Render(Map_Objects_Pointer, ourShader, vaoWalls, texture1, 0, 0, 3, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, Tile_Map, window.getGLFWwindow());
 
-        Pipe->Render(Map_Objects_Pointer, ourShader, VAO_Walls, texture1, offset1, offset2, rand_id, 0);
+        Pipe->Render(Map_Objects_Pointer, ourShader, vaoWalls, texture1, offset1, offset2, rand_id, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, window.getGLFWwindow());
 
-        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, VAO_Walls, texture1, offset1_1, offset2_2, 0, rand_id_2);
+        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, vaoWalls, texture1, offset1_1, offset2_2, 0, rand_id_2);
 		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, window.getGLFWwindow());
 
 		Camera_View.Set_Position(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
@@ -463,7 +463,7 @@ int main()
 
 		// Биндим объект вершинного буфера чтобы получить возможность загрузить новые данные, так как до этого мы анбиндили все объекты данного типа.
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		vbo.bind();
 
 		if(Player_Hero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
 		{
@@ -475,13 +475,13 @@ int main()
 					default:
 						anim_count = 0;
 					case 0:
-						glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[0][anim_count], GL_STATIC_DRAW);
+                        vbo.setBufferData(Vertex_Animation[0][anim_count], sizeof(vertices), GL_STATIC_DRAW);
 						break;
 					case 1:
-						glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[0][anim_count], GL_STATIC_DRAW);
+						vbo.setBufferData(Vertex_Animation[0][anim_count], sizeof(vertices), GL_STATIC_DRAW);
 						break;
 					case 2:
-						glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[0][anim_count], GL_STATIC_DRAW);
+						vbo.setBufferData(Vertex_Animation[0][anim_count], sizeof(vertices), GL_STATIC_DRAW);
 						break;
 				}
 				++anim_count;
@@ -558,7 +558,7 @@ int main()
 			}
 		}
 
-		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, VAO, texture2);
+		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, vao, texture2);
 
         // glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         window.swapBuffers();
@@ -566,8 +566,11 @@ int main()
     }
 
     // Опционально: освобождаем все ресурсы, как только они выполнили свое предназначение
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    vbo.destroy();
+    glDeleteVertexArrays(1, &vao);
+
+    vboWalls.destroy();
+    glDeleteVertexArrays(1, &vaoWalls);
 
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();
@@ -580,7 +583,7 @@ int main()
 		delete [] Map_Objects_Pointer2[counter3];
 	delete [] Map_Objects_Pointer2;
 
-    summon_Destructor3000(level_array1, 23, 37);
+    summonDestructor3000(level_array1, 23, 37);
 //    summon_Destructor3000(level_array2, 16, 24);
     
     return 0;
