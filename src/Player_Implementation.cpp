@@ -2,56 +2,86 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Player_Implementation::Player_Implementation(float xAxis, float yAxis, float speed) : m_xAxis(xAxis), m_yAxis(yAxis), m_Speed(speed) {}
+PlayerImpl::PlayerImpl(float xAxis, float yAxis, float speed) :
+    m_xAxis(xAxis),
+    m_yAxis(yAxis),
+    m_Speed(speed)
+{ }
 
-void Player_Implementation::set_xAxis(float xAxis) { m_xAxis = xAxis; }
-void Player_Implementation::set_yAxis(float yAxis) { m_yAxis = yAxis; }
+void PlayerImpl::setXAxis(float xAxis)
+{
+    m_xAxis = xAxis;
+}
 
-float Player_Implementation::get_xAxis() { return m_xAxis; }
-float Player_Implementation::get_yAxis() { return m_yAxis; }
-float Player_Implementation::get_xRange() { return m_xRange; }
-float Player_Implementation::get_yRange() { return m_yRange; }
+void PlayerImpl::setYAxis(float yAxis)
+{
+    m_yAxis = yAxis;
+}
 
-void Player_Implementation::Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, Texture texture)
+float PlayerImpl::getXAxis()
+{
+    return m_xAxis;
+}
+
+float PlayerImpl::getYAxis()
+{
+    return m_yAxis;
+}
+
+float PlayerImpl::getXRange()
+{
+    return m_xRange;
+}
+
+float PlayerImpl::getYRange()
+{
+    return m_yRange;
+}
+
+void PlayerImpl::draw(const int screenWidth, const int screenHeight,
+                      Shader shader, unsigned int vaoId, Texture texture)
 {
     glm::mat4 transformMat = glm::mat4(1.f);
+
     transformMat = glm::translate(transformMat, glm::vec3(m_xAxis, m_yAxis, 0.f));
     transformMat = glm::scale(transformMat, glm::vec3(64.f));
-    ourShader.setUniform("model", transformMat);
+
+    shader.use();
+    shader.setUniform("model", transformMat);
 
     texture.bind();
-    ourShader.use();
-    glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindVertexArray(vaoId);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Player_Implementation::Receiver(int key, int action)
+void PlayerImpl::receiver(int key, int action)
 {
-	m_key_axis = key;
-	m_action = action;
+    m_keyAxis = key;
+    m_action = action;
 }
 
-int& Player_Implementation::getKeyAxis()
+int& PlayerImpl::getKeyAxis()
 {
-	return m_key_axis;
+    return m_keyAxis;
 }
 
-void Player_Implementation::setKeyAxis(int key)
+void PlayerImpl::setKeyAxis(int key)
 {
-	m_key_axis = key;
+    m_keyAxis = key;
 }
 
-int& Player_Implementation::getAction()
+int& PlayerImpl::getAction()
 {
-	return m_action;
+    return m_action;
 }
 
-void Player_Implementation::set_Speed(const float &speed)
+void PlayerImpl::set_Speed(const float &speed)
 {
-	m_Speed = speed;
+    m_Speed = speed;
 }
 
-float& Player_Implementation::get_Speed()
+float& PlayerImpl::getSpeed()
 {
-	return m_Speed;
+    return m_Speed;
 }

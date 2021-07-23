@@ -39,7 +39,6 @@ unsigned int Buffer::getId() const
     return m_id;
 }
 
-
 unsigned int Buffer::getTarget() const
 {
     return m_target;

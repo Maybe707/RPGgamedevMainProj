@@ -40,8 +40,8 @@ private:
     static unsigned int compileShader(const std::string& path, unsigned int type);
 
     static void checkCompileErrors(unsigned int glHandelr, unsigned int status, 
-                                    void (*GLget)(unsigned int, unsigned int, int*),
-                                    void (*GLinfoLog)(unsigned int, int, int*, char*));
+                                   void (*GLget)(unsigned int, unsigned int, int*),
+                                   void (*GLinfoLog)(unsigned int, int, int*, char*));
 };
 
 #endif //RPG_SHADER_H

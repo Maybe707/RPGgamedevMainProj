@@ -9,30 +9,33 @@
 
 class WorldMap
 {
-	const int map_height;
-	const int map_width;
-	const unsigned int m_scr_width;
-	const unsigned int m_scr_height;
-    char** tile_Map;
-    
-    public:
-	WorldMap(const unsigned int scr_width, const unsigned int scr_height,
-			 const int map_h, const int map_w);
+    const int m_mapHeight;
+    const int m_mapWidth;
+    const unsigned int m_screenWidth;
+    const unsigned int m_screenHeight;
+    char** m_tilemap;
+public:
+    WorldMap(const unsigned int screenWidth, const unsigned int screenHeight,
+             const int mapHeight, const int mapWidth);
 
-	~WorldMap();
+    virtual ~WorldMap();
     
-	void Initializing(char** array);
+    void initialize(char** array);
     
-    void set_RandomSprites(const char*** Sprite_Set, Sprite_RandSet& sprite_obj);
+    void setRandomSprites(const char*** spriteSet, SpriteRandSet& spriteObj);
     
-	char getMapKey(const int i, const int j);
+    char getMapKey(const int i, const int j);
+
     int getRandomNumber(int min, int max);
-	const int getMapHeight();
-	const int getMapWidth();
 
-	void Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, Texture texture, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level);
+    const int getMapHeight();
+    const int getMapWidth();
 
-	void MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, Texture texture);
+    void render(MapObjects** mapObjects, Shader& shader, unsigned int vaoId,
+                Texture texture, const int rowOffset, const int columnOffset,
+                int randId, int randIdNextLevel);
+
+    void drawMap(float coordX, float coordY, Shader shader, unsigned int vaoId, Texture texture);
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef MAP_OBJECTS
 #define MAP_OBJECTS
 
-class Map_Objects
+class MapObjects
 {
 	char m_Symbol;
 	float m_xAxis;
@@ -11,20 +11,20 @@ class Map_Objects
 	int m_j;
     
 public:
-    Map_Objects();
-    Map_Objects(char symbol, float xAxis, float yAxis, float size);
+    MapObjects();
+    MapObjects(char symbol, float xAxis, float yAxis, float size);
 
-	char get_Symbol();
-	float get_xAxis();
-	float get_yAxis();
-	float get_Size();
+	char getSymbol();
+	float getXAxis();
+	float getYAxis();
+	float getSize();
 	int getI();
 	int getJ();
 
-	void set_Symbol(char symbol);
-	void set_xAxis(float xAxis);
-	void set_yAxis(float yAxis);
-	void set_Size(float size);
+	void setSymbol(char symbol);
+	void setXAxis(float xAxis);
+	void setYAxis(float yAxis);
+	void setSize(float size);
 	void setI(int i);
 	void setJ(int j);
 };

@@ -1,37 +1,49 @@
 #include "Sprite_RandSet.h"
 
-Sprite_RandSet::Sprite_RandSet(const int width, const int height) : m_width(width), m_height(height)
+SpriteRandSet::SpriteRandSet(const int width, const int height) :
+    m_width(width),
+    m_height(height)
 {
-    Sprite_SetArray = new char*[m_height];
-    for(int i = 0; i < m_width; ++i)
-        Sprite_SetArray[i] = new char[m_width];
+    m_spriteSetArray = new char *[m_height];
+
+    for (int i = 0; i < m_width; ++i)
+    {
+        m_spriteSetArray[i] = new char[m_width];
+    }
 }
 
-Sprite_RandSet::~Sprite_RandSet()
+SpriteRandSet::~SpriteRandSet()
 {
-    for(int i = 0; i < m_height; ++i)
-        delete [] Sprite_SetArray[i];
-    delete [] Sprite_SetArray;    
+    for (int i = 0; i < m_height; ++i)
+    {
+        delete[] m_spriteSetArray[i];
+    }
+
+    delete[] m_spriteSetArray;    
 }
 
-void Sprite_RandSet::setRandSprite(const char*** Sprite_Set, const int rand_index)
+void SpriteRandSet::setRandSprite(const char*** spriteSet, const int randIndex)
 {
     for(int y = 0; y < m_height; ++y)
+    {
         for(int x = 0; x < m_width; ++x)
-            Sprite_SetArray[y][x] = Sprite_Set[rand_index][y][x];
+        {
+            m_spriteSetArray[y][x] = spriteSet[randIndex][y][x];
+        }
+    }
 }
 
-const int Sprite_RandSet::getWidth() const
+const int SpriteRandSet::getWidth() const
 {
     return m_width;
 }
 
-const int Sprite_RandSet::getHeight() const
+const int SpriteRandSet::getHeight() const
 {
     return m_height;
 }
 
-char** Sprite_RandSet::getSprite_SetArray() const
+char** SpriteRandSet::getSpriteSetArray() const
 {
-    return Sprite_SetArray;
+    return m_spriteSetArray;
 }
