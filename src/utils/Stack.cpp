@@ -1,22 +1,22 @@
-#include "Stack_Engine.h"
+#include "Stack.h"
 
-Stack_Engine::Stack_Engine(const int range, int stack_end) : m_range(range)
+Stack::Stack(const int range, int stack_end) : m_range(range)
 {
 	m_stack = new int[m_range];
 }
 
-Stack_Engine::~Stack_Engine()
+Stack::~Stack()
 {
 	delete [] m_stack;
 }
 
-void Stack_Engine::Push(int element)
+void Stack::push(int element)
 {
 	m_stack[m_stackEnd] = element;
 	++m_stackEnd;
 }
 
-int Stack_Engine::Pop()
+int Stack::pop()
 {
 	int temp;
 	temp = m_stack[m_stackEnd-1];
@@ -25,12 +25,12 @@ int Stack_Engine::Pop()
 	return temp;
 }
 
-int Stack_Engine::getElement()
+int Stack::getElement()
 {
 	return m_stack[m_stackEnd-1];
 }
 
-int Stack_Engine::PopSearch(int key)
+int Stack::popSearch(int key)
 {
 	int temp = 0;
 	int temp_array[m_stackEnd];

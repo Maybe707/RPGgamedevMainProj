@@ -10,14 +10,14 @@
 #include <ctime>
 #include "Map.h"
 #include "Player_Implementation.h"
-#include "Camera.h"
+#include "Camera2D.h"
 #include "Collision.h"
 #include "Input.h"
 #include "Data.h"
 #include "Chrono_Guard.h"
 #include "Map_Source.h"
 #include "Key_Input_Notifier.h"
-#include "Stack_Engine.h"
+#include "utils/Stack.h"
 #include "ElementsForRandSprites.h"
 #include "graphics/Texture.h"
 
@@ -233,7 +233,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
 Key_Input_Notifier Input_Notifier;
-Stack_Engine stack(4);
+Stack stack(4);
 
 int main()
 {
@@ -304,7 +304,7 @@ int main()
     int l_height2 = getRandomNumber2(4, 7) * 7 + 2;
     int l_width2 = getRandomNumber2(4, 7) * 7 + 2;
     
-    Camera_2D Camera_View(0.0f, 0.0f, 0.0f, SCR_WIDTH, SCR_HEIGHT, 0.0f, 100.0f);
+    Camera2D Camera_View(0.0f, 0.0f, 0.0f, SCR_WIDTH, SCR_HEIGHT, 0.0f, 100.0f);
     WorldMap Tile_Map(SCR_WIDTH, SCR_HEIGHT, l_height, l_width); 
     WorldMap Tile_Map2(SCR_WIDTH, SCR_HEIGHT, l_height2, l_width2);
 
@@ -350,7 +350,7 @@ int main()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   	Camera_View.Set_View(ourShader);
+   	Camera_View.setView(ourShader);
 
    	const int anim_index_array = 3;
 	int anim_count = 0;
@@ -404,8 +404,8 @@ int main()
         Tile_Map2.Render(Map_Objects_Pointer2, ourShader, vaoWalls.getId(), wallTexture, offset1_1, offset2_2, 0, rand_id_2);
 		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, window.getGLFWwindow());
 
-		Camera_View.Set_Position(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
-		Camera_View.Set_View(ourShader);
+		Camera_View.setPosition(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
+		Camera_View.setView(ourShader);
 
 		// Биндим объект вершинного буфера чтобы получить возможность загрузить новые данные, так как до этого мы анбиндили все объекты данного типа.
 
@@ -542,12 +542,12 @@ void inputCallback(Window* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
-		stack.Push(key);
+		stack.push(key);
 		Input_Notifier.Notifier(stack.getElement(), action);
 	}
 	if (action == GLFW_RELEASE)
 	{
-		stack.PopSearch(key);
+		stack.popSearch(key);
 		Input_Notifier.Notifier(stack.getElement(), action);
 	}
 }
