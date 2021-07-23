@@ -24,6 +24,7 @@ void VertexArray::unbind()
 void VertexArray::destroy()
 {
     glDeleteVertexArrays(1, &m_id);
+    m_id = 0;
 }
 
 unsigned int VertexArray::getId() const

@@ -24,6 +24,7 @@ void Buffer::unbind() const
 void Buffer::destroy()
 {
     glDeleteBuffers(1, &m_id);
+    m_id = 0;
 }
 
 template<typename T>
