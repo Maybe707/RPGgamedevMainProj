@@ -61,18 +61,18 @@ int getRandomNumber2(int min, int max)
     return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
 
-char **genRandomLevel(const int l_height, const int l_width)
+char **genRandomLevel(const int lHeight, const int lWidth)
 {
 
-    char **arr_ptr = new char *[l_height];
+    char **arr_ptr = new char *[lHeight];
 
-    for (int r = 0; r < l_height; ++r)
-        arr_ptr[r] = new char[l_width];
+    for (int r = 0; r < lHeight; ++r)
+        arr_ptr[r] = new char[lWidth];
 
-    for (int r2 = 0; r2 < l_height; ++r2)
-        for (int c2 = 0; c2 < l_width; ++c2)
+    for (int r2 = 0; r2 < lHeight; ++r2)
+        for (int c2 = 0; c2 < lWidth; ++c2)
         {
-            if (r2 == 0 || r2 == (l_height - 1) || c2 == 0 || c2 == (l_width - 1))
+            if (r2 == 0 || r2 == (lHeight - 1) || c2 == 0 || c2 == (lWidth - 1))
                 arr_ptr[r2][c2] = '0';
             else
                 arr_ptr[r2][c2] = ' ';
@@ -81,69 +81,69 @@ char **genRandomLevel(const int l_height, const int l_width)
     return arr_ptr;
 }
 
-void createHoleInWallNextLevel(char **arr_ptr, int rand_wall, int rand_id_next_level,
-                               int level_height, int level_width)
+void createHoleInWallNextLevel(char **arrPtr, int randWall, int randIdNextLevel,
+                               int levelHeight, int levelWidth)
 {
-    switch (rand_id_next_level)
+    switch (randIdNextLevel)
     {
         case 1:
-            arr_ptr[0][rand_wall - 1] = ' ';
-            arr_ptr[0][rand_wall] = ' ';
+            arrPtr[0][randWall - 1] = ' ';
+            arrPtr[0][randWall] = ' ';
             break;
         case 2:
-            arr_ptr[rand_wall - 1][0] = ' ';
-            arr_ptr[rand_wall][0] = ' ';
+            arrPtr[randWall - 1][0] = ' ';
+            arrPtr[randWall][0] = ' ';
             break;
         case 3:
-            arr_ptr[0][rand_wall - 1] = ' ';
-            arr_ptr[0][rand_wall] = ' ';
+            arrPtr[0][randWall - 1] = ' ';
+            arrPtr[0][randWall] = ' ';
             break;
         case 4:
-            arr_ptr[rand_wall - 1][0] = ' ';
-            arr_ptr[rand_wall][0] = ' ';
+            arrPtr[randWall - 1][0] = ' ';
+            arrPtr[randWall][0] = ' ';
             break;
     }
 }
 
-const int createHoleInWall(char **arr_ptr, const int l_height, const int l_width,
-                           int rand_id)
+const int createHoleInWall(char **arrPtr, const int lHeight, const int lWidth,
+                           int randId)
 {
     int rand_wall = 0;
 
-    switch (rand_id)
+    switch (randId)
     {
         case 1:
-            rand_wall = getRandomNumber2(1, l_width - 3);
-            arr_ptr[0][rand_wall] = ' ';
+            rand_wall = getRandomNumber2(1, lWidth - 3);
+            arrPtr[0][rand_wall] = ' ';
             ++rand_wall;
-            arr_ptr[0][rand_wall] = ' ';
+            arrPtr[0][rand_wall] = ' ';
             break;
         case 2:
-            rand_wall = getRandomNumber2(1, l_height - 3);
-            arr_ptr[rand_wall][0] = ' ';
+            rand_wall = getRandomNumber2(1, lHeight - 3);
+            arrPtr[rand_wall][0] = ' ';
             ++rand_wall;
-            arr_ptr[rand_wall][0] = ' ';
+            arrPtr[rand_wall][0] = ' ';
             break;
         case 3:
-            rand_wall = getRandomNumber2(1, l_width - 3);
-            arr_ptr[l_height - 1][rand_wall] = ' ';
+            rand_wall = getRandomNumber2(1, lWidth - 3);
+            arrPtr[lHeight - 1][rand_wall] = ' ';
             ++rand_wall;
-            arr_ptr[l_height - 1][rand_wall] = ' ';
+            arrPtr[lHeight - 1][rand_wall] = ' ';
             break;
         case 4:
-            rand_wall = getRandomNumber2(1, l_height - 3);
-            arr_ptr[rand_wall][l_width - 1] = ' ';
+            rand_wall = getRandomNumber2(1, lHeight - 3);
+            arrPtr[rand_wall][lWidth - 1] = ' ';
             ++rand_wall;
-            arr_ptr[rand_wall][l_width - 1] = ' ';
+            arrPtr[rand_wall][lWidth - 1] = ' ';
             break;
     }
 
     return rand_wall;
 }
 
-int levelInRandId(int rand_id)
+int levelInRandId(int randId)
 {
-    switch (rand_id)
+    switch (randId)
     {
         case 4:
             return 2;
@@ -158,9 +158,9 @@ int levelInRandId(int rand_id)
     return 0;
 }
 
-void nextLevelOffset(int *offset1, int *offset2, int rand_id)
+void nextLevelOffset(int *offset1, int *offset2, int randId)
 {
-    switch (rand_id)
+    switch (randId)
     {
         case 4:
             *offset2 += 10;
@@ -181,52 +181,52 @@ void nextLevelOffset(int *offset1, int *offset2, int rand_id)
     }
 }
 
-char **createPipe(const int rand_id, const int size_1 = 4, const int size_2 = 10)
+char **createPipe(const int randId, const int size1 = 4, const int size2 = 10)
 {
-    char **arr_ptr = nullptr;
+    char **arrPtr = nullptr;
 
-    if (rand_id == 1 || rand_id == 3)
+    if (randId == 1 || randId == 3)
     {
-        arr_ptr = new char *[size_2];
+        arrPtr = new char *[size2];
 
-        for (int r = 0; r < size_2; ++r)
-            arr_ptr[r] = new char[size_1];
+        for (int r = 0; r < size2; ++r)
+            arrPtr[r] = new char[size1];
 
-        for (int r2 = 0; r2 < size_2; ++r2)
-            for (int c2 = 0; c2 < size_1; ++c2)
+        for (int r2 = 0; r2 < size2; ++r2)
+            for (int c2 = 0; c2 < size1; ++c2)
             {
-                if (c2 == 0 || c2 == (size_1 - 1))
-                    arr_ptr[r2][c2] = '0';
+                if (c2 == 0 || c2 == (size1 - 1))
+                    arrPtr[r2][c2] = '0';
                 else
-                    arr_ptr[r2][c2] = ' ';
+                    arrPtr[r2][c2] = ' ';
             }
     }
-    if (rand_id == 2 || rand_id == 4)
+    if (randId == 2 || randId == 4)
     {
-        arr_ptr = new char *[size_1];
+        arrPtr = new char *[size1];
 
-        for (int l = 0; l < size_1; ++l)
-            arr_ptr[l] = new char[size_2];
+        for (int l = 0; l < size1; ++l)
+            arrPtr[l] = new char[size2];
 
-        for (int n2 = 0; n2 < size_1; ++n2)
-            for (int m2 = 0; m2 < size_2; ++m2)
+        for (int n2 = 0; n2 < size1; ++n2)
+            for (int m2 = 0; m2 < size2; ++m2)
             {
-                if (n2 == 0 || n2 == (size_1 - 1))
-                    arr_ptr[n2][m2] = '0';
+                if (n2 == 0 || n2 == (size1 - 1))
+                    arrPtr[n2][m2] = '0';
                 else
-                    arr_ptr[n2][m2] = ' ';
+                    arrPtr[n2][m2] = ' ';
             }
     }
 
-    return arr_ptr;
+    return arrPtr;
 }
 
-void summonDestructor3000(char **arr_obj, const int height, const int width)
+void summonDestructor3000(char **arrObj, const int height, const int width)
 {
     for (int count = 0; count < height; ++count)
-        delete[] arr_obj[count];
-    delete[] arr_obj;
-    arr_obj = nullptr;
+        delete[] arrObj[count];
+    delete[] arrObj;
+    arrObj = nullptr;
 }
 
 void inputCallback(Window *window, int key, int scancode, int action, int mods);
@@ -236,7 +236,7 @@ void resizeCallback(Window *window, int width, int height);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
-KeyInputNotifier Input_Notifier;
+KeyInputNotifier inputNotifier;
 Stack stack(4);
 
 int main()
@@ -303,84 +303,84 @@ int main()
     std::cout << "rand seed: " << seedDeb << std::endl;
     srand(seedDeb);
 
-    int l_height = getRandomNumber2(4, 7) * 7 + 2;
-    int l_width = getRandomNumber2(4, 7) * 7 + 2;
-    int l_height2 = getRandomNumber2(4, 7) * 7 + 2;
-    int l_width2 = getRandomNumber2(4, 7) * 7 + 2;
+    int lHeight = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth = getRandomNumber2(4, 7) * 7 + 2;
+    int lHeight2 = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth2 = getRandomNumber2(4, 7) * 7 + 2;
 
     Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
-    WorldMap worldmap1(SCR_WIDTH, SCR_HEIGHT, l_height, l_width);
-    WorldMap worldmap2(SCR_WIDTH, SCR_HEIGHT, l_height2, l_width2);
+    WorldMap worldMap1(SCR_WIDTH, SCR_HEIGHT, lHeight, lWidth);
+    WorldMap worldMap2(SCR_WIDTH, SCR_HEIGHT, lHeight2, lWidth2);
 
-    char **level_array1 = genRandomLevel(l_height, l_width);
-    int rand_id = getRandomNumber2(1, 4);
-    int rand_wall = createHoleInWall(level_array1, l_height, l_width, rand_id);
-    WorldMap *Pipe = nullptr;
-    if (rand_id == 1 || rand_id == 3)
+    char **levelArray1 = genRandomLevel(lHeight, lWidth);
+    int randId = getRandomNumber2(1, 4);
+    int randWall = createHoleInWall(levelArray1, lHeight, lWidth, randId);
+    WorldMap *pipe = nullptr;
+    if (randId == 1 || randId == 3)
     {
-        Pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, WALL_SIZE_1, WALL_SIZE_2);
+        pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, WALL_SIZE_1, WALL_SIZE_2);
     }
-    if (rand_id == 2 || rand_id == 4)
+    if (randId == 2 || randId == 4)
     {
-        Pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, WALL_SIZE_2, WALL_SIZE_1);
+        pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, WALL_SIZE_2, WALL_SIZE_1);
     }
-    char **pipe_ptr = createPipe(rand_id);
-    Pipe->initialize(pipe_ptr);
+    char **pipePtr = createPipe(randId);
+    pipe->initialize(pipePtr);
 
     int offset1 = 0;
     int offset2 = 0;
 
-    setOffsetForPipe(rand_id, offset1, offset2, rand_wall, l_height, l_width);
+    setOffsetForPipe(randId, offset1, offset2, randWall, lHeight, lWidth);
 
-    int offset1_1 = offset1;
-    int offset2_2 = offset2;
+    int offset1and1 = offset1;
+    int offset2and2 = offset2;
 
-    int rand_id_2 = levelInRandId(rand_id);
-    nextLevelOffset(&offset1_1, &offset2_2, rand_id_2);
+    int randId2 = levelInRandId(randId);
+    nextLevelOffset(&offset1and1, &offset2and2, randId2);
 
-    worldmap1.initialize(level_array1);
+    worldMap1.initialize(levelArray1);
 
-    char **level_array2 = genRandomLevel(l_height2, l_width2);
-    createHoleInWallNextLevel(level_array2, rand_wall, rand_id_2, l_height2, l_width2);
-    worldmap2.initialize(level_array2);
+    char **levelArray2 = genRandomLevel(lHeight2, lWidth2);
+    createHoleInWallNextLevel(levelArray2, randWall, randId2, lHeight2, lWidth2);
+    worldMap2.initialize(levelArray2);
 
-    SpriteRandSet RandSprite(RAND_SPRITE_SIZE, RAND_SPRITE_SIZE);
-//    RandSprite.setRandSprite(arraySpritesSet, 1);
-    worldmap1.setRandomSprites(arraySpritesSet, RandSprite);
-    worldmap2.setRandomSprites(arraySpritesSet, RandSprite);
+    SpriteRandSet randSprite(RAND_SPRITE_SIZE, RAND_SPRITE_SIZE);
+//    randSprite.setRandSprite(arraySpritesSet, 1);
+    worldMap1.setRandomSprites(arraySpritesSet, randSprite);
+    worldMap2.setRandomSprites(arraySpritesSet, randSprite);
 
     Player playerHero(glm::vec2(450.0f, -150.0f), 2.0f);
-    Input_Notifier.attach(&playerHero);
+    inputNotifier.attach(&playerHero);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    const int anim_index_array = 3;
-    int anim_count = 0;
-    float *Vertex_Animation[4][anim_index_array] = {
+    const int animIndexArray = 3;
+    int animCount = 0;
+    float *Vertex_Animation[4][animIndexArray] = {
             {vertices,   vertices2,  vertices3},
             {vertices4,  vertices5,  vertices6},
             {vertices7,  vertices8,  vertices9},
             {vertices10, vertices11, vertices12}
     };
-    float Delta_Time = 0;
-    float Animation_Delta = 0;
-    const int Map_Objects_Row = l_height;
-    const int Map_Objects_Col = l_width;
+    float deltaTime = 0;
+    float animationDelta = 0;
+    const int mapObjectsRow = lHeight;
+    const int mapObjectsCol = lWidth;
 
-//	const int Map_Objects_Row = mapHeight;
-//	const int Map_Objects_Col = mapWidth;
+//	const int mapObjectsRow = mapHeight;
+//	const int mapObjectsCol = mapWidth;
 
-    const int Map_Objects_Row2 = l_height2;
-    const int Map_Objects_Col2 = l_width2;
+    const int mapObjectsRow2 = lHeight2;
+    const int mapObjectsCol2 = lWidth2;
 
-    MapObjects **Map_Objects_Pointer = new MapObjects *[Map_Objects_Row];
-    for (int counter = 0; counter < Map_Objects_Row; ++counter)
-        Map_Objects_Pointer[counter] = new MapObjects[Map_Objects_Col];
+    MapObjects **mapObjectsPointer = new MapObjects *[mapObjectsRow];
+    for (int counter = 0; counter < mapObjectsRow; ++counter)
+        mapObjectsPointer[counter] = new MapObjects[mapObjectsCol];
 
-    MapObjects **Map_Objects_Pointer2 = new MapObjects *[Map_Objects_Row2];
-    for (int count = 0; count < Map_Objects_Row2; ++count)
-        Map_Objects_Pointer2[count] = new MapObjects[Map_Objects_Col2];
+    MapObjects **mapObjectsPointer2 = new MapObjects *[mapObjectsRow2];
+    for (int count = 0; count < mapObjectsRow2; ++count)
+        mapObjectsPointer2[count] = new MapObjects[mapObjectsCol2];
 
     // Game timer.
     ChronoGuard Chrono(0.0f, 0.0f, 0.0f);
@@ -395,18 +395,18 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Chrono.setNewFrameTime();
-        Delta_Time = Chrono.getDeltaTime();
-        processInput(window.getGLFWwindow(), playerHero, Delta_Time);
+        deltaTime = Chrono.getDeltaTime();
+        processInput(window.getGLFWwindow(), playerHero, deltaTime);
 
-        worldmap1.render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
-        Collision.detection(Map_Objects_Pointer, playerHero, Delta_Time, worldmap1, window.getGLFWwindow());
+        worldMap1.render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
+        Collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1, window.getGLFWwindow());
 
-        Pipe->render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), wallTexture, offset1, offset2, rand_id, 0);
-        Collision.detection(Map_Objects_Pointer, playerHero, Delta_Time, *Pipe, window.getGLFWwindow());
+        pipe->render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, offset1, offset2, randId, 0);
+        Collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe, window.getGLFWwindow());
 
-        worldmap2.render(Map_Objects_Pointer2, ourShader, vaoWalls.getId(), wallTexture, offset1_1, offset2_2, 0,
-                         rand_id_2);
-        Collision.detection(Map_Objects_Pointer2, playerHero, Delta_Time, worldmap2, window.getGLFWwindow());
+        worldMap2.render(mapObjectsPointer2, ourShader, vaoWalls.getId(), wallTexture, offset1and1, offset2and2, 0,
+                         randId2);
+        Collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2, window.getGLFWwindow());
 
         camera.setPosition(-playerHero.getPosition());
         ourShader.setUniform("projection", camera.getProjectionMatrix());
@@ -418,103 +418,103 @@ int main()
 
         if (playerHero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
         {
-            Animation_Delta += Delta_Time;
-            if (Animation_Delta > 30.0f)
+            animationDelta += deltaTime;
+            if (animationDelta > 30.0f)
             {
-                switch (anim_count)
+                switch (animCount)
                 {
                     default:
-                        anim_count = 0;
+                        animCount = 0;
                     case 0:
-                        vbo.setBufferData(Vertex_Animation[0][anim_count], sizeof(vertices), GL_STATIC_DRAW);
+                        vbo.setBufferData(Vertex_Animation[0][animCount], sizeof(vertices), GL_STATIC_DRAW);
                         break;
                     case 1:
-                        vbo.setBufferData(Vertex_Animation[0][anim_count], sizeof(vertices), GL_STATIC_DRAW);
+                        vbo.setBufferData(Vertex_Animation[0][animCount], sizeof(vertices), GL_STATIC_DRAW);
                         break;
                     case 2:
-                        vbo.setBufferData(Vertex_Animation[0][anim_count], sizeof(vertices), GL_STATIC_DRAW);
+                        vbo.setBufferData(Vertex_Animation[0][animCount], sizeof(vertices), GL_STATIC_DRAW);
                         break;
                 }
-                ++anim_count;
-                Animation_Delta = 0;
+                ++animCount;
+                animationDelta = 0;
             }
         }
         else if (playerHero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
         {
-            Animation_Delta += Delta_Time;
-            if (Animation_Delta > 30.0f)
+            animationDelta += deltaTime;
+            if (animationDelta > 30.0f)
             {
-                switch (anim_count)
+                switch (animCount)
                 {
                     default:
-                        anim_count = 0;
+                        animCount = 0;
                     case 0:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][animCount],
                                      GL_STATIC_DRAW);
                         break;
                     case 1:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][animCount],
                                      GL_STATIC_DRAW);
                         break;
                     case 2:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][animCount],
                                      GL_STATIC_DRAW);
                         break;
                 }
-                ++anim_count;
-                Animation_Delta = 0;
+                ++animCount;
+                animationDelta = 0;
             }
         }
         else if (playerHero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
         {
-            Animation_Delta += Delta_Time;
-            if (Animation_Delta > 30.0f)
+            animationDelta += deltaTime;
+            if (animationDelta > 30.0f)
             {
-                switch (anim_count)
+                switch (animCount)
                 {
                     default:
-                        anim_count = 0;
+                        animCount = 0;
                     case 0:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][animCount],
                                      GL_STATIC_DRAW);
                         break;
                     case 1:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][animCount],
                                      GL_STATIC_DRAW);
                         break;
                     case 2:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][animCount],
                                      GL_STATIC_DRAW);
                         break;
                 }
-                ++anim_count;
-                Animation_Delta = 0;
+                ++animCount;
+                animationDelta = 0;
             }
         }
         else if (playerHero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
         {
-            Animation_Delta += Delta_Time;
-            if (Animation_Delta > 30.0f)
+            animationDelta += deltaTime;
+            if (animationDelta > 30.0f)
             {
-                switch (anim_count)
+                switch (animCount)
                 {
                     default:
-                        anim_count = 0;
+                        animCount = 0;
                     case 0:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][animCount],
                                      GL_STATIC_DRAW);
                         break;
                     case 1:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][animCount],
                                      GL_STATIC_DRAW);
                         break;
                     case 2:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][anim_count],
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][animCount],
                                      GL_STATIC_DRAW);
                         break;
                 }
-                ++anim_count;
-                Animation_Delta = 0;
+                ++animCount;
+                animationDelta = 0;
             }
         }
 
@@ -538,16 +538,16 @@ int main()
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();
 
-    for (int counter2 = 0; counter2 < Map_Objects_Row; ++counter2)
-        delete[] Map_Objects_Pointer[counter2];
-    delete[] Map_Objects_Pointer;
+    for (int counter2 = 0; counter2 < mapObjectsRow; ++counter2)
+        delete[] mapObjectsPointer[counter2];
+    delete[] mapObjectsPointer;
 
-    for (int counter3 = 0; counter3 < Map_Objects_Row2; ++counter3)
-        delete[] Map_Objects_Pointer2[counter3];
-    delete[] Map_Objects_Pointer2;
+    for (int counter3 = 0; counter3 < mapObjectsRow2; ++counter3)
+        delete[] mapObjectsPointer2[counter3];
+    delete[] mapObjectsPointer2;
 
-    summonDestructor3000(level_array1, 23, 37);
-//    summon_Destructor3000(level_array2, 16, 24);
+    summonDestructor3000(levelArray1, 23, 37);
+//    summon_Destructor3000(levelArray2, 16, 24);
 
     return 0;
 }
@@ -557,12 +557,12 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
     if (action == GLFW_PRESS)
     {
         stack.push(key);
-        Input_Notifier.notifier(stack.getElement(), action);
+        inputNotifier.notifier(stack.getElement(), action);
     }
     if (action == GLFW_RELEASE)
     {
         stack.popSearch(key);
-        Input_Notifier.notifier(stack.getElement(), action);
+        inputNotifier.notifier(stack.getElement(), action);
     }
 }
 
