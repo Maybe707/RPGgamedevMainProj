@@ -4,10 +4,6 @@
 #include "graphics/Shader.h"
 #include "graphics/VertexArray.h"
 #include "graphics/Buffer.h"
-#include <stb_image.h>
-#include <iostream>
-#include <vector>
-#include <ctime>
 #include "Map.h"
 #include "Player.h"
 #include "graphics/Camera2D.h"
@@ -15,7 +11,6 @@
 #include "Input.h"
 #include "Data.h"
 #include "ChronoGuard.h"
-#include "useless_files/MapSource.h"
 #include "KeyInputNotifier.h"
 #include "utils/Stack.h"
 #include "ElementsForRandSprites.h"
