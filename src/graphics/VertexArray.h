@@ -9,7 +9,6 @@ private:
     unsigned int m_id{};
 public:
     VertexArray();
-    ~VertexArray() override;
 
     void bind();
     void unbind();

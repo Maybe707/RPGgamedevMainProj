@@ -6,11 +6,6 @@ Buffer::Buffer(unsigned int target) : m_target(target)
     glGenBuffers(1, &m_id);    
 }
 
-Buffer::~Buffer()
-{
-    glDeleteBuffers(1, &m_id);
-}
-
 void Buffer::bind() const
 {
     glBindBuffer(m_target, m_id);
@@ -25,6 +20,7 @@ void Buffer::destroy()
 {
     glDeleteBuffers(1, &m_id);
     m_id = 0;
+    m_target = 0;
 }
 
 template<typename T>
