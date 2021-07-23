@@ -3,10 +3,10 @@
 
 class Renderer
 {
-	int m_sizeRow;
-	int m_sizeCol;
+    int m_sizeRow;
+    int m_sizeCol;
 public:
-	Renderer(int sizeRow, int sizeCol);
+    Renderer(int sizeRow, int sizeCol);
 
 };
 

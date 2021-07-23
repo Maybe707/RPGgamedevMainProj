@@ -2,12 +2,12 @@
 #include "Key_Input_Notifier_Interface.h"
 #include <list>
 
-class Key_Input_Notifier : public Key_Input_Notifier_Interface
+class KeyInputNotifier : public IKeyInputNotifier
 {
-	std::list<Player_Implementation *> Player_Observers;
-	public:
-	virtual ~Key_Input_Notifier() {}
-	virtual void Attach(Player_Implementation* player_hero) override;
-	virtual void Detach(Player_Implementation* player_hero) override;
-	virtual void Notifier(int key, int action) override;
+    std::list<PlayerImpl *> m_playerObservers;
+public:
+    virtual ~KeyInputNotifier() {}
+    virtual void attach(PlayerImpl* player) override;
+    virtual void detach(PlayerImpl* player) override;
+    virtual void notifier(int key, int action) override;
 };

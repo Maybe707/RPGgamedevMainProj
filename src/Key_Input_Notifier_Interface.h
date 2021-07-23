@@ -3,13 +3,13 @@
 
 #include "Player_Implementation.h"
 
-class Key_Input_Notifier_Interface
+class IKeyInputNotifier
 {
-	public:
-	virtual ~Key_Input_Notifier_Interface() {}
-	virtual void Attach(Player_Implementation* player_hero) = 0;
-	virtual void Detach(Player_Implementation* player_hero) = 0;
-	virtual void Notifier(int key, int action) = 0;
+public:
+    virtual ~IKeyInputNotifier() {}
+    virtual void attach(PlayerImpl* player) = 0;
+    virtual void detach(PlayerImpl* player) = 0;
+    virtual void notifier(int key, int action) = 0;
 };
 
 #endif

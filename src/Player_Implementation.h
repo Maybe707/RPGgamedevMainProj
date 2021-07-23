@@ -3,33 +3,38 @@
 
 #include "Unit_Interface.h"
 
-class Player_Implementation : public Unit_Interface
+class PlayerImpl : public IUnit
 {
-	float m_xAxis;
-	float m_yAxis;
-	float m_Speed;
-	float m_xRange = 32.0f;
-	float m_yRange = 32.0f;
-	int m_key_axis;
-	int m_action;
+    float m_xAxis;
+    float m_yAxis;
+    float m_Speed;
+    float m_xRange = 32.0f;
+    float m_yRange = 32.0f;
+    int m_keyAxis;
+    int m_action;
 public:
-	Player_Implementation(float xAxis, float yAxis, float speed);
+    PlayerImpl(float xAxis, float yAxis, float speed);
 
-	void set_xAxis(float xAxis);
-	void set_yAxis(float yAxis);
-	void setKeyAxis(int key);
-	void set_Speed(const float& speed);
+    void setXAxis(float xAxis);
+    void setYAxis(float yAxis);
+    
+    void setKeyAxis(int key);
+    void set_Speed(const float& speed);
 
-	float get_xAxis();
-	float get_yAxis();
-	float get_xRange();
-	float get_yRange();
-	int& getKeyAxis();
-	int& getAction();
-	float& get_Speed();
+    float getXAxis();
+    float getYAxis();
 
-	virtual void Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, Texture texture) override;
-	virtual void Receiver(int key, int action) override;
+    float getXRange();
+    float getYRange();
+
+    int& getKeyAxis();
+    int& getAction();
+    float& getSpeed();
+
+    virtual void draw(const int screenWidth, const int screenHeight,
+                      Shader shader, unsigned int vaoId, Texture texture) override;
+        
+    virtual void receiver(int key, int action) override;
 };
 
 #endif

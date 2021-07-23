@@ -2,11 +2,11 @@
 #include "Player_Implementation.h"
 class Game_Shell
 {
-	Player_Implementation* Player_Hero;
+    Player_Implementation* Player_Hero;
 public:
-	Game_Shell()
-	{
-		glfwSetKeyCallback(GLFWwindow *window, GLFWkeyfun callback);
-	}
+    Game_Shell()
+    {
+        glfwSetKeyCallback(GLFWwindow *window, GLFWkeyfun callback);
+    }
 
-	
+    

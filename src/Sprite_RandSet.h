@@ -1,25 +1,24 @@
-#ifndef SPRITE_RANDSET
-#define SPRITE_RANDSET
+#ifndef SPRITE_RANDSET_H
+#define SPRITE_RANDSET_H
 
 #include "Map_Objects.h"
 
-class Sprite_RandSet
+class SpriteRandSet
 {
-
     const int m_width;
     const int m_height;
-    char** Sprite_SetArray;
-
+    char** m_spriteSetArray;
 public:
-    Sprite_RandSet(const int width, const int height);
+    SpriteRandSet(const int width, const int height);
 
-    ~Sprite_RandSet();
+    virtual ~SpriteRandSet();
     
-    void setRandSprite(const char*** Sprite_Set, const int rand_index);
+    void setRandSprite(const char*** spriteSet, const int randIndex);
 
     const int getWidth() const;
     const int getHeight() const;
-    char** getSprite_SetArray() const;
+
+    char** getSpriteSetArray() const;
 };
 
 #endif
