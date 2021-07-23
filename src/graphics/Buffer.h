@@ -2,24 +2,29 @@
 #define BUFFER_H
 
 #include <cstddef>
+#include <vector>
+#include "IGLObject.h"
 
-class Buffer
+class Buffer : public IGLObject
 {
 private:
-    unsigned int m_id;
-    unsigned int m_target;
+    unsigned int m_id{};
+    unsigned int m_target{};
 public:
-    Buffer();
+    Buffer() = default;
     Buffer(unsigned int);
-    ~Buffer();
+    ~Buffer() override;
 
-    void bind();
-    void unbind();
+    void bind() const;
+    void unbind() const;
     void destroy();
 
-    void setBufferData(void* data, size_t size, unsigned int usage);
+    template<typename T>
+    void setBufferData(const std::vector<T>& data, unsigned int usage);
 
-    unsigned int getId() const;
+    void setBufferData(const void* data, size_t size, unsigned int usage) const;
+
+    unsigned int getId() const override;
     unsigned int getTarget() const;
 };
 

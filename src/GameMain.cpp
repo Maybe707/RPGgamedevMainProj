@@ -2,13 +2,14 @@
 #include <GLFW/glfw3.h>
 #include "window/Window.h"
 #include "graphics/Shader.h"
+#include "graphics/VertexArray.h"
 #include "graphics/Buffer.h"
 #include <stb_image.h>
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include "Map.h"
 #include "Player_Implementation.h"
-#include "Map_Objects.h"
 #include "Camera.h"
 #include "Collision.h"
 #include "Input.h"
@@ -248,12 +249,11 @@ int main()
 
     // Компилирование нашей шейдерной программы
     Shader ourShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
-    
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
+
+    VertexArray vao;
     Buffer vbo(GL_ARRAY_BUFFER);
     
-    glBindVertexArray(vao);
+    vao.bind();
     
     vbo.bind();
     vbo.setBufferData(vertices, sizeof(vertices), GL_STATIC_DRAW);
@@ -268,12 +268,12 @@ int main()
 	glBindVertexArray(0);
 
 	vbo.unbind();
+	vao.unbind();
 
-	unsigned int vaoWalls;
-	glGenVertexArrays(1, &vaoWalls);
+	VertexArray vaoWalls;
     Buffer vboWalls(GL_ARRAY_BUFFER);
 
-    glBindVertexArray(vaoWalls);
+    vaoWalls.bind();
 
     vboWalls.bind();
     vboWalls.setBufferData(vertices, sizeof(vertices), GL_STATIC_DRAW);
@@ -286,7 +286,8 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	vboWalls.unbind();
     
     // Загрузка и создание текстуры
     unsigned int texture1, texture2;
@@ -345,7 +346,7 @@ int main()
     ourShader.setUniform("tex", 0);
     ourShader.setUniform("texture2", 1);
 
-    srand(static_cast<unsigned int>(time(0)));
+    srand(static_cast<unsigned>(time(0)));
 
     int l_height = getRandomNumber2(4, 7) * 7 + 2;
     int l_width = getRandomNumber2(4, 7) * 7 + 2;
@@ -443,13 +444,13 @@ int main()
 		Delta_Time = Chrono.get_Delta();
         Process_Input(window.getGLFWwindow(), Player_Hero, Delta_Time);
 
-		Tile_Map.Render(Map_Objects_Pointer, ourShader, vaoWalls, texture1, 0, 0, 3, 0);
+		Tile_Map.Render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), texture1, 0, 0, 3, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, Tile_Map, window.getGLFWwindow());
 
-        Pipe->Render(Map_Objects_Pointer, ourShader, vaoWalls, texture1, offset1, offset2, rand_id, 0);
+        Pipe->Render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), texture1, offset1, offset2, rand_id, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, window.getGLFWwindow());
 
-        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, vaoWalls, texture1, offset1_1, offset2_2, 0, rand_id_2);
+        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, vaoWalls.getId(), texture1, offset1_1, offset2_2, 0, rand_id_2);
 		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, window.getGLFWwindow());
 
 		Camera_View.Set_Position(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
@@ -552,19 +553,12 @@ int main()
 			}
 		}
 
-		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, vao, texture2);
+		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, vao.getId(), texture2);
 
         // glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         window.swapBuffers();
         glfwPollEvents();
     }
-
-    // Опционально: освобождаем все ресурсы, как только они выполнили свое предназначение
-    vbo.destroy();
-    glDeleteVertexArrays(1, &vao);
-
-    vboWalls.destroy();
-    glDeleteVertexArrays(1, &vaoWalls);
 
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();
@@ -592,7 +586,7 @@ void inputCallback(Window* window, int key, int scancode, int action, int mods)
 	}
 	if (action == GLFW_RELEASE)
 	{
-		stack.Pop_Search(key);
+		stack.PopSearch(key);
 		Input_Notifier.Notifier(stack.getElement(), action);
 	}
 }

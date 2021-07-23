@@ -1,9 +1,10 @@
 #ifndef GLOBJECT_H
 #define GLOBJECT_H
 
-class GLObject
+class IGLObject
 {
 public:
+    virtual ~IGLObject() = default;;
     virtual unsigned int getId() const = 0;
 };
 
