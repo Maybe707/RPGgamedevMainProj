@@ -66,8 +66,7 @@ bool Collision::detectionBox(Player &player, MapObjects &mapObjects, float &delt
     return stateX;
 }
 
-void
-Collision::detection(MapObjects **mapObjects, Player &player, float &deltaTime, WorldMap &worldmap, GLFWwindow *window)
+void Collision::detection(MapObjects **mapObjects, Player &player, float &deltaTime, WorldMap &worldmap, GLFWwindow *window)
 {
     for (int i = 0; i < worldmap.getMapHeight(); ++i)
     {

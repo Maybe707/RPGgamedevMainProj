@@ -7,7 +7,6 @@ Camera2D::Camera2D(glm::vec2 position, float width, float height, float zn, floa
           m_width(width), m_height(height),
           m_zn(zn), m_zf(zf) {}
 
-
 glm::vec2 Camera2D::getPosition() const
 {
     return m_position;

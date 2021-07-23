@@ -1,5 +1,5 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef RPG_STACK_H
+#define RPG_STACK_H
 
 class Stack
 {
@@ -16,4 +16,4 @@ public:
     int popSearch(int key);
 };
 
-#endif
+#endif //RPG_STACK_H

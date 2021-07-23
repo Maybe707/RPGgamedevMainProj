@@ -1,5 +1,5 @@
-#ifndef BUFFER_H
-#define BUFFER_H
+#ifndef RPG_BUFFER_H
+#define RPG_BUFFER_H
 
 #include <cstddef>
 #include <vector>
@@ -27,4 +27,4 @@ public:
     unsigned int getTarget() const;
 };
 
-#endif
+#endif //RPG_BUFFER_H

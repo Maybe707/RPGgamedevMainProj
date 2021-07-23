@@ -1,5 +1,5 @@
-#ifndef CAMERA_2D_H
-#define CAMERA_2D_H
+#ifndef RPG_CAMERA_2D_H
+#define RPG_CAMERA_2D_H
 
 #include "Shader.h"
 
@@ -21,4 +21,4 @@ public:
     glm::mat4 getViewMatrix() const;
 };
 
-#endif
+#endif //RPG_CAMERA_2D_H

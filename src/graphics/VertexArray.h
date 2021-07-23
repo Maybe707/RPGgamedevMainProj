@@ -1,5 +1,5 @@
-#ifndef VERTEXARRAY_H
-#define VERTEXARRAY_H
+#ifndef RPG_VERTEX_ARRAY_H
+#define RPG_VERTEX_ARRAY_H
 
 #include "IGLObject.h"
 
@@ -19,4 +19,4 @@ public:
 };
 
 
-#endif
+#endif //RPG_VERTEX_ARRAY_H

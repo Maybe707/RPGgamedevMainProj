@@ -1,5 +1,5 @@
-#ifndef GLOBJECT_H
-#define GLOBJECT_H
+#ifndef RPG_IGLOBJECT_H
+#define RPG_IGLOBJECT_H
 
 class IGLObject
 {
@@ -10,4 +10,4 @@ public:
     virtual void destroy() = 0;
 };
 
-#endif
+#endif //RPG_IGLOBJECT_H

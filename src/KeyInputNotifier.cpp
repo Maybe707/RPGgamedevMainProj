@@ -1,4 +1,4 @@
-#include "Key_Input_Notifier.h"
+#include "KeyInputNotifier.h"
 #include "Player.h"
 
 void KeyInputNotifier::attach(Player *player)
