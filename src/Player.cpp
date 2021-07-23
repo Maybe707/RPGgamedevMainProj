@@ -2,47 +2,35 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Player::Player(float xAxis, float yAxis, float speed) :
-        m_xAxis(xAxis),
-        m_yAxis(yAxis),
-        m_Speed(speed) {}
+Player::Player(glm::vec2 position, float speed)
+        : m_position(position),
+          m_Speed(speed) {}
 
-void Player::setXAxis(float xAxis)
+glm::vec2 Player::getPosition() const
 {
-    m_xAxis = xAxis;
+    return m_position;
 }
 
-void Player::setYAxis(float yAxis)
+void Player::setPosition(glm::vec2 position)
 {
-    m_yAxis = yAxis;
+    m_position = position;
 }
 
-float Player::getXAxis()
+void Player::setSpeed(const float speed)
 {
-    return m_xAxis;
+    m_Speed = speed;
 }
 
-float Player::getYAxis()
+float Player::getSpeed() const
 {
-    return m_yAxis;
+    return m_Speed;
 }
 
-float Player::getXRange()
+void Player::draw(Shader shader, unsigned int vaoId, Texture texture)
 {
-    return m_xRange;
-}
+    glm::mat4 transformMat(1.f);
 
-float Player::getYRange()
-{
-    return m_yRange;
-}
-
-void Player::draw(const int screenWidth, const int screenHeight,
-                  Shader shader, unsigned int vaoId, Texture texture)
-{
-    glm::mat4 transformMat = glm::mat4(1.f);
-
-    transformMat = glm::translate(transformMat, glm::vec3(m_xAxis, m_yAxis, 0.f));
+    transformMat = glm::translate(transformMat, glm::vec3(m_position, 0.f));
     transformMat = glm::scale(transformMat, glm::vec3(64.f));
 
     shader.use();
@@ -57,30 +45,9 @@ void Player::draw(const int screenWidth, const int screenHeight,
 void Player::receiver(int key, int action)
 {
     m_keyAxis = key;
-    m_action = action;
 }
 
-int &Player::getKeyAxis()
+int Player::getKeyAxis()
 {
     return m_keyAxis;
-}
-
-void Player::setKeyAxis(int key)
-{
-    m_keyAxis = key;
-}
-
-int &Player::getAction()
-{
-    return m_action;
-}
-
-void Player::setSpeed(const float &speed)
-{
-    m_Speed = speed;
-}
-
-float &Player::getSpeed()
-{
-    return m_Speed;
 }

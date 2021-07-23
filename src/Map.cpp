@@ -134,8 +134,7 @@ void WorldMap::render(MapObjects **mapObjects, Shader &shader, unsigned int vaoI
 
 void WorldMap::drawMap(float coordX, float coordY, Shader shader, unsigned int vaoId, Texture texture)
 {
-    glm::mat4 transformMat = glm::mat4(1.f);
-
+    glm::mat4 transformMat(1.f);
     transformMat = glm::translate(transformMat, glm::vec3(coordX, coordY, 0.f));
     transformMat = glm::scale(transformMat, glm::vec3(64.f));
 

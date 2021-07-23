@@ -2,59 +2,40 @@
 #include "GLFW/glfw3.h"
 #include "Collision.h"
 
-void Collision::repel(MapObjects **mapObjects, Player &player, float &deltaTime, GLFWwindow *window)
-{
-    if (player.getKeyAxis() == GLFW_KEY_W)
-    {
-        player.setYAxis(player.getYAxis() - deltaTime);
-    }
-
-    if (player.getKeyAxis() == GLFW_KEY_S)
-    {
-        player.setYAxis(player.getYAxis() + deltaTime);
-    }
-
-    if (player.getKeyAxis() == GLFW_KEY_A)
-    {
-        player.setXAxis(player.getXAxis() + deltaTime);
-    }
-
-    if (player.getKeyAxis() == GLFW_KEY_D)
-    {
-        player.setXAxis(player.getXAxis() - deltaTime);
-    }
-}
-
 bool Collision::detectionBox(Player &player, MapObjects &mapObjects, float &deltaTime, GLFWwindow *window)
 {
-    bool stateX = false;
-    float axisX = 0;
-    float axisY = 0;
+    bool stateX;
 
-    if (player.getXAxis() < mapObjects.getXAxis() + 58.0f &&
-        player.getXAxis() + 58.0f > mapObjects.getXAxis() &&
-        player.getYAxis() < mapObjects.getYAxis() + 58.0f &&
-        player.getYAxis() + 58.0f > mapObjects.getYAxis())
+    glm::vec2 playerPosition = player.getPosition();
+
+    if (playerPosition.x < mapObjects.getXAxis() + 58.0f && // Кто знает, почему тут 58?
+        playerPosition.x + 58.0f > mapObjects.getXAxis() &&
+        playerPosition.y < mapObjects.getYAxis() + 58.0f &&
+        playerPosition.y + 58.0f > mapObjects.getYAxis())
     {
+
+        // TODO: В инпуте кнопки проверяются, тут проверяются. Что-то очень странное...
         if (player.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            player.setYAxis(player.getYAxis() - deltaTime * player.getSpeed());
+            playerPosition -= glm::vec2(0.f, deltaTime * player.getSpeed());
         }
 
         if (player.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            player.setYAxis(player.getYAxis() + deltaTime * player.getSpeed());
+            playerPosition += glm::vec2(0.f, deltaTime * player.getSpeed());
         }
 
         if (player.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            player.setXAxis(player.getXAxis() + deltaTime * player.getSpeed());
+            playerPosition += glm::vec2(deltaTime * player.getSpeed(), 0.f);
         }
 
         if (player.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            player.setXAxis(player.getXAxis() - deltaTime * player.getSpeed());
+            playerPosition -= glm::vec2(deltaTime * player.getSpeed(), 0.f);
         }
+
+        player.setPosition(playerPosition);
 
         stateX = true;
     }
@@ -72,12 +53,9 @@ void Collision::detection(MapObjects **mapObjects, Player &player, float &deltaT
     {
         for (int j = 0; j < worldmap.getMapWidth(); ++j)
         {
-            if (worldmap.getMapKey(i, j) == '0')
+            if (worldmap.getMapKey(i, j) == '0' && detectionBox(player, mapObjects[i][j], deltaTime, window))
             {
-                if (detectionBox(player, mapObjects[i][j], deltaTime, window))
-                {
-                    return;
-                }
+                return;
             }
         }
     }

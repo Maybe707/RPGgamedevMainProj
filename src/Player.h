@@ -5,34 +5,21 @@
 
 class Player : public IUnit
 {
-    float m_xAxis;
-    float m_yAxis;
+    glm::vec2 m_position;
     float m_Speed;
-    float m_xRange = 32.0f;
-    float m_yRange = 32.0f;
     int m_keyAxis;
-    int m_action;
 public:
-    Player(float xAxis, float yAxis, float speed);
+    Player(glm::vec2 position, float speed);
 
-    void setXAxis(float xAxis);
-    void setYAxis(float yAxis);
+    glm::vec2 getPosition() const;
+    void setPosition(glm::vec2 position);
 
-    void setKeyAxis(int key);
-    void setSpeed(const float &speed);
+    float getSpeed() const;
+    void setSpeed(const float speed);
 
-    float getXAxis();
-    float getYAxis();
+    int getKeyAxis();
 
-    float getXRange();
-    float getYRange();
-
-    int &getKeyAxis();
-    int &getAction();
-    float &getSpeed();
-
-    virtual void draw(const int screenWidth, const int screenHeight,
-                      Shader shader, unsigned int vaoId, Texture texture) override;
+    virtual void draw(Shader shader, unsigned int vaoId, Texture texture) override;
 
     virtual void receiver(int key, int action) override;
 };

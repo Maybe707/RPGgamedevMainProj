@@ -9,8 +9,7 @@ class IUnit
 public:
     virtual ~IUnit() {}
 
-    virtual void draw(const int screenWidth, const int screenHeight,
-                      Shader shader, unsigned int vaoId, Texture texture) = 0;
+    virtual void draw(Shader shader, unsigned int vaoId, Texture texture) = 0;
 
     virtual void receiver(int key, int action) = 0;
 };

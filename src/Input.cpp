@@ -8,23 +8,27 @@ void processInput(GLFWwindow *window, Player &player, float &deltaTime)
         glfwSetWindowShouldClose(window, true);
     }
 
+    glm::vec2 movementVec = player.getPosition();
+
     if (player.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        player.setYAxis(player.getYAxis() + deltaTime * player.getSpeed());
+        movementVec += glm::vec2(0.f, deltaTime * player.getSpeed());
     }
 
     if (player.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        player.setYAxis(player.getYAxis() - deltaTime * player.getSpeed());
+        movementVec -= glm::vec2(0.f, deltaTime * player.getSpeed());
     }
 
     if (player.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        player.setXAxis(player.getXAxis() - deltaTime * player.getSpeed());
+        movementVec -= glm::vec2(deltaTime * player.getSpeed(), 0.f);
     }
 
     if (player.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        player.setXAxis(player.getXAxis() + deltaTime * player.getSpeed());
+        movementVec += glm::vec2(deltaTime * player.getSpeed(), 0.f);
     }
+
+    player.setPosition(movementVec);
 }

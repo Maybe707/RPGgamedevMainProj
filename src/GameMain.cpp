@@ -349,8 +349,8 @@ int main()
     worldmap1.setRandomSprites(arraySpritesSet, RandSprite);
     worldmap2.setRandomSprites(arraySpritesSet, RandSprite);
 
-    Player Player_Hero(450.0f, -150.0f, 2.0f);  // 450.0f, -150.0f
-    Input_Notifier.attach(&Player_Hero);
+    Player playerHero(glm::vec2(450.0f, -150.0f), 2.0f);
+    Input_Notifier.attach(&playerHero);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -396,19 +396,19 @@ int main()
 
         Chrono.setNewFrameTime();
         Delta_Time = Chrono.getDeltaTime();
-        processInput(window.getGLFWwindow(), Player_Hero, Delta_Time);
+        processInput(window.getGLFWwindow(), playerHero, Delta_Time);
 
         worldmap1.render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
-        Collision.detection(Map_Objects_Pointer, Player_Hero, Delta_Time, worldmap1, window.getGLFWwindow());
+        Collision.detection(Map_Objects_Pointer, playerHero, Delta_Time, worldmap1, window.getGLFWwindow());
 
         Pipe->render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), wallTexture, offset1, offset2, rand_id, 0);
-        Collision.detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, window.getGLFWwindow());
+        Collision.detection(Map_Objects_Pointer, playerHero, Delta_Time, *Pipe, window.getGLFWwindow());
 
         worldmap2.render(Map_Objects_Pointer2, ourShader, vaoWalls.getId(), wallTexture, offset1_1, offset2_2, 0,
                          rand_id_2);
-        Collision.detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, worldmap2, window.getGLFWwindow());
+        Collision.detection(Map_Objects_Pointer2, playerHero, Delta_Time, worldmap2, window.getGLFWwindow());
 
-        camera.setPosition(glm::vec2(-Player_Hero.getXAxis(), -Player_Hero.getYAxis()));
+        camera.setPosition(-playerHero.getPosition());
         ourShader.setUniform("projection", camera.getProjectionMatrix());
         ourShader.setUniform("view", camera.getViewMatrix());
 
@@ -416,7 +416,7 @@ int main()
         // так как до этого мы анбиндили все объекты данного типа.
         vbo.bind();
 
-        if (Player_Hero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+        if (playerHero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
         {
             Animation_Delta += Delta_Time;
             if (Animation_Delta > 30.0f)
@@ -439,7 +439,7 @@ int main()
                 Animation_Delta = 0;
             }
         }
-        else if (Player_Hero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
+        else if (playerHero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
         {
             Animation_Delta += Delta_Time;
             if (Animation_Delta > 30.0f)
@@ -465,7 +465,7 @@ int main()
                 Animation_Delta = 0;
             }
         }
-        else if (Player_Hero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
+        else if (playerHero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
         {
             Animation_Delta += Delta_Time;
             if (Animation_Delta > 30.0f)
@@ -491,7 +491,7 @@ int main()
                 Animation_Delta = 0;
             }
         }
-        else if (Player_Hero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+        else if (playerHero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
         {
             Animation_Delta += Delta_Time;
             if (Animation_Delta > 30.0f)
@@ -518,7 +518,7 @@ int main()
             }
         }
 
-        Player_Hero.draw(SCR_WIDTH, SCR_HEIGHT, ourShader, vao.getId(), heroTexture);
+        playerHero.draw(ourShader, vao.getId(), heroTexture);
 
         // glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         window.swapBuffers();
