@@ -13,10 +13,10 @@
 class Shader : public IGLObject
 {
 private:
-    unsigned int m_id;
+    unsigned int m_id{};
 public:
-    // Конструктор генерирует шейдер "на лету"
-    Shader(const char *vertexPath, const char *fragmentPath);
+    Shader() = default;
+    Shader(unsigned int id);
 
     // Активация шейдера
     void use() const;
@@ -29,11 +29,19 @@ public:
 
     void setUniform(const std::string &name, const glm::mat4& mat) const;
 
-    unsigned int getId() const override;
+    unsigned int getId() const noexcept override;
+
+    void destroy();
+
+    static Shader createShader(const char *vertexPath, const char *fragmentPath);
 
 private:
     // Полезные функции для проверки ошибок компиляции/связывания шейдеров
-    static void checkCompileErrors(unsigned int shader, const std::string &type);
+    static unsigned int compileShader(const char* path, unsigned int type);
+
+    static void checkCompileErrors(unsigned int glHandelr, unsigned int status, 
+                                    void (*GLget)(unsigned int, unsigned int, int*),
+                                    void (*GLinfoLog)(unsigned int, int, int*, char*));
 };
 
 #endif //RPG_SHADER_H

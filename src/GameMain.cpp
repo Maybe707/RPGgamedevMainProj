@@ -248,7 +248,7 @@ int main()
 	window.setResizeCallback(resizeCallback);
 
     // Компилирование нашей шейдерной программы
-    Shader ourShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
+    Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
 
     VertexArray vao;
     Buffer vbo(GL_ARRAY_BUFFER);
@@ -345,8 +345,10 @@ int main()
 
     ourShader.setUniform("tex", 0);
     ourShader.setUniform("texture2", 1);
-
-    srand(static_cast<unsigned>(time(0)));
+    
+    unsigned int seedDeb = static_cast<unsigned>(time(0));
+    std::cout << seedDeb << std::endl;
+    srand(seedDeb);
 
     int l_height = getRandomNumber2(4, 7) * 7 + 2;
     int l_width = getRandomNumber2(4, 7) * 7 + 2;
@@ -559,6 +561,8 @@ int main()
         window.swapBuffers();
         glfwPollEvents();
     }
+
+    ourShader.destroy();
 
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();
