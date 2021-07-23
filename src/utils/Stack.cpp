@@ -33,10 +33,11 @@ int Stack::getElement()
 int Stack::popSearch(int key)
 {
     int temp = 0;
-    int temp_array[m_stackEnd];
+	int * pTempArray = new int[m_stackEnd];
+
     for (int n = 0; n < m_stackEnd; ++n)
     {
-        temp_array[n] = m_stack[n];
+		pTempArray[n] = m_stack[n];
     }
     for (int i = 0; i < m_stackEnd; ++i)
     {
@@ -44,10 +45,12 @@ int Stack::popSearch(int key)
         {
             continue;
         }
-        m_stack[temp] = temp_array[i];
+        m_stack[temp] = pTempArray[i];
         ++temp;
     }
     m_stack[m_stackEnd - 1] = 0;
     --m_stackEnd;
-    return temp_array[temp - 1];
+
+	delete[] pTempArray;
+    return pTempArray[temp - 1];
 }
