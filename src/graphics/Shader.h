@@ -33,11 +33,11 @@ public:
 
     void destroy() override;
 
-    static Shader createShader(const char *vertexPath, const char *fragmentPath);
+    static Shader createShader(const std::string& vertexPath, const std::string& fragmentPath);
 
 private:
     // Полезные функции для проверки ошибок компиляции/связывания шейдеров
-    static unsigned int compileShader(const char* path, unsigned int type);
+    static unsigned int compileShader(const std::string& path, unsigned int type);
 
     static void checkCompileErrors(unsigned int glHandelr, unsigned int status, 
                                     void (*GLget)(unsigned int, unsigned int, int*),

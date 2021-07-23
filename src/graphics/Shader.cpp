@@ -38,7 +38,7 @@ void Shader::destroy()
     m_id = 0;
 }
 
-Shader Shader::createShader(const char* vertexPath, const char* fragmentPath)
+Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath)
 {
     unsigned int shaderProgram = 0;
 
@@ -59,7 +59,7 @@ Shader Shader::createShader(const char* vertexPath, const char* fragmentPath)
     return Shader(shaderProgram);
 }
 
-unsigned int Shader::compileShader(const char* path, unsigned int type)
+unsigned int Shader::compileShader(const std::string& path, unsigned int type)
 {
     std::fstream shaderFile;
     std::string shaderCode;
