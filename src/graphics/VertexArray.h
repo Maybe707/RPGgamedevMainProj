@@ -13,7 +13,7 @@ public:
     void bind();
     void unbind();
 
-    void destroy();
+    void destroy() override;
 
     unsigned int getId() const override;
 };

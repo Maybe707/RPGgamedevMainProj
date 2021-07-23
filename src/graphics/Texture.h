@@ -21,7 +21,7 @@ public:
 
     unsigned int getId() const noexcept override;
 
-    void destroy();
+    void destroy() override;
 
     std::string getPath() const;
 

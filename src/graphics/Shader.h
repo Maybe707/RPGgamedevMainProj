@@ -31,7 +31,7 @@ public:
 
     unsigned int getId() const noexcept override;
 
-    void destroy();
+    void destroy() override;
 
     static Shader createShader(const char *vertexPath, const char *fragmentPath);
 

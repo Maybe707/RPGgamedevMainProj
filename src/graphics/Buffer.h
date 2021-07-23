@@ -16,7 +16,7 @@ public:
 
     void bind() const;
     void unbind() const;
-    void destroy();
+    void destroy() override;
 
     template<typename T>
     void setBufferData(const std::vector<T>& data, unsigned int usage);

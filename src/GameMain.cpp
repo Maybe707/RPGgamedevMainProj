@@ -13,8 +13,6 @@
 #include "Camera.h"
 #include "Collision.h"
 #include "Input.h"
-#include "GL_Window.h"
-#include "GL_Initializasion.h"
 #include "Data.h"
 #include "Chrono_Guard.h"
 #include "Map_Source.h"
