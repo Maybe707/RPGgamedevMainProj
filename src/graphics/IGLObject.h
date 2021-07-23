@@ -3,13 +3,8 @@
 
 class GLObject
 {
-private:
-    
 public:
-    GLObject(/* args */);
-    ~GLObject();
+    virtual unsigned int getId() const = 0;
 };
-
-
 
 #endif
