@@ -1,6 +1,6 @@
 class Stack_Engine
 {
-	int m_stack_end;
+	int m_stackEnd;
 	const int m_range;
 	int* m_stack;
 public:
@@ -10,5 +10,5 @@ public:
 	void Push(int element);
 	int Pop();
 	int getElement();
-	int Pop_Search(int key);
+	int PopSearch(int key);
 };

@@ -3,13 +3,14 @@
 
 #include <glad/gl.h>
 #include <glm/glm.hpp>
+#include "IGLObject.h"
 
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-class Shader
+class Shader : public IGLObject
 {
 private:
     unsigned int m_id;
@@ -27,6 +28,8 @@ public:
     void setUniform(const std::string &name, float value) const;
 
     void setUniform(const std::string &name, const glm::mat4& mat) const;
+
+    unsigned int getId() const override;
 
 private:
     // Полезные функции для проверки ошибок компиляции/связывания шейдеров

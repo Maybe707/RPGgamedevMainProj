@@ -89,6 +89,11 @@ void Shader::setUniform(const std::string &name, const glm::mat4& mat) const
     glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
+unsigned int Shader::getId() const
+{
+    return m_id;
+}
+
 void Shader::checkCompileErrors(unsigned int shader, const std::string &type)
 {
     int success;
