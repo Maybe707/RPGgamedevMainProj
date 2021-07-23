@@ -1,7 +1,7 @@
-#include "Player_Implementation.h"
+#include "Player.h"
 #include <GLFW/glfw3.h>
 
-void processInput(GLFWwindow* window, PlayerImpl& player, float& deltaTime)
+void processInput(GLFWwindow *window, Player &player, float &deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {

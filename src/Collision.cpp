@@ -2,7 +2,7 @@
 #include "GLFW/glfw3.h"
 #include "Collision.h"
 
-void Collision::repel(MapObjects** mapObjects, PlayerImpl& player, float& deltaTime, GLFWwindow* window)
+void Collision::repel(MapObjects **mapObjects, Player &player, float &deltaTime, GLFWwindow *window)
 {
     if (player.getKeyAxis() == GLFW_KEY_W)
     {
@@ -25,12 +25,12 @@ void Collision::repel(MapObjects** mapObjects, PlayerImpl& player, float& deltaT
     }
 }
 
-bool Collision::detectionBox(PlayerImpl& player, MapObjects& mapObjects, float& deltaTime, GLFWwindow* window)
+bool Collision::detectionBox(Player &player, MapObjects &mapObjects, float &deltaTime, GLFWwindow *window)
 {
     bool stateX = false;
     float axisX = 0;
     float axisY = 0;
-    
+
     if (player.getXAxis() < mapObjects.getXAxis() + 58.0f &&
         player.getXAxis() + 58.0f > mapObjects.getXAxis() &&
         player.getYAxis() < mapObjects.getYAxis() + 58.0f &&
@@ -66,13 +66,14 @@ bool Collision::detectionBox(PlayerImpl& player, MapObjects& mapObjects, float& 
     return stateX;
 }
 
-void Collision::detection(MapObjects** mapObjects, PlayerImpl& player, float& deltaTime, WorldMap& worldmap, GLFWwindow* window)
+void
+Collision::detection(MapObjects **mapObjects, Player &player, float &deltaTime, WorldMap &worldmap, GLFWwindow *window)
 {
-    for(int i = 0; i < worldmap.getMapHeight(); ++i)
+    for (int i = 0; i < worldmap.getMapHeight(); ++i)
     {
-        for(int j = 0; j < worldmap.getMapWidth(); ++j)
+        for (int j = 0; j < worldmap.getMapWidth(); ++j)
         {
-            if(worldmap.getMapKey(i, j) == '0')
+            if (worldmap.getMapKey(i, j) == '0')
             {
                 if (detectionBox(player, mapObjects[i][j], deltaTime, window))
                 {

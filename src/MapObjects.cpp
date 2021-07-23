@@ -1,17 +1,15 @@
-#include "Map_Objects.h"
+#include "MapObjects.h"
 
-MapObjects::MapObjects()
-{ }
+MapObjects::MapObjects() {}
 
 MapObjects::MapObjects(char symbol, float xAxis, float yAxis, float size) :
-    m_Symbol(symbol),
-    m_xAxis(xAxis),
-    m_yAxis(yAxis),
-    m_Size(size)
-{ }
+        m_Symbol(symbol),
+        m_xAxis(xAxis),
+        m_yAxis(yAxis),
+        m_Size(size) {}
 
 char MapObjects::getSymbol()
-{ 
+{
     return m_Symbol;
 }
 

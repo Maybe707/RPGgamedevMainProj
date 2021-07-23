@@ -1,45 +1,44 @@
-#include "Player_Implementation.h"
+#include "Player.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
-PlayerImpl::PlayerImpl(float xAxis, float yAxis, float speed) :
-    m_xAxis(xAxis),
-    m_yAxis(yAxis),
-    m_Speed(speed)
-{ }
+Player::Player(float xAxis, float yAxis, float speed) :
+        m_xAxis(xAxis),
+        m_yAxis(yAxis),
+        m_Speed(speed) {}
 
-void PlayerImpl::setXAxis(float xAxis)
+void Player::setXAxis(float xAxis)
 {
     m_xAxis = xAxis;
 }
 
-void PlayerImpl::setYAxis(float yAxis)
+void Player::setYAxis(float yAxis)
 {
     m_yAxis = yAxis;
 }
 
-float PlayerImpl::getXAxis()
+float Player::getXAxis()
 {
     return m_xAxis;
 }
 
-float PlayerImpl::getYAxis()
+float Player::getYAxis()
 {
     return m_yAxis;
 }
 
-float PlayerImpl::getXRange()
+float Player::getXRange()
 {
     return m_xRange;
 }
 
-float PlayerImpl::getYRange()
+float Player::getYRange()
 {
     return m_yRange;
 }
 
-void PlayerImpl::draw(const int screenWidth, const int screenHeight,
-                      Shader shader, unsigned int vaoId, Texture texture)
+void Player::draw(const int screenWidth, const int screenHeight,
+                  Shader shader, unsigned int vaoId, Texture texture)
 {
     glm::mat4 transformMat = glm::mat4(1.f);
 
@@ -55,33 +54,33 @@ void PlayerImpl::draw(const int screenWidth, const int screenHeight,
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void PlayerImpl::receiver(int key, int action)
+void Player::receiver(int key, int action)
 {
     m_keyAxis = key;
     m_action = action;
 }
 
-int& PlayerImpl::getKeyAxis()
+int &Player::getKeyAxis()
 {
     return m_keyAxis;
 }
 
-void PlayerImpl::setKeyAxis(int key)
+void Player::setKeyAxis(int key)
 {
     m_keyAxis = key;
 }
 
-int& PlayerImpl::getAction()
+int &Player::getAction()
 {
     return m_action;
 }
 
-void PlayerImpl::set_Speed(const float &speed)
+void Player::setSpeed(const float &speed)
 {
     m_Speed = speed;
 }
 
-float& PlayerImpl::getSpeed()
+float &Player::getSpeed()
 {
     return m_Speed;
 }

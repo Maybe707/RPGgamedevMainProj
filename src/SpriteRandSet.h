@@ -1,7 +1,7 @@
 #ifndef SPRITE_RANDSET_H
 #define SPRITE_RANDSET_H
 
-#include "Map_Objects.h"
+#include "MapObjects.h"
 
 class SpriteRandSet
 {

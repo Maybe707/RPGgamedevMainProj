@@ -7,7 +7,7 @@ Stack::Stack(const int range, int stack_end) : m_range(range)
 
 Stack::~Stack()
 {
-    delete [] m_stack;
+    delete[] m_stack;
 }
 
 void Stack::push(int element)
@@ -19,28 +19,28 @@ void Stack::push(int element)
 int Stack::pop()
 {
     int temp;
-    temp = m_stack[m_stackEnd-1];
-    m_stack[m_stackEnd-1] = 0;
+    temp = m_stack[m_stackEnd - 1];
+    m_stack[m_stackEnd - 1] = 0;
     --m_stackEnd;
     return temp;
 }
 
 int Stack::getElement()
 {
-    return m_stack[m_stackEnd-1];
+    return m_stack[m_stackEnd - 1];
 }
 
 int Stack::popSearch(int key)
 {
     int temp = 0;
     int temp_array[m_stackEnd];
-    for(int n = 0; n < m_stackEnd; ++n)
+    for (int n = 0; n < m_stackEnd; ++n)
     {
         temp_array[n] = m_stack[n];
     }
-    for(int i = 0; i < m_stackEnd; ++i)
+    for (int i = 0; i < m_stackEnd; ++i)
     {
-        if(m_stack[i] == key)
+        if (m_stack[i] == key)
         {
             continue;
         }
@@ -49,5 +49,5 @@ int Stack::popSearch(int key)
     }
     m_stack[m_stackEnd - 1] = 0;
     --m_stackEnd;
-    return temp_array[temp-1];
+    return temp_array[temp - 1];
 }

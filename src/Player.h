@@ -1,9 +1,9 @@
 #ifndef PLAYER_IMPLEMENTATION
 #define PLAYER_IMPLEMENTATION
 
-#include "Unit_Interface.h"
+#include "IUnit.h"
 
-class PlayerImpl : public IUnit
+class Player : public IUnit
 {
     float m_xAxis;
     float m_yAxis;
@@ -13,13 +13,13 @@ class PlayerImpl : public IUnit
     int m_keyAxis;
     int m_action;
 public:
-    PlayerImpl(float xAxis, float yAxis, float speed);
+    Player(float xAxis, float yAxis, float speed);
 
     void setXAxis(float xAxis);
     void setYAxis(float yAxis);
-    
+
     void setKeyAxis(int key);
-    void set_Speed(const float& speed);
+    void setSpeed(const float &speed);
 
     float getXAxis();
     float getYAxis();
@@ -27,13 +27,13 @@ public:
     float getXRange();
     float getYRange();
 
-    int& getKeyAxis();
-    int& getAction();
-    float& getSpeed();
+    int &getKeyAxis();
+    int &getAction();
+    float &getSpeed();
 
     virtual void draw(const int screenWidth, const int screenHeight,
                       Shader shader, unsigned int vaoId, Texture texture) override;
-        
+
     virtual void receiver(int key, int action) override;
 };
 

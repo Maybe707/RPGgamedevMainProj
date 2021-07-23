@@ -1,19 +1,19 @@
 #include "Key_Input_Notifier.h"
-#include "Player_Implementation.h"
+#include "Player.h"
 
-void KeyInputNotifier::attach(PlayerImpl *player)
+void KeyInputNotifier::attach(Player *player)
 {
     m_playerObservers.push_back(player);
 }
 
-void KeyInputNotifier::detach(PlayerImpl *player)
+void KeyInputNotifier::detach(Player *player)
 {
     m_playerObservers.remove(player);
 }
 
 void KeyInputNotifier::notifier(int key, int action)
 {
-    for(PlayerImpl* iterator: m_playerObservers)
+    for(Player* iterator: m_playerObservers)
     {
         iterator->receiver(key, action);
     }

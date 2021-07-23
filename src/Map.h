@@ -3,8 +3,8 @@
 
 #include <string>
 #include "graphics/Shader.h"
-#include "Map_Objects.h"
-#include "Sprite_RandSet.h"
+#include "MapObjects.h"
+#include "SpriteRandSet.h"
 #include "graphics/Texture.h"
 
 class WorldMap
@@ -13,7 +13,7 @@ class WorldMap
     const int m_mapWidth;
     const unsigned int m_screenWidth;
     const unsigned int m_screenHeight;
-    char** m_tilemap;
+    char** m_tileMap;
 public:
     WorldMap(const unsigned int screenWidth, const unsigned int screenHeight,
              const int mapHeight, const int mapWidth);

@@ -5,58 +5,58 @@
 
 WorldMap::WorldMap(const unsigned int screenWidth, const unsigned int screenHeight,
                    const int mapHeight, const int mapWidth) :
-    m_screenWidth(screenWidth),
-    m_screenHeight(screenHeight),
-    m_mapHeight(mapHeight),
-    m_mapWidth(mapWidth)
+        m_screenWidth(screenWidth),
+        m_screenHeight(screenHeight),
+        m_mapHeight(mapHeight),
+        m_mapWidth(mapWidth)
 {
-    m_tilemap = new char*[m_mapHeight];
+    m_tileMap = new char *[m_mapHeight];
 
-    for(int count = 0; count < m_mapHeight; ++count)
-        m_tilemap[count] = new char[m_mapWidth];
+    for (int count = 0; count < m_mapHeight; ++count)
+        m_tileMap[count] = new char[m_mapWidth];
 
-    for(int i = 0; i < m_mapHeight; ++i)
+    for (int i = 0; i < m_mapHeight; ++i)
     {
-        for(int j = 0; j < m_mapWidth; ++j)
+        for (int j = 0; j < m_mapWidth; ++j)
         {
-            m_tilemap[i][j] = ' ';
+            m_tileMap[i][j] = ' ';
         }
     }
 }
 
 WorldMap::~WorldMap()
 {
-    for(int count = 0; count < m_mapHeight; ++count)
-        delete [] m_tilemap[count];
-    delete [] m_tilemap;
-    m_tilemap = nullptr;
+    for (int count = 0; count < m_mapHeight; ++count)
+        delete[] m_tileMap[count];
+    delete[] m_tileMap;
+    m_tileMap = nullptr;
 }
 
-void WorldMap::initialize(char** array)
+void WorldMap::initialize(char **array)
 {
-    for(int i = 0; i < m_mapHeight; ++i)
-        for(int j = 0; j < m_mapWidth; ++j)
+    for (int i = 0; i < m_mapHeight; ++i)
+        for (int j = 0; j < m_mapWidth; ++j)
         {
-            m_tilemap[i][j] = array[i][j];
+            m_tileMap[i][j] = array[i][j];
         }
 }
 
-void WorldMap::setRandomSprites(const char*** spriteSet, SpriteRandSet& spriteObj)
+void WorldMap::setRandomSprites(const char ***spriteSet, SpriteRandSet &spriteObj)
 {
-    for(int posIndex_X = 0; posIndex_X < ((m_mapHeight - 2) / 7); ++posIndex_X)
+    for (int posIndex_X = 0; posIndex_X < ((m_mapHeight - 2) / 7); ++posIndex_X)
     {
-        for(int posIndex_Y = 0; posIndex_Y < ((m_mapWidth - 2) / 7); ++posIndex_Y)
+        for (int posIndex_Y = 0; posIndex_Y < ((m_mapWidth - 2) / 7); ++posIndex_Y)
         {
             // rand call
             spriteObj.setRandSprite(spriteSet, getRandomNumber(0, 2));
 
-            for(int localArrIndex_X = 0; localArrIndex_X < spriteObj.getHeight(); ++localArrIndex_X)
+            for (int localArrIndex_X = 0; localArrIndex_X < spriteObj.getHeight(); ++localArrIndex_X)
             {
-                for(int localArrIndex_Y = 0; localArrIndex_Y < spriteObj.getWidth(); ++localArrIndex_Y)
+                for (int localArrIndex_Y = 0; localArrIndex_Y < spriteObj.getWidth(); ++localArrIndex_Y)
                 {
-                    if(spriteObj.getSpriteSetArray()[localArrIndex_X][localArrIndex_Y] == '0')
+                    if (spriteObj.getSpriteSetArray()[localArrIndex_X][localArrIndex_Y] == '0')
                     {
-                        m_tilemap[posIndex_X*7 + 1 + localArrIndex_X][posIndex_Y*7 + 1 + localArrIndex_Y] = '0';
+                        m_tileMap[posIndex_X * 7 + 1 + localArrIndex_X][posIndex_Y * 7 + 1 + localArrIndex_Y] = '0';
                     }
                 }
             }
@@ -66,14 +66,14 @@ void WorldMap::setRandomSprites(const char*** spriteSet, SpriteRandSet& spriteOb
 
 char WorldMap::getMapKey(const int i, const int j)
 {
-    return m_tilemap[i][j];
+    return m_tileMap[i][j];
 }
 
 // Генерируем рандомное число между значениями min и max.
 // Предполагается, что функцию srand() уже вызывали
 int WorldMap::getRandomNumber(int min, int max)
 {
-    static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0); 
+    static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
     // Равномерно распределяем рандомное число в нашем диапазоне
     return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
@@ -88,33 +88,33 @@ const int WorldMap::getMapWidth()
     return m_mapWidth;
 }
 
-void WorldMap::render(MapObjects** mapObjects, Shader& shader, unsigned int vaoId,
+void WorldMap::render(MapObjects **mapObjects, Shader &shader, unsigned int vaoId,
                       Texture texture, const int rowOffset, const int columnOffset,
                       int randId, int randIdNextLevel)
 {
     int flagX = 1;
     int flagY = 1;
 
-    if(randId == 1)
+    if (randId == 1)
         flagX = -1;
 
-    if(randId == 2)
+    if (randId == 2)
         flagY = -1;
 
-    if(randIdNextLevel == 3)
+    if (randIdNextLevel == 3)
         flagX = -1;
 
-    if(randIdNextLevel == 4)
+    if (randIdNextLevel == 4)
         flagY = -1;
 
     int height = m_mapHeight;
     int width = m_mapWidth;
 
-    for(int i = 0; i < height; ++i)
+    for (int i = 0; i < height; ++i)
     {
-        for(int j = 0; j < width; ++j)
+        for (int j = 0; j < width; ++j)
         {
-            if(getMapKey(i, j) == '0')
+            if (getMapKey(i, j) == '0')
             {
                 float tempRow = flagX * (-i - rowOffset) * 64;
                 float tempCol = flagY * (j + columnOffset) * 64;
