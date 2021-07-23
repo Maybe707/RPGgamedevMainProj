@@ -6,11 +6,6 @@ VertexArray::VertexArray()
     glCreateVertexArrays(1, &m_id);
 }
 
-VertexArray::~VertexArray()
-{
-    destroy();
-}
-
 void VertexArray::bind()
 {
     glBindVertexArray(m_id);

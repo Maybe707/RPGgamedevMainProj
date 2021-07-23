@@ -13,7 +13,6 @@ private:
 public:
     Buffer() = default;
     Buffer(unsigned int);
-    ~Buffer() override;
 
     void bind() const;
     void unbind() const;

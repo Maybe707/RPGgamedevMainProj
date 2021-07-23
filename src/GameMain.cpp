@@ -517,6 +517,12 @@ int main()
     wallTexture.destroy();
     heroTexture.destroy();
 
+    vbo.destroy();
+    vboWalls.destroy();
+    
+    vao.destroy();
+    vaoWalls.destroy();
+
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();
 
