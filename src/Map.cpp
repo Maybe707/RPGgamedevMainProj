@@ -1,6 +1,5 @@
 #include <glad/gl.h>
 #include "Map.h"
-#include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -62,7 +61,7 @@ int WorldMap::getRandomNumber(int min, int max)
 const int WorldMap::getMapHeight() { return map_height; }
 const int WorldMap::getMapWidth() { return map_width; }
 
-void WorldMap::Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, unsigned int texture1, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level)
+void WorldMap::Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, Texture texture, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level)
 {
     int flag_x = 1;
     int flag_y = 1;
@@ -91,21 +90,19 @@ void WorldMap::Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsi
 				Map_Objects_Pointer[i][j].set_Symbol('0');
 				Map_Objects_Pointer[i][j].setI(i);
 				Map_Objects_Pointer[i][j].setJ(j);
-				MapDraw(tempCol, tempRow, ourShader, VAO, texture1);
+				MapDraw(tempCol, tempRow, ourShader, VAO, texture);
 			}
 		}
 }
 
-void WorldMap::MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1)
+void WorldMap::MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, Texture texture)
 {
     glm::mat4 transformMat = glm::mat4(1.f);
     transformMat = glm::translate(transformMat, glm::vec3(coordX, coordY, 0.f));
     transformMat = glm::scale(transformMat, glm::vec3(64.f));
     ourShader.setUniform("model", transformMat);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-
+    texture.bind();
 	ourShader.use();
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

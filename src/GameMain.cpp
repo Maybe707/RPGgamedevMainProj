@@ -21,6 +21,7 @@
 #include "Key_Input_Notifier.h"
 #include "Stack_Engine.h"
 #include "ElementsForRandSprites.h"
+#include "graphics/Texture.h"
 
 #define wall_size1 10
 #define wall_size2 4
@@ -288,64 +289,14 @@ int main()
 	glBindVertexArray(0);
 
 	vboWalls.unbind();
-    
-    // Загрузка и создание текстуры
-    unsigned int texture1, texture2;
-    // Текстура №1 - Деревянный ящик
-    glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    // установка параметров наложения текстуры
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // установка метода наложения текстуры GL_REPEAT (стандартный метод наложения)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
-    // Установка параметров фильтрации текстуры
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    // Загрузка изображения, создание текстуры и генерирование мипмап-уровней
-    int width, height, nrChannels;
-
-	stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load("../res/textures/enemy.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    // установка параметров наложения текстуры
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // установка метода наложения текстуры GL_REPEAT (стандартный метод наложения)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // Установка параметров фильтрации текстуры
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	data = stbi_load("../res/textures/hero.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
+    Texture wallTexture("../res/textures/enemy.png");
+    Texture heroTexture("../res/textures/hero.png");
 
     // Указываем OpenGL какой сэмплер к какому текстурному блоку принадлежит (это нужно сделать единожды)
     ourShader.use(); // не забудьте активировать шейдер перед настройкой uniform-переменных!
-
     ourShader.setUniform("tex", 0);
-    ourShader.setUniform("texture2", 1);
-    
+
     unsigned int seedDeb = static_cast<unsigned>(time(0));
     std::cout << seedDeb << std::endl;
     srand(seedDeb);
@@ -446,13 +397,13 @@ int main()
 		Delta_Time = Chrono.get_Delta();
         Process_Input(window.getGLFWwindow(), Player_Hero, Delta_Time);
 
-		Tile_Map.Render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), texture1, 0, 0, 3, 0);
+		Tile_Map.Render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, Tile_Map, window.getGLFWwindow());
 
-        Pipe->Render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), texture1, offset1, offset2, rand_id, 0);
+        Pipe->Render(Map_Objects_Pointer, ourShader, vaoWalls.getId(), wallTexture, offset1, offset2, rand_id, 0);
 		Collision.Detection(Map_Objects_Pointer, Player_Hero, Delta_Time, *Pipe, window.getGLFWwindow());
 
-        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, vaoWalls.getId(), texture1, offset1_1, offset2_2, 0, rand_id_2);
+        Tile_Map2.Render(Map_Objects_Pointer2, ourShader, vaoWalls.getId(), wallTexture, offset1_1, offset2_2, 0, rand_id_2);
 		Collision.Detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, Tile_Map2, window.getGLFWwindow());
 
 		Camera_View.Set_Position(-Player_Hero.get_xAxis(), -Player_Hero.get_yAxis(), 0.0f, 1.0f);
@@ -555,7 +506,7 @@ int main()
 			}
 		}
 
-		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, vao.getId(), texture2);
+		Player_Hero.Draw(SCR_WIDTH, SCR_HEIGHT, ourShader, vao.getId(), heroTexture);
 
         // glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         window.swapBuffers();
@@ -563,6 +514,8 @@ int main()
     }
 
     ourShader.destroy();
+    wallTexture.destroy();
+    heroTexture.destroy();
 
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();

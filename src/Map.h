@@ -5,6 +5,7 @@
 #include "graphics/Shader.h"
 #include "Map_Objects.h"
 #include "Sprite_RandSet.h"
+#include "graphics/Texture.h"
 
 class WorldMap
 {
@@ -29,9 +30,9 @@ class WorldMap
 	const int getMapHeight();
 	const int getMapWidth();
 
-	void Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, unsigned int texture1, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level);
+	void Render(Map_Objects** Map_Objects_Pointer, Shader& ourShader, unsigned int VAO, Texture texture, const int row_offset, const int col_offset, int rand_id, int rand_id_next_level);
 
-	void MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, unsigned int texture1);
+	void MapDraw(float coordX, float coordY, Shader ourShader, unsigned int VAO, Texture texture);
 };
 
 #endif

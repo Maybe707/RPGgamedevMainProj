@@ -4,7 +4,8 @@
 class IGLObject
 {
 public:
-    virtual ~IGLObject() = default;;
+    virtual ~IGLObject() = default;
+
     virtual unsigned int getId() const = 0;
 };
 

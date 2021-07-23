@@ -12,18 +12,16 @@ float Player_Implementation::get_yAxis() { return m_yAxis; }
 float Player_Implementation::get_xRange() { return m_xRange; }
 float Player_Implementation::get_yRange() { return m_yRange; }
 
-void Player_Implementation::Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, unsigned int texture2)
+void Player_Implementation::Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, Texture texture)
 {
     glm::mat4 transformMat = glm::mat4(1.f);
     transformMat = glm::translate(transformMat, glm::vec3(m_xAxis, m_yAxis, 0.f));
     transformMat = glm::scale(transformMat, glm::vec3(64.f));
     ourShader.setUniform("model", transformMat);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-
-	ourShader.use();
-	glBindVertexArray(VAO);
+    texture.bind();
+    ourShader.use();
+    glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 

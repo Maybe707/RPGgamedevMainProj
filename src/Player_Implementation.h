@@ -28,7 +28,7 @@ public:
 	int& getAction();
 	float& get_Speed();
 
-	virtual void Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, unsigned int texture2) override;
+	virtual void Draw (const int SCR_WIDTH, const int SCR_HEIGHT, Shader ourShader, unsigned int VAO, Texture texture) override;
 	virtual void Receiver(int key, int action) override;
 };
 
