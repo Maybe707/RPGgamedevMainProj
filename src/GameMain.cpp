@@ -10,7 +10,7 @@
 #include <ctime>
 #include "Map.h"
 #include "Player.h"
-#include "Camera2D.h"
+#include "graphics/Camera2D.h"
 #include "Collision.h"
 #include "Input.h"
 #include "Data.h"
@@ -308,7 +308,7 @@ int main()
     int l_height2 = getRandomNumber2(4, 7) * 7 + 2;
     int l_width2 = getRandomNumber2(4, 7) * 7 + 2;
 
-    Camera2D Camera_View(0.0f, 0.0f, 0.0f, SCR_WIDTH, SCR_HEIGHT, 0.0f, 100.0f);
+    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
     WorldMap worldmap1(SCR_WIDTH, SCR_HEIGHT, l_height, l_width);
     WorldMap worldmap2(SCR_WIDTH, SCR_HEIGHT, l_height2, l_width2);
 
@@ -354,7 +354,6 @@ int main()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    Camera_View.setView(ourShader);
 
     const int anim_index_array = 3;
     int anim_count = 0;
@@ -409,11 +408,12 @@ int main()
                          rand_id_2);
         Collision.detection(Map_Objects_Pointer2, Player_Hero, Delta_Time, worldmap2, window.getGLFWwindow());
 
-        Camera_View.setPosition(-Player_Hero.getXAxis(), -Player_Hero.getYAxis(), 0.0f, 1.0f);
-        Camera_View.setView(ourShader);
+        camera.setPosition(glm::vec2(-Player_Hero.getXAxis(), -Player_Hero.getYAxis()));
+        ourShader.setUniform("projection", camera.getProjectionMatrix());
+        ourShader.setUniform("view", camera.getViewMatrix());
 
-        // Биндим объект вершинного буфера чтобы получить возможность загрузить новые данные, так как до этого мы анбиндили все объекты данного типа.
-
+        // Биндим объект вершинного буфера чтобы получить возможность загрузить новые данные,
+        // так как до этого мы анбиндили все объекты данного типа.
         vbo.bind();
 
         if (Player_Hero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
