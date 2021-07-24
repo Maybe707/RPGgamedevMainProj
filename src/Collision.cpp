@@ -2,17 +2,17 @@
 #include "window/Window.h"
 #include "Collision.h"
 
-bool Collision::detectionBox(Player &player, MapObject &mapObjects, float &deltaTime)
+bool Collision::detectionBox(Player& player, MapObject& mapObject, float& deltaTime)
 {
     bool stateX;
     Window& wnd = Window::getInstance();
 
     glm::vec2 playerPosition = player.getPosition();
 
-    if (playerPosition.x < mapObjects.getXAxis() + 58.0f && // Кто знает, почему тут 58?
-        playerPosition.x + 58.0f > mapObjects.getXAxis() &&
-        playerPosition.y < mapObjects.getYAxis() + 58.0f &&
-        playerPosition.y + 58.0f > mapObjects.getYAxis())
+    if (playerPosition.x < mapObject.getXAxis() + 58.0f && //HACK: Кто знает, почему тут 58? Это хак
+        playerPosition.x + 58.0f > mapObject.getXAxis() &&
+        playerPosition.y < mapObject.getYAxis() + 58.0f &&
+        playerPosition.y + 58.0f > mapObject.getYAxis())
     {
 
         // TODO: В инпуте кнопки проверяются, тут проверяются. Что-то очень странное...
@@ -48,7 +48,7 @@ bool Collision::detectionBox(Player &player, MapObject &mapObjects, float &delta
     return stateX;
 }
 
-void Collision::detection(MapObject **mapObjects, Player &player, float &deltaTime, WorldMap &worldmap)
+void Collision::detection(MapObject** mapObjects, Player& player, float& deltaTime, WorldMap& worldmap)
 {
     for (int i = 0; i < worldmap.getMapHeight(); ++i)
     {
