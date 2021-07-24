@@ -355,8 +355,8 @@ int main()
 
         spriteBatch.begin();
       
-        deltaTime = Chrono.getDeltaTime() * 200;
-        processInput(window.getGLFWwindow(), playerHero, deltaTime);
+        deltaTime = chrono.getDeltaTime() * 200;
+        processInput(playerHero, deltaTime);
 
         worldMap1.render(mapObjectsPointer, spriteBatch, wallSprite, 0, 0, 3, 0);
         collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1);
