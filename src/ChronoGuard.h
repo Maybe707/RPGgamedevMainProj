@@ -16,9 +16,12 @@ public:
     {
         m_frameTime = glfwGetTime();
         m_deltaTime = m_frameTime - m_prevFrameTime;
-        m_deltaTime *= 200;
         m_prevFrameTime = m_frameTime;
     }
 
-    float getDeltaTime() { return m_deltaTime; }
+    float getDeltaTime()
+    {   
+        setNewFrameTime(); 
+        return m_deltaTime; 
+    }
 };
