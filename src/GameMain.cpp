@@ -58,7 +58,7 @@ int getRandomNumber2(int min, int max)
     return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
 
-char **genRandomLevel(const int lHeight, const int lWidth)
+char** genRandomLevel(const int lHeight, const int lWidth)
 {
 
     char **arr_ptr = new char *[lHeight];
@@ -234,7 +234,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
 KeyInputNotifier inputNotifier;
-std::vector<int> inputVec;
+std::vector<int> inputVec{};
 
 int main()
 {
@@ -300,6 +300,7 @@ int main()
     std::cout << "rand seed: " << seedDeb << std::endl;
     srand(seedDeb);
 
+    // FIXME: Нужно исправить генерацию размера что бы избавиться от рандомного SIGSEGV
     int lHeight = getRandomNumber2(4, 7) * 7 + 2;
     int lWidth = getRandomNumber2(4, 7) * 7 + 2;
     int lHeight2 = getRandomNumber2(4, 7) * 7 + 2;
@@ -413,7 +414,7 @@ int main()
         // так как до этого мы анбиндили все объекты данного типа.
         vbo.bind();
 
-        if (playerHero.getKeyAxis() == GLFW_KEY_S && window.getKey(GLFW_KEY_S))
+        if (playerHero.getKeyAxis() == GLFW_KEY_S || window.getKey(GLFW_KEY_S))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -436,7 +437,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_A && window.getKey(GLFW_KEY_A))
+        else if (playerHero.getKeyAxis() == GLFW_KEY_A || window.getKey(GLFW_KEY_A))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -462,7 +463,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_D && window.getKey(GLFW_KEY_D))
+        else if (playerHero.getKeyAxis() == GLFW_KEY_D || window.getKey(GLFW_KEY_D))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -488,7 +489,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_W && window.getKey(GLFW_KEY_W))
+        else if (playerHero.getKeyAxis() == GLFW_KEY_W || window.getKey(GLFW_KEY_W))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)

@@ -9,9 +9,9 @@ Window& Window::getInstance(int width, int height, const std::string& title)
     return window;
 }
 
-Window::Window(int width, int height, const std::string &title)
+Window::Window(int width, int height, const std::string &title) : m_keys()
 {
-    glfwInit();
+    assert(glfwInit());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -36,40 +36,40 @@ Window::Window(int width, int height, const std::string &title)
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
 }
 
-bool Window::isOpen()
+bool Window::isOpen() const
 {
     return !glfwWindowShouldClose(m_window);
 }
 
-void Window::close()
+void Window::close() const
 {
     glfwSetWindowShouldClose(m_window, GL_TRUE);
 }
 
-void Window::destroy()
+void Window::destroy() const
 {
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }
 
-void Window::makeContextCurrent()
+void Window::makeContextCurrent() const noexcept
 {
     glfwMakeContextCurrent(m_window);
 }
 
-void Window::swapBuffers()
+void Window::swapBuffers() const noexcept
 {
     glfwSwapBuffers(m_window);
 }
 
-int Window::getWidth()
+int Window::getWidth() const
 {
     int width;
     glfwGetWindowSize(m_window, &width, nullptr);
     return width;
 }
 
-int Window::getHeight()
+int Window::getHeight() const
 {
     int height;
     glfwGetWindowSize(m_window, nullptr, &height);

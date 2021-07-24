@@ -18,19 +18,19 @@ private:
     ResizeCallback m_resizeCallback;
     bool m_keys[GLFW_KEY_LAST + 1];
 public:
-    bool isOpen();
+    bool isOpen() const;
 
-    void close();
+    void close() const;
 
-    void destroy();
+    void destroy() const;
 
-    void makeContextCurrent();
+    void makeContextCurrent() const noexcept;
 
-    void swapBuffers();
+    void swapBuffers() const noexcept;
 
-    int getWidth();
+    int getWidth() const;
 
-    int getHeight();
+    int getHeight() const;
 
     bool getKey(int key);
 
