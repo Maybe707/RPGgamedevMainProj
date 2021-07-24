@@ -2,11 +2,13 @@
 out vec4 FragColor;
 
 in vec2 TexCoord;
+in float TexIndex;
 
 // Текстурные сэмплеры
-uniform sampler2D tex;
+uniform sampler2DRect textures[16];
 
 void main()
 {
-    FragColor = texture(tex, TexCoord);
+    int index = int(TexIndex);
+    FragColor = texture(textures[index], TexCoord);
 }

@@ -1,8 +1,6 @@
 #include <glad/gl.h>
 #include "Map.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 WorldMap::WorldMap(const unsigned int screenWidth, const unsigned int screenHeight,
                    const int mapHeight, const int mapWidth) :
         m_screenWidth(screenWidth),
@@ -88,9 +86,8 @@ const int WorldMap::getMapWidth()
     return m_mapWidth;
 }
 
-void WorldMap::render(MapObject** mapObjects, Shader &shader, unsigned int vaoId,
-                      Texture texture, const int rowOffset, const int columnOffset,
-                      int randId, int randIdNextLevel)
+void WorldMap::render(MapObject** mapObjects, SpriteBatch& batch, Sprite& sprite, const int rowOffset,
+                      const int columnOffset, int randId, int randIdNextLevel)
 {
     int flagX = 1;
     int flagY = 1;
@@ -126,23 +123,14 @@ void WorldMap::render(MapObject** mapObjects, Shader &shader, unsigned int vaoId
                 mapObjects[i][j].setI(i);
                 mapObjects[i][j].setJ(j);
 
-                drawMap(tempCol, tempRow, shader, vaoId, texture);
+                drawMap(tempCol, tempRow, batch, sprite);
             }
         }
     }
 }
 
-void WorldMap::drawMap(float coordX, float coordY, Shader shader, unsigned int vaoId, Texture texture)
+void WorldMap::drawMap(float coordX, float coordY, SpriteBatch& batch, Sprite& sprite)
 {
-    glm::mat4 transformMat(1.f);
-    transformMat = glm::translate(transformMat, glm::vec3(coordX, coordY, 0.f));
-    transformMat = glm::scale(transformMat, glm::vec3(64.f));
-
-    shader.use();
-    shader.setUniform("model", transformMat);
-
-    texture.bind();
-
-    glBindVertexArray(vaoId);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    sprite.setPosition(glm::vec2(coordX, coordY));
+    batch.draw(sprite);
 }

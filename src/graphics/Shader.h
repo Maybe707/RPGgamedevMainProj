@@ -29,6 +29,8 @@ public:
 
     void setUniform(const std::string &name, const glm::mat4& mat) const;
 
+    void setUniform(const std::string &name, const int arr[], int size) const;
+
     unsigned int getId() const noexcept override;
 
     void destroy() override;

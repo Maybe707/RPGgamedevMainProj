@@ -19,7 +19,7 @@ void Texture::bind(unsigned int slot) const
 
 void Texture::unbind() const
 {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTextureUnit(0, 0);
 }
 
 unsigned int Texture::getId() const noexcept
@@ -48,7 +48,8 @@ int Texture::getHeight() const
     return m_height;
 }
 
-Texture Texture::create(const std::string& path)
+// Нам может пригодиться тип текстур GL_TEXTURE_RECTANGLE и GL_TEXTURE_2D
+Texture Texture::create(const std::string& path, unsigned int type)
 {
     unsigned int texture;
     int channels;
@@ -56,7 +57,7 @@ Texture Texture::create(const std::string& path)
     int height;
     unsigned char* data = nullptr;
 
-    glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+    glCreateTextures(type, 1, &texture);
 
     // Установка параметров наложения текстуры
     glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -73,7 +74,7 @@ Texture Texture::create(const std::string& path)
          std::cout << "Failed to load texture" << std::endl;
          return Texture(0, "", 0, 0);
     }
-    
+
     glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
     glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateTextureMipmap(texture);
