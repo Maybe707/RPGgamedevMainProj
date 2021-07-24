@@ -554,9 +554,8 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
     }
     if (action == GLFW_RELEASE)
     {
-        inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
-        // FIXME: ошибка при компиляции на винде. Обращение к элементу уже пустого массива
         inputNotifier.notifier(inputVec.back(), action);
+		inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
     }
 }
 
