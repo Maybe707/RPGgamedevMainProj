@@ -57,7 +57,7 @@ int getRandomNumber2(int min, int max)
     return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
 
-char **genRandomLevel(const int lHeight, const int lWidth)
+char** genRandomLevel(const int lHeight, const int lWidth)
 {
 
     char **arr_ptr = new char *[lHeight];
@@ -233,17 +233,14 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
 KeyInputNotifier inputNotifier;
-std::vector<int> inputVec;
+std::vector<int> inputVec{};
 
 int main()
 {
-    // fglfw: инициализация и конфигурирование
-    glfwInit();
-
     // Создание окна
-    Window window(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
+    auto& window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
-    window.setInputCallback(inputCallback);
+    // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
 
     // Создание шейдерной программы
@@ -258,10 +255,11 @@ int main()
     std::cout << "rand seed: " << seedDeb << std::endl;
     srand(seedDeb);
 
-    int lHeight = getRandomNumber2(4, 7) * 7 + 2;
-    int lWidth = getRandomNumber2(4, 7) * 7 + 2;
+    // FIXME: Нужно исправить генерацию размера что бы избавиться от рандомного SIGSEGV
+    int lHeight  = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth   = getRandomNumber2(4, 7) * 7 + 2;
     int lHeight2 = getRandomNumber2(4, 7) * 7 + 2;
-    int lWidth2 = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth2  = getRandomNumber2(4, 7) * 7 + 2;
 
     Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
 
@@ -356,25 +354,24 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         spriteBatch.begin();
-
-        chrono.setNewFrameTime();
-        deltaTime = chrono.getDeltaTime();
+      
+        deltaTime = Chrono.getDeltaTime() * 200;
         processInput(window.getGLFWwindow(), playerHero, deltaTime);
 
         worldMap1.render(mapObjectsPointer, spriteBatch, wallSprite, 0, 0, 3, 0);
-        collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1, window.getGLFWwindow());
+        collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1);
 
         pipe->render(mapObjectsPointer, spriteBatch, wallSprite, offset1, offset2, randId, 0);
-        collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe, window.getGLFWwindow());
+        collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe);
 
         worldMap2.render(mapObjectsPointer2, spriteBatch, wallSprite, offset1and1, offset2and2, 0, randId2);
-        collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2, window.getGLFWwindow());
+        collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2);
 
         camera.setPosition(-playerHero.getPosition());
         spriteBatch.setProjectionMatrix(camera.getProjectionMatrix());
         spriteBatch.setViewMatrix(camera.getViewMatrix());
 
-        if (playerHero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+        if (window.getKey(GLFW_KEY_S))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -397,7 +394,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
+        else if (window.getKey(GLFW_KEY_A))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -420,7 +417,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
+        else if (window.getKey(GLFW_KEY_D))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -443,7 +440,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+        else if (window.getKey(GLFW_KEY_W))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -482,9 +479,7 @@ int main()
     heroTexture.destroy();
     spriteBatch.destroy();
 
-
-    // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
-    glfwTerminate();
+    window.destroy();
 
     // for (int counter2 = 0; counter2 < mapObjectsRow; ++counter2)
         // delete[] mapObjectsPointer[counter2];
@@ -509,8 +504,8 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
     }
     if (action == GLFW_RELEASE)
     {
-        inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
         inputNotifier.notifier(inputVec.back(), action);
+		inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
     }
 }
 
