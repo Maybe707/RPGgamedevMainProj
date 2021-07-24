@@ -238,10 +238,7 @@ std::vector<int> inputVec{};
 
 int main()
 {
-    // fglfw: инициализация и конфигурирование
-
     // Создание окна
-    // Window window(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     auto& window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
     window.setInputCallback(inputCallback);
@@ -301,10 +298,10 @@ int main()
     srand(seedDeb);
 
     // FIXME: Нужно исправить генерацию размера что бы избавиться от рандомного SIGSEGV
-    int lHeight = getRandomNumber2(4, 7) * 7 + 2;
-    int lWidth = getRandomNumber2(4, 7) * 7 + 2;
+    int lHeight  = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth   = getRandomNumber2(4, 7) * 7 + 2;
     int lHeight2 = getRandomNumber2(4, 7) * 7 + 2;
-    int lWidth2 = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth2  = getRandomNumber2(4, 7) * 7 + 2;
 
     Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
     WorldMap worldMap1(SCR_WIDTH, SCR_HEIGHT, lHeight, lWidth);
@@ -391,9 +388,8 @@ int main()
         // Рендеринг
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        Chrono.setNewFrameTime();
-        deltaTime = Chrono.getDeltaTime();
+        
+        deltaTime = Chrono.getDeltaTime() * 200;
         processInput(playerHero, deltaTime);
 
         worldMap1.render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
@@ -559,6 +555,7 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
     if (action == GLFW_RELEASE)
     {
         inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
+        // FIXME: ошибка при компиляции на винде. Обращение к элементу уже пустого массива
         inputNotifier.notifier(inputVec.back(), action);
     }
 }
