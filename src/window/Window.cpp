@@ -3,8 +3,16 @@
 #include <iostream>
 #include <cassert>
 
+Window& Window::getInstance(int width, int height, const std::string& title)
+{
+    static Window window(width, height, title);
+    return window;
+}
+
 Window::Window(int width, int height, const std::string &title)
 {
+    glfwInit();
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -28,11 +36,6 @@ Window::Window(int width, int height, const std::string &title)
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
 }
 
-Window::~Window()
-{
-    glfwDestroyWindow(m_window);
-}
-
 bool Window::isOpen()
 {
     return !glfwWindowShouldClose(m_window);
@@ -41,6 +44,12 @@ bool Window::isOpen()
 void Window::close()
 {
     glfwSetWindowShouldClose(m_window, GL_TRUE);
+}
+
+void Window::destroy()
+{
+    glfwDestroyWindow(m_window);
+    glfwTerminate();
 }
 
 void Window::makeContextCurrent()
@@ -67,6 +76,11 @@ int Window::getHeight()
     return height;
 }
 
+bool Window::getKey(int key)
+{
+    return m_keys[key];
+}
+
 void Window::setInputCallback(InputCallback inputCallback)
 {
     m_inputCallback = inputCallback;
@@ -91,6 +105,20 @@ void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int acti
 {
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
     win->onKey(key, scancode, actions, mods);
+
+    if (key < 0) return;
+
+    switch (actions)
+    {
+    case GLFW_PRESS:
+        getInstance().m_keys[key] = true;
+        break;
+    case GLFW_RELEASE:
+        getInstance().m_keys[key] = false;
+        break;
+    default:
+        break;
+    }
 }
 
 void Window::glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height)

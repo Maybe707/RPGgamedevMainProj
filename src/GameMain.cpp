@@ -239,10 +239,10 @@ std::vector<int> inputVec;
 int main()
 {
     // fglfw: инициализация и конфигурирование
-    glfwInit();
 
     // Создание окна
-    Window window(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
+    // Window window(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
+    auto& window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
     window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
@@ -393,17 +393,17 @@ int main()
 
         Chrono.setNewFrameTime();
         deltaTime = Chrono.getDeltaTime();
-        processInput(window.getGLFWwindow(), playerHero, deltaTime);
+        processInput(playerHero, deltaTime);
 
         worldMap1.render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
-        Collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1, window.getGLFWwindow());
+        Collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1);
 
         pipe->render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, offset1, offset2, randId, 0);
-        Collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe, window.getGLFWwindow());
+        Collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe);
 
         worldMap2.render(mapObjectsPointer2, ourShader, vaoWalls.getId(), wallTexture, offset1and1, offset2and2, 0,
                          randId2);
-        Collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2, window.getGLFWwindow());
+        Collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2);
 
         camera.setPosition(-playerHero.getPosition());
         ourShader.setUniform("projection", camera.getProjectionMatrix());
@@ -413,7 +413,7 @@ int main()
         // так как до этого мы анбиндили все объекты данного типа.
         vbo.bind();
 
-        if (playerHero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+        if (playerHero.getKeyAxis() == GLFW_KEY_S && window.getKey(GLFW_KEY_S))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -436,7 +436,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_A && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
+        else if (playerHero.getKeyAxis() == GLFW_KEY_A && window.getKey(GLFW_KEY_A))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -462,7 +462,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_D && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
+        else if (playerHero.getKeyAxis() == GLFW_KEY_D && window.getKey(GLFW_KEY_D))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -488,7 +488,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_W && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+        else if (playerHero.getKeyAxis() == GLFW_KEY_W && window.getKey(GLFW_KEY_W))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -531,9 +531,8 @@ int main()
 
     vao.destroy();
     vaoWalls.destroy();
-
-    // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
-    glfwTerminate();
+    
+    window.destroy();
 
     // for (int counter2 = 0; counter2 < mapObjectsRow; ++counter2)
         // delete[] mapObjectsPointer[counter2];

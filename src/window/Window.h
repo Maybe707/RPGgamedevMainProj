@@ -16,20 +16,13 @@ private:
     GLFWwindow *m_window;
     InputCallback m_inputCallback;
     ResizeCallback m_resizeCallback;
+    bool m_keys[GLFW_KEY_LAST + 1];
 public:
-    Window(int width, int height, const std::string &title);
-
-    ~Window();
-
-    // TODO: в идеале нужно избавиться от этого метода
-    inline GLFWwindow *getGLFWwindow()
-    {
-        return m_window;
-    }
-
     bool isOpen();
 
     void close();
+
+    void destroy();
 
     void makeContextCurrent();
 
@@ -39,11 +32,20 @@ public:
 
     int getHeight();
 
+    bool getKey(int key);
+
     void setInputCallback(InputCallback inputCallback);
 
     void setResizeCallback(ResizeCallback resizeCallback);
 
+    static Window& getInstance(int width = 0, int height = 0, const std::string& title = "");
+
 private:
+    Window(int width, int height, const std::string &title);
+
+    Window(const Window&) = delete;
+    Window& operator= (const Window&) = delete;
+
     void onKey(int key, int scancode, int actions, int mods);
 
     void onResize(int width, int height);

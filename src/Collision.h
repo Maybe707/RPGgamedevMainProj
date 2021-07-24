@@ -8,8 +8,8 @@
 class Collision
 {
 public:
-    bool detectionBox(Player& player, MapObject& mapObjects, float& deltaTime, GLFWwindow* window);
-    void detection(MapObject** mapObjects, Player& player, float& deltaTime, WorldMap& worldmap, GLFWwindow* window);
+    bool detectionBox(Player& player, MapObject& mapObjects, float& deltaTime);
+    void detection(MapObject** mapObjects, Player& player, float& deltaTime, WorldMap& worldmap);
 };
 
 #endif
