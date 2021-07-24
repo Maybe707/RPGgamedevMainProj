@@ -13,7 +13,8 @@ private:
     int m_height{}; // Высота текстуры
 
 public:
-    explicit Texture(const std::string &path);
+    Texture();
+    Texture(unsigned int id, const std::string& path, int width, int height);
 
     void bind(unsigned int slot = 0) const;
 
@@ -28,6 +29,8 @@ public:
     int getWidth() const;
 
     int getHeight() const;
+
+    static Texture create(const std::string &path);
 };
 
 

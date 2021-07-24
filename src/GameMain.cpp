@@ -1,5 +1,6 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <ctime>
 #include "window/Window.h"
 #include "graphics/Shader.h"
 #include "graphics/VertexArray.h"
@@ -287,8 +288,8 @@ int main()
 
     vboWalls.unbind();
 
-    Texture wallTexture("../res/textures/enemy.png");
-    Texture heroTexture("../res/textures/hero.png");
+    Texture wallTexture = Texture::create("../res/textures/enemy.png");
+    Texture heroTexture = Texture::create("../res/textures/hero.png");
 
     // Указываем OpenGL какой сэмплер к какому текстурному блоку принадлежит (это нужно сделать единожды)
     ourShader.use();
@@ -369,13 +370,13 @@ int main()
     const int mapObjectsRow2 = lHeight2;
     const int mapObjectsCol2 = lWidth2;
 
-    MapObjects **mapObjectsPointer = new MapObjects *[mapObjectsRow];
+    MapObject **mapObjectsPointer = new MapObject *[mapObjectsRow];
     for (int counter = 0; counter < mapObjectsRow; ++counter)
-        mapObjectsPointer[counter] = new MapObjects[mapObjectsCol];
+        mapObjectsPointer[counter] = new MapObject[mapObjectsCol];
 
-    MapObjects **mapObjectsPointer2 = new MapObjects *[mapObjectsRow2];
+    MapObject **mapObjectsPointer2 = new MapObject *[mapObjectsRow2];
     for (int count = 0; count < mapObjectsRow2; ++count)
-        mapObjectsPointer2[count] = new MapObjects[mapObjectsCol2];
+        mapObjectsPointer2[count] = new MapObject[mapObjectsCol2];
 
     // Game timer.
     ChronoGuard Chrono(0.0f, 0.0f, 0.0f);
@@ -533,9 +534,9 @@ int main()
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();
 
-    for (int counter2 = 0; counter2 < mapObjectsRow; ++counter2)
-        delete[] mapObjectsPointer[counter2];
-    delete[] mapObjectsPointer;
+    // for (int counter2 = 0; counter2 < mapObjectsRow; ++counter2)
+        // delete[] mapObjectsPointer[counter2];
+    // delete[] mapObjectsPointer;
 
     for (int counter3 = 0; counter3 < mapObjectsRow2; ++counter3)
         delete[] mapObjectsPointer2[counter3];

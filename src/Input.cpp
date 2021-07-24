@@ -29,6 +29,6 @@ void processInput(GLFWwindow *window, Player &player, float &deltaTime)
     {
         movementVec += glm::vec2(deltaTime * player.getSpeed(), 0.f);
     }
-
+    
     player.setPosition(movementVec);
 }

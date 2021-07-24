@@ -4,38 +4,13 @@
 #include <glad/gl.h>
 #include <stb_image.h>
 
-Texture::Texture(const std::string &path)
-        : m_path(path)
-{
-    glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
+Texture::Texture() : m_id(0), m_path(""), m_width(0), m_height(0) { }
 
-    // Установка параметров наложения текстуры
-    glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // Установка параметров фильтрации текстуры
-    glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    stbi_set_flip_vertically_on_load(1);
-
-    int channels;
-    unsigned char *data = stbi_load(path.c_str(), &m_width, &m_height, &channels, 0);
-    if (data)
-    {
-        glTextureStorage2D(m_id, 1, GL_RGBA8, m_width, m_height);
-        glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateTextureMipmap(m_id);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
+Texture::Texture(unsigned int id, const std::string& path, int width, int height) 
+        : m_id(id), 
+        m_path(path), 
+        m_width(width), 
+        m_height(height) { }
 
 void Texture::bind(unsigned int slot) const
 {
@@ -71,4 +46,36 @@ int Texture::getWidth() const
 int Texture::getHeight() const
 {
     return m_height;
+}
+
+Texture Texture::create(const std::string& path)
+{
+    unsigned int texture;
+    int channels;
+    int width;
+    int height;
+    unsigned char* data = nullptr;
+
+    glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+
+    // Установка параметров наложения текстуры
+    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    stbi_set_flip_vertically_on_load(1);
+
+    data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+    if (!data)
+        return Texture(0, "", 0, 0);
+    
+    glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
+    glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateTextureMipmap(texture);
+    
+    stbi_image_free(data);
+
+    return Texture(texture, path, width, height);
 }
