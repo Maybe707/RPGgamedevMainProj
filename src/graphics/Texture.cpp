@@ -69,7 +69,10 @@ Texture Texture::create(const std::string& path)
 
     data = stbi_load(path.c_str(), &width, &height, &channels, 0);
     if (!data)
-        return Texture(0, "", 0, 0);
+    {
+         std::cout << "Failed to load texture" << std::endl;
+         return Texture(0, "", 0, 0);
+    }
     
     glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
     glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
