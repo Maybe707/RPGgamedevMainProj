@@ -1,11 +1,9 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <ctime>
-#include <stack>
 #include <algorithm>
 #include "window/Window.h"
 #include "graphics/Shader.h"
-#include "graphics/VertexArray.h"
 #include "graphics/Buffer.h"
 #include "Map.h"
 #include "Player.h"
@@ -17,6 +15,7 @@
 #include "KeyInputNotifier.h"
 #include "ElementsForRandSprites.h"
 #include "graphics/Texture.h"
+#include "graphics/SpriteBatch.h"
 
 #define WALL_SIZE_1 10
 #define WALL_SIZE_2 4
@@ -247,54 +246,13 @@ int main()
     window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
 
-    // Компилирование нашей шейдерной программы
+    // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
-
-    VertexArray vao;
-    Buffer vbo(GL_ARRAY_BUFFER);
-
-    vao.bind();
-
-    vbo.bind();
-    vbo.setBufferData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-
-    // Координатные атрибуты
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-
-    // Атрибуты текстурных координат
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindVertexArray(0);
-
-    vbo.unbind();
-    vao.unbind();
-
-    VertexArray vaoWalls;
-    Buffer vboWalls(GL_ARRAY_BUFFER);
-
-    vaoWalls.bind();
-
-    vboWalls.bind();
-    vboWalls.setBufferData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-
-    // Координатные атрибуты
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-
-    // Атрибуты текстурных координат
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glBindVertexArray(0);
-
-    vboWalls.unbind();
+    // Создание батча, который будет рисовать наши спрайты
+    SpriteBatch spriteBatch(ourShader);
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
-
-    // Указываем OpenGL какой сэмплер к какому текстурному блоку принадлежит (это нужно сделать единожды)
-    ourShader.use();
-    ourShader.setUniform("tex", 0);
 
     unsigned int seedDeb = static_cast<unsigned>(time(0));
     std::cout << "rand seed: " << seedDeb << std::endl;
@@ -306,6 +264,7 @@ int main()
     int lWidth2 = getRandomNumber2(4, 7) * 7 + 2;
 
     Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
+
     WorldMap worldMap1(SCR_WIDTH, SCR_HEIGHT, lHeight, lWidth);
     WorldMap worldMap2(SCR_WIDTH, SCR_HEIGHT, lHeight2, lWidth2);
 
@@ -346,27 +305,31 @@ int main()
     worldMap1.setRandomSprites(arraySpritesSet, randSprite);
     worldMap2.setRandomSprites(arraySpritesSet, randSprite);
 
-    Player playerHero(glm::vec2(450.0f, -150.0f), 2.0f);
-    inputNotifier.attach(&playerHero);
+    // Подготовка спрайтов
+    Sprite wallSprite(wallTexture);
+    wallSprite.setTextureRect(IntRect(0, 224, 128 -32, 128 -32));
+    wallSprite.setHeight(64);
+    wallSprite.setWidth(64);
+    wallSprite.setOrigin(glm::vec2(32, 32));
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    Sprite heroSprite(heroTexture);
+    heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
+    heroSprite.setHeight(64);
+    heroSprite.setWidth(64);
+    heroSprite.setOrigin(glm::vec2(32, 32));
+
+    // Создание игрока
+    Player playerHero(heroSprite, 2.0f);
+    playerHero.setPosition(glm::vec2(450.0f, -150.0f));
+
+    inputNotifier.attach(&playerHero);
 
     const int animIndexArray = 3;
     int animCount = 0;
-    float *Vertex_Animation[4][animIndexArray] = {
-            {vertices,   vertices2,  vertices3},
-            {vertices4,  vertices5,  vertices6},
-            {vertices7,  vertices8,  vertices9},
-            {vertices10, vertices11, vertices12}
-    };
     float deltaTime = 0;
     float animationDelta = 0;
     const int mapObjectsRow = lHeight;
     const int mapObjectsCol = lWidth;
-
-//	const int mapObjectsRow = mapHeight;
-//	const int mapObjectsCol = mapWidth;
 
     const int mapObjectsRow2 = lHeight2;
     const int mapObjectsCol2 = lWidth2;
@@ -380,10 +343,11 @@ int main()
         mapObjectsPointer2[count] = new MapObject[mapObjectsCol2];
 
     // Game timer.
-    ChronoGuard Chrono(0.0f, 0.0f, 0.0f);
-    Collision Collision;
+    ChronoGuard chrono(0.0f, 0.0f, 0.0f);
+    Collision collision;
 
-    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     while (window.isOpen())
     {
@@ -391,27 +355,24 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Chrono.setNewFrameTime();
-        deltaTime = Chrono.getDeltaTime();
+        spriteBatch.begin();
+
+        chrono.setNewFrameTime();
+        deltaTime = chrono.getDeltaTime();
         processInput(window.getGLFWwindow(), playerHero, deltaTime);
 
-        worldMap1.render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, 0, 0, 3, 0);
-        Collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1, window.getGLFWwindow());
+        worldMap1.render(mapObjectsPointer, spriteBatch, wallSprite, 0, 0, 3, 0);
+        collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1, window.getGLFWwindow());
 
-        pipe->render(mapObjectsPointer, ourShader, vaoWalls.getId(), wallTexture, offset1, offset2, randId, 0);
-        Collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe, window.getGLFWwindow());
+        pipe->render(mapObjectsPointer, spriteBatch, wallSprite, offset1, offset2, randId, 0);
+        collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe, window.getGLFWwindow());
 
-        worldMap2.render(mapObjectsPointer2, ourShader, vaoWalls.getId(), wallTexture, offset1and1, offset2and2, 0,
-                         randId2);
-        Collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2, window.getGLFWwindow());
+        worldMap2.render(mapObjectsPointer2, spriteBatch, wallSprite, offset1and1, offset2and2, 0, randId2);
+        collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2, window.getGLFWwindow());
 
         camera.setPosition(-playerHero.getPosition());
-        ourShader.setUniform("projection", camera.getProjectionMatrix());
-        ourShader.setUniform("view", camera.getViewMatrix());
-
-        // Биндим объект вершинного буфера чтобы получить возможность загрузить новые данные,
-        // так как до этого мы анбиндили все объекты данного типа.
-        vbo.bind();
+        spriteBatch.setProjectionMatrix(camera.getProjectionMatrix());
+        spriteBatch.setViewMatrix(camera.getViewMatrix());
 
         if (playerHero.getKeyAxis() == GLFW_KEY_S && glfwGetKey(window.getGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
         {
@@ -423,13 +384,13 @@ int main()
                     default:
                         animCount = 0;
                     case 0:
-                        vbo.setBufferData(Vertex_Animation[0][animCount], sizeof(vertices), GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(0, 96, 32, 32));
                         break;
                     case 1:
-                        vbo.setBufferData(Vertex_Animation[0][animCount], sizeof(vertices), GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
                         break;
                     case 2:
-                        vbo.setBufferData(Vertex_Animation[0][animCount], sizeof(vertices), GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(64, 96, 32, 32));
                         break;
                 }
                 ++animCount;
@@ -446,16 +407,13 @@ int main()
                     default:
                         animCount = 0;
                     case 0:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(0, 64, 32, 32));
                         break;
                     case 1:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(32, 64, 32, 32));
                         break;
                     case 2:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[1][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(64, 64, 32, 32));
                         break;
                 }
                 ++animCount;
@@ -472,16 +430,13 @@ int main()
                     default:
                         animCount = 0;
                     case 0:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(0, 32, 32, 32));
                         break;
                     case 1:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(32, 32, 32, 32));
                         break;
                     case 2:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[2][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(64, 32, 32, 32));
                         break;
                 }
                 ++animCount;
@@ -498,16 +453,13 @@ int main()
                     default:
                         animCount = 0;
                     case 0:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(0, 0, 32, 32));
                         break;
                     case 1:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(32, 0, 32, 32));
                         break;
                     case 2:
-                        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), Vertex_Animation[3][animCount],
-                                     GL_STATIC_DRAW);
+                        heroSprite.setTextureRect(IntRect(64, 0, 32, 32));
                         break;
                 }
                 ++animCount;
@@ -515,9 +467,12 @@ int main()
             }
         }
 
-        playerHero.draw(ourShader, vao.getId(), heroTexture);
+        playerHero.draw(spriteBatch);
 
-        // glfw: обмен содержимым front- и back- буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
+        spriteBatch.end();
+
+        // glfw: обмен содержимым front- и back- буферов.
+        // Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         window.swapBuffers();
         glfwPollEvents();
     }
@@ -525,12 +480,8 @@ int main()
     ourShader.destroy();
     wallTexture.destroy();
     heroTexture.destroy();
+    spriteBatch.destroy();
 
-    vbo.destroy();
-    vboWalls.destroy();
-
-    vao.destroy();
-    vaoWalls.destroy();
 
     // glfw: завершение, освобождение всех выделенных ранее GLFW-реурсов
     glfwTerminate();

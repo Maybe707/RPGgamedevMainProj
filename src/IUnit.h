@@ -3,13 +3,14 @@
 
 #include "graphics/Shader.h"
 #include "graphics/Texture.h"
+#include "graphics/SpriteBatch.h"
 
 class IUnit
 {
 public:
     virtual ~IUnit() {}
 
-    virtual void draw(Shader shader, unsigned int vaoId, Texture texture) = 0;
+    virtual void draw(SpriteBatch& batch) = 0;
 
     virtual void receiver(int key, int action) = 0;
 };

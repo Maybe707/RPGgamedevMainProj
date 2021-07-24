@@ -6,6 +6,7 @@
 #include "MapObject.h"
 #include "SpriteRandSet.h"
 #include "graphics/Texture.h"
+#include "graphics/SpriteBatch.h"
 
 class WorldMap
 {
@@ -31,11 +32,10 @@ public:
     const int getMapHeight();
     const int getMapWidth();
 
-    void render(MapObject** mapObjects, Shader& shader, unsigned int vaoId,
-                Texture texture, const int rowOffset, const int columnOffset,
+    void render(MapObject** mapObjects, SpriteBatch& batch, Sprite& sprite, const int rowOffset, const int columnOffset,
                 int randId, int randIdNextLevel);
 
-    void drawMap(float coordX, float coordY, Shader shader, unsigned int vaoId, Texture texture);
+    void drawMap(float coordX, float coordY, SpriteBatch& batch, Sprite& sprite);
 };
 
 #endif

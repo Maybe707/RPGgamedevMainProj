@@ -1,45 +1,32 @@
 #include "Player.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
-Player::Player(glm::vec2 position, float speed)
-        : m_position(position),
-          m_Speed(speed) {}
+Player::Player(Sprite& sprite, float speed)
+        : m_sprite(sprite),
+          m_speed(speed) {}
 
 glm::vec2 Player::getPosition() const
 {
-    return m_position;
+    return m_sprite.getPosition();
 }
 
 void Player::setPosition(glm::vec2 position)
 {
-    m_position = position;
+    m_sprite.setPosition(position);
 }
 
 void Player::setSpeed(const float speed)
 {
-    m_Speed = speed;
+    m_speed = speed;
 }
 
 float Player::getSpeed() const
 {
-    return m_Speed;
+    return m_speed;
 }
 
-void Player::draw(Shader shader, unsigned int vaoId, Texture texture)
+void Player::draw(SpriteBatch& batch)
 {
-    glm::mat4 transformMat(1.f);
-
-    transformMat = glm::translate(transformMat, glm::vec3(m_position, 0.f));
-    transformMat = glm::scale(transformMat, glm::vec3(64.f));
-
-    shader.use();
-    shader.setUniform("model", transformMat);
-
-    texture.bind();
-
-    glBindVertexArray(vaoId);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    batch.draw(m_sprite);
 }
 
 void Player::receiver(int key, int action)
@@ -47,7 +34,7 @@ void Player::receiver(int key, int action)
     m_keyAxis = key;
 }
 
-int Player::getKeyAxis()
+int Player::getKeyAxis() const
 {
     return m_keyAxis;
 }

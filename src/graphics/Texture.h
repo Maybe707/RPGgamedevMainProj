@@ -2,6 +2,7 @@
 #define RPG_TEXTURE_H
 
 #include <string>
+#include <glad/gl.h>
 #include "IGLObject.h"
 
 class Texture : public IGLObject
@@ -30,7 +31,7 @@ public:
 
     int getHeight() const;
 
-    static Texture create(const std::string &path);
+    static Texture create(const std::string &path, unsigned int type = GL_TEXTURE_RECTANGLE);
 };
 
 
