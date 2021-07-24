@@ -16,22 +16,22 @@ bool Collision::detectionBox(Player& player, MapObject& mapObject, float& deltaT
     {
 
         // TODO: В инпуте кнопки проверяются, тут проверяются. Что-то очень странное...
-        if (player.getKeyAxis() == GLFW_KEY_W && wnd.getKey(GLFW_KEY_W))
+        if (wnd.getKey(GLFW_KEY_W))
         {
             playerPosition -= glm::vec2(0.f, deltaTime * player.getSpeed());
         }
 
-        if (player.getKeyAxis() == GLFW_KEY_S && wnd.getKey(GLFW_KEY_S))
+        if (wnd.getKey(GLFW_KEY_S))
         {
             playerPosition += glm::vec2(0.f, deltaTime * player.getSpeed());
         }
 
-        if (player.getKeyAxis() == GLFW_KEY_A && wnd.getKey(GLFW_KEY_A))
+        if (wnd.getKey(GLFW_KEY_A))
         {
             playerPosition += glm::vec2(deltaTime * player.getSpeed(), 0.f);
         }
 
-        if (player.getKeyAxis() == GLFW_KEY_D && wnd.getKey(GLFW_KEY_D))
+        if (wnd.getKey(GLFW_KEY_D))
         {
             playerPosition -= glm::vec2(deltaTime * player.getSpeed(), 0.f);
         }

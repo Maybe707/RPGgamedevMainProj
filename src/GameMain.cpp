@@ -241,7 +241,7 @@ int main()
     // Создание окна
     auto& window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
-    window.setInputCallback(inputCallback);
+    // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
 
     // Компилирование нашей шейдерной программы
@@ -410,7 +410,7 @@ int main()
         // так как до этого мы анбиндили все объекты данного типа.
         vbo.bind();
 
-        if (playerHero.getKeyAxis() == GLFW_KEY_S || window.getKey(GLFW_KEY_S))
+        if (window.getKey(GLFW_KEY_S))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -433,7 +433,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_A || window.getKey(GLFW_KEY_A))
+        else if (window.getKey(GLFW_KEY_A))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -459,7 +459,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_D || window.getKey(GLFW_KEY_D))
+        else if (window.getKey(GLFW_KEY_D))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)
@@ -485,7 +485,7 @@ int main()
                 animationDelta = 0;
             }
         }
-        else if (playerHero.getKeyAxis() == GLFW_KEY_W || window.getKey(GLFW_KEY_W))
+        else if (window.getKey(GLFW_KEY_W))
         {
             animationDelta += deltaTime;
             if (animationDelta > 30.0f)

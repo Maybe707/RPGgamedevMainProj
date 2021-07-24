@@ -13,22 +13,22 @@ void processInput(Player &player, float &deltaTime)
 
     glm::vec2 movementVec = player.getPosition();
 
-    if (player.getKeyAxis() == GLFW_KEY_W && window.getKey(GLFW_KEY_W))
+    if (window.getKey(GLFW_KEY_W))
     {
         movementVec += glm::vec2(0.f, deltaTime * player.getSpeed());
     }
 
-    if (player.getKeyAxis() == GLFW_KEY_S && window.getKey(GLFW_KEY_S))
+    if (window.getKey(GLFW_KEY_S))
     {
         movementVec -= glm::vec2(0.f, deltaTime * player.getSpeed());
     }
 
-    if (player.getKeyAxis() == GLFW_KEY_A && window.getKey(GLFW_KEY_A))
+    if (window.getKey(GLFW_KEY_A))
     {
         movementVec -= glm::vec2(deltaTime * player.getSpeed(), 0.f);
     }
 
-    if (player.getKeyAxis() == GLFW_KEY_D && window.getKey(GLFW_KEY_D))
+    if (window.getKey(GLFW_KEY_D))
     {
         movementVec += glm::vec2(deltaTime * player.getSpeed(), 0.f);
     }
