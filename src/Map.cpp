@@ -88,7 +88,7 @@ const int WorldMap::getMapWidth()
     return m_mapWidth;
 }
 
-void WorldMap::render(MapObjects **mapObjects, Shader &shader, unsigned int vaoId,
+void WorldMap::render(MapObject** mapObjects, Shader &shader, unsigned int vaoId,
                       Texture texture, const int rowOffset, const int columnOffset,
                       int randId, int randIdNextLevel)
 {

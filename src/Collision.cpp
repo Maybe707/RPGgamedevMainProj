@@ -2,7 +2,7 @@
 #include "GLFW/glfw3.h"
 #include "Collision.h"
 
-bool Collision::detectionBox(Player &player, MapObjects &mapObjects, float &deltaTime, GLFWwindow *window)
+bool Collision::detectionBox(Player &player, MapObject &mapObjects, float &deltaTime, GLFWwindow *window)
 {
     bool stateX;
 
@@ -47,7 +47,7 @@ bool Collision::detectionBox(Player &player, MapObjects &mapObjects, float &delt
     return stateX;
 }
 
-void Collision::detection(MapObjects **mapObjects, Player &player, float &deltaTime, WorldMap &worldmap, GLFWwindow *window)
+void Collision::detection(MapObject **mapObjects, Player &player, float &deltaTime, WorldMap &worldmap, GLFWwindow *window)
 {
     for (int i = 0; i < worldmap.getMapHeight(); ++i)
     {

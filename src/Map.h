@@ -3,7 +3,7 @@
 
 #include <string>
 #include "graphics/Shader.h"
-#include "MapObjects.h"
+#include "MapObject.h"
 #include "SpriteRandSet.h"
 #include "graphics/Texture.h"
 
@@ -31,7 +31,7 @@ public:
     const int getMapHeight();
     const int getMapWidth();
 
-    void render(MapObjects** mapObjects, Shader& shader, unsigned int vaoId,
+    void render(MapObject** mapObjects, Shader& shader, unsigned int vaoId,
                 Texture texture, const int rowOffset, const int columnOffset,
                 int randId, int randIdNextLevel);
 

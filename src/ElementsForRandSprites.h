@@ -1,7 +1,7 @@
 #ifndef ELEMENTS_FOR_RANDSPRITES_H
 #define ELEMENTS_FOR_RANDSPRITES_H
 
-#include "MapObjects.h"
+#include "MapObject.h"
 
 const int spriteSet1Height = 7, spriteSet1Width = 8;
 const char *spriteSet1[spriteSet1Height] =
