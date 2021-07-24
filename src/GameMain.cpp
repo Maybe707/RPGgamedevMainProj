@@ -369,13 +369,13 @@ int main()
     const int mapObjectsRow2 = lHeight2;
     const int mapObjectsCol2 = lWidth2;
 
-    MapObjects **mapObjectsPointer = new MapObjects *[mapObjectsRow];
+    MapObject **mapObjectsPointer = new MapObject *[mapObjectsRow];
     for (int counter = 0; counter < mapObjectsRow; ++counter)
-        mapObjectsPointer[counter] = new MapObjects[mapObjectsCol];
+        mapObjectsPointer[counter] = new MapObject[mapObjectsCol];
 
-    MapObjects **mapObjectsPointer2 = new MapObjects *[mapObjectsRow2];
+    MapObject **mapObjectsPointer2 = new MapObject *[mapObjectsRow2];
     for (int count = 0; count < mapObjectsRow2; ++count)
-        mapObjectsPointer2[count] = new MapObjects[mapObjectsCol2];
+        mapObjectsPointer2[count] = new MapObject[mapObjectsCol2];
 
     // Game timer.
     ChronoGuard Chrono(0.0f, 0.0f, 0.0f);
