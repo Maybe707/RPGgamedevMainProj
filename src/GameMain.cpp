@@ -1,6 +1,8 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <ctime>
+#include <stack>
+#include <algorithm>
 #include "window/Window.h"
 #include "graphics/Shader.h"
 #include "graphics/VertexArray.h"
@@ -13,7 +15,6 @@
 #include "Data.h"
 #include "ChronoGuard.h"
 #include "KeyInputNotifier.h"
-#include "utils/Stack.h"
 #include "ElementsForRandSprites.h"
 #include "graphics/Texture.h"
 
@@ -233,7 +234,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
 KeyInputNotifier inputNotifier;
-Stack stack(4);
+std::vector<int> inputVec;
 
 int main()
 {
@@ -552,13 +553,13 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS)
     {
-        stack.push(key);
-        inputNotifier.notifier(stack.getElement(), action);
+        inputVec.push_back(key);
+        inputNotifier.notifier(inputVec.back(), action);
     }
     if (action == GLFW_RELEASE)
     {
-        stack.popSearch(key);
-        inputNotifier.notifier(stack.getElement(), action);
+        inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
+        inputNotifier.notifier(inputVec.back(), action);
     }
 }
 
