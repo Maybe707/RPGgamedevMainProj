@@ -3,7 +3,7 @@
 #include <glad/gl.h>
 #include <numeric>
 
-SpriteBatch::SpriteBatch(Shader& shader, int spriteCount)
+SpriteBatch::SpriteBatch(Shader &shader, int spriteCount)
         : m_shader(shader), m_spriteCount(spriteCount),
           m_vbo(GL_ARRAY_BUFFER), m_ibo(GL_ELEMENT_ARRAY_BUFFER),
           m_textures(&compareTextures)
@@ -34,7 +34,7 @@ SpriteBatch::SpriteBatch(Shader& shader, int spriteCount)
     // 0, 1, 2, 2, 3, 0
     // 4, 5, 6, 6, 7, 4
     // и т.д.
-    unsigned int indices[indexCount];
+    auto* indices = new unsigned int[indexCount];
     unsigned int offset = 0;
     for (int i = 0; i < indexCount; i += 6)
     {
@@ -49,10 +49,11 @@ SpriteBatch::SpriteBatch(Shader& shader, int spriteCount)
         offset += 4;
     };
     m_ibo.bind();
-    m_ibo.setBufferData(indices, sizeof(indices), GL_STATIC_DRAW);
+    m_ibo.setBufferData(indices, indexCount * sizeof(unsigned int), GL_STATIC_DRAW);
 
     m_vbo.unbind();
     m_vao.unbind();
+    delete[] indices;
 }
 
 void SpriteBatch::begin()
@@ -72,9 +73,9 @@ void SpriteBatch::end()
 
     m_shader.use();
 
-    int ids[m_textures.size()];
+    int *ids = new int[m_textures.size()];
     std::iota(ids, ids + m_textures.size(), 0);
-    m_shader.setUniform("textures", &ids[0], m_textures.size());
+    m_shader.setUniform("textures", ids, m_textures.size());
 
     m_shader.setUniform("model", glm::mat4(1));
 
@@ -84,6 +85,8 @@ void SpriteBatch::end()
     }
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_spriteCount * 6, GL_UNSIGNED_INT, nullptr);
+
+    delete[] ids;
 }
 
 void SpriteBatch::draw(const Sprite &sprite)
@@ -111,7 +114,8 @@ void SpriteBatch::draw(const Sprite &sprite)
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()),0.f), // верх право
+                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()),
+                                           0.f), // верх право
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
                          });
     m_vertices.push_back({
