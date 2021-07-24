@@ -33,7 +33,7 @@ class SpriteBatch
     // Функция сравнения текстур, хз куда ее лучше положить
     inline static bool compareTextures(const Texture &texture1, const Texture &texture2)
     {
-        return texture1.getId() != texture2.getId();
+        return texture1.getId() < texture2.getId();
     }
 
     // Мапа с текстурами. Нужна для проверки дубликатов и биндинга
