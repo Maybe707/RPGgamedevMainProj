@@ -3,7 +3,6 @@
 
 #include <cstddef>
 #include <vector>
-#include <array>
 #include <glad/gl.h>
 #include "IGLObject.h"
 
