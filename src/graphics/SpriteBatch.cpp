@@ -34,7 +34,7 @@ SpriteBatch::SpriteBatch(Shader &shader, int spriteCount)
     // 0, 1, 2, 2, 3, 0
     // 4, 5, 6, 6, 7, 4
     // и т.д.
-    auto* indices = new unsigned int[indexCount];
+    auto *indices = new unsigned int[indexCount];
     unsigned int offset = 0;
     for (int i = 0; i < indexCount; i += 6)
     {
@@ -69,7 +69,6 @@ void SpriteBatch::end()
     m_vbo.bind();
 
     // Закидываем наши вершины в заранее выделенную память
-    glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertices.size() * sizeof(Vertex), &m_vertices[0]);
     m_vbo.setSubData(m_vertices, 0);
 
     m_shader.use();
@@ -80,10 +79,11 @@ void SpriteBatch::end()
 
     m_shader.setUniform("model", glm::mat4(1));
 
-    for (auto &m_texture : m_textures)
+    for (auto &item : m_textures)
     {
-        m_texture.first.bind(m_texture.second);
+        item.first.bind(item.second);
     }
+
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_spriteCount * 6, GL_UNSIGNED_INT, nullptr);
 
@@ -92,6 +92,12 @@ void SpriteBatch::end()
 
 void SpriteBatch::draw(const Sprite &sprite)
 {
+    if (m_vertices.size() / 4 >= m_spriteCount)
+    {
+        std::cout << "Cannot draw a sprite! Maximum number of sprites reached!" << std::endl;
+        return;
+    }
+
     // Тут мы ничего не рисуем, а просто сохраняем наши спрайты, чтобы потом отрисовать их все вместе
     glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin();
     IntRect rect = sprite.getTextureRect();
@@ -101,6 +107,12 @@ void SpriteBatch::draw(const Sprite &sprite)
     auto result = m_textures.find(texture);
     if (result == m_textures.end())
     {
+        if (m_textures.size() >= MaxTextures)
+        {
+            std::cout << "Cannot draw a sprite with texture " << texture.getPath()
+                      << "! Maximum number of textures reached!" << std::endl;
+            return;
+        }
         // Если такой текстуры еще нет, то добавляем ее в кэш
         result = m_textures.insert({texture, m_textures.size()}).first;
     }

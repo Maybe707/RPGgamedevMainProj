@@ -3,7 +3,6 @@
 
 #include <glm/glm.hpp>
 #include <vector>
-#include <set>
 #include <map>
 #include "VertexArray.h"
 #include "Buffer.h"
@@ -18,6 +17,8 @@ struct Vertex
     float texId;
 };
 
+static const size_t MaxTextures = 16;
+
 // TODO: Класс пока еще сырой, его стоит дальше дорабатывать и оптимизировать
 class SpriteBatch
 {
@@ -27,7 +28,6 @@ class SpriteBatch
     VertexArray m_vao;
     Buffer m_vbo;
     Buffer m_ibo;
-
 
     std::vector<Vertex> m_vertices;
 
@@ -54,8 +54,6 @@ public:
     void setViewMatrix(glm::mat4 viewMat);
 
     void destroy();
-
-private:
 
 };
 
