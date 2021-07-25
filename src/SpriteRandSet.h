@@ -1,8 +1,6 @@
 #ifndef SPRITE_RANDSET_H
 #define SPRITE_RANDSET_H
 
-#include "MapObject.h"
-
 class SpriteRandSet
 {
     const int m_width;

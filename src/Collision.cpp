@@ -2,62 +2,64 @@
 #include "window/Window.h"
 #include "Collision.h"
 
-bool Collision::detectionBox(Player& player, MapObject& mapObject, float& deltaTime)
-{
-    bool stateX;
-    Window& wnd = Window::getInstance();
+// TODO: Временно вырезанно для переработки
 
-    glm::vec2 playerPosition = player.getPosition();
+// bool Collision::detectionBox(Player& player, MapObject& mapObject, float& deltaTime)
+// {
+//     bool stateX;
+//     Window& wnd = Window::getInstance();
 
-    if (playerPosition.x < mapObject.getXAxis() + 58.0f && //HACK: Кто знает, почему тут 58? Это хак
-        playerPosition.x + 58.0f > mapObject.getXAxis() &&
-        playerPosition.y < mapObject.getYAxis() + 58.0f &&
-        playerPosition.y + 58.0f > mapObject.getYAxis())
-    {
+//     glm::vec2 playerPosition = player.getPosition();
 
-        // TODO: В инпуте кнопки проверяются, тут проверяются. Что-то очень странное...
-        if (wnd.getKey(GLFW_KEY_W))
-        {
-            playerPosition -= glm::vec2(0.f, deltaTime * player.getSpeed());
-        }
+//     if (playerPosition.x < mapObject.getXAxis() + 58.0f && //HACK: Кто знает, почему тут 58? Это хак
+//         playerPosition.x + 58.0f > mapObject.getXAxis() &&
+//         playerPosition.y < mapObject.getYAxis() + 58.0f &&
+//         playerPosition.y + 58.0f > mapObject.getYAxis())
+//     {
 
-        if (wnd.getKey(GLFW_KEY_S))
-        {
-            playerPosition += glm::vec2(0.f, deltaTime * player.getSpeed());
-        }
+//         // TODO: В инпуте кнопки проверяются, тут проверяются. Что-то очень странное...
+//         if (wnd.getKey(GLFW_KEY_W))
+//         {
+//             playerPosition -= glm::vec2(0.f, deltaTime * player.getSpeed());
+//         }
 
-        if (wnd.getKey(GLFW_KEY_A))
-        {
-            playerPosition += glm::vec2(deltaTime * player.getSpeed(), 0.f);
-        }
+//         if (wnd.getKey(GLFW_KEY_S))
+//         {
+//             playerPosition += glm::vec2(0.f, deltaTime * player.getSpeed());
+//         }
 
-        if (wnd.getKey(GLFW_KEY_D))
-        {
-            playerPosition -= glm::vec2(deltaTime * player.getSpeed(), 0.f);
-        }
+//         if (wnd.getKey(GLFW_KEY_A))
+//         {
+//             playerPosition += glm::vec2(deltaTime * player.getSpeed(), 0.f);
+//         }
 
-        player.setPosition(playerPosition);
+//         if (wnd.getKey(GLFW_KEY_D))
+//         {
+//             playerPosition -= glm::vec2(deltaTime * player.getSpeed(), 0.f);
+//         }
 
-        stateX = true;
-    }
-    else
-    {
-        stateX = false;
-    }
+//         player.setPosition(playerPosition);
 
-    return stateX;
-}
+//         stateX = true;
+//     }
+//     else
+//     {
+//         stateX = false;
+//     }
 
-void Collision::detection(MapObject** mapObjects, Player& player, float& deltaTime, WorldMap& worldmap)
-{
-    for (int i = 0; i < worldmap.getMapHeight(); ++i)
-    {
-        for (int j = 0; j < worldmap.getMapWidth(); ++j)
-        {
-            if (worldmap.getMapKey(i, j) == '0' && detectionBox(player, mapObjects[i][j], deltaTime))
-            {
-                return;
-            }
-        }
-    }
-}
+//     return stateX;
+// }
+
+// void Collision::detection(MapObject** mapObjects, Player& player, float& deltaTime, WorldMap& worldmap)
+// {
+//     for (int i = 0; i < worldmap.getMapHeight(); ++i)
+//     {
+//         for (int j = 0; j < worldmap.getMapWidth(); ++j)
+//         {
+//             if (worldmap.getMapKey(i, j) == '0' && detectionBox(player, mapObjects[i][j], deltaTime))
+//             {
+//                 return;
+//             }
+//         }
+//     }
+// }
