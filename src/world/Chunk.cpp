@@ -30,7 +30,7 @@ namespace map
 
     void Chunk::setTile(const glm::ivec2& tilePos, const Tile& tile)
     {
-        m_tiles.at(toLocalTileIndex(tilePos)) = static_cast<u8>(tile.m_type);
+        m_tiles[toLocalTileIndex(tilePos)] = static_cast<u8>(tile.m_type);
     }
 
     void Chunk::draw(SpriteBatch& batch, Sprite& sprite)
@@ -40,10 +40,12 @@ namespace map
             for (size_t x = 0; x < CHUNK_SIZE; x++)
             {
                 u8 tileId = m_tiles.at(y * CHUNK_SIZE + x);
+                int realX = x + m_pos.x * CHUNK_SIZE;
+                int realY = y + m_pos.y * CHUNK_SIZE;
 
                 if (tileId == 0) continue;
 
-                sprite.setPosition({x * 64, y * 64});
+                sprite.setPosition({realX * 64, realY * 64});
                 batch.draw(sprite);
             }
         }
