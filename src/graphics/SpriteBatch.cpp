@@ -16,7 +16,7 @@ SpriteBatch::SpriteBatch(Shader &shader, int spriteCount)
 
     // Небольшой трюк.
     // Вместо того, чтобы сразу закидывать данные в vbo, мы выделим в нем память для дальнейшего использования
-    m_vbo.setBufferData(nullptr, sizeof(Vertex) * vertexCount, GL_DYNAMIC_DRAW);
+    m_vbo.setData(nullptr, sizeof(Vertex) * vertexCount, GL_DYNAMIC_DRAW);
 
     // Координатные атрибуты
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) 0);
@@ -49,7 +49,7 @@ SpriteBatch::SpriteBatch(Shader &shader, int spriteCount)
         offset += 4;
     };
     m_ibo.bind();
-    m_ibo.setBufferData(indices, indexCount * sizeof(unsigned int), GL_STATIC_DRAW);
+    m_ibo.setData(indices, indexCount * sizeof(unsigned int), GL_STATIC_DRAW);
 
     m_vbo.unbind();
     m_vao.unbind();
@@ -70,6 +70,7 @@ void SpriteBatch::end()
 
     // Закидываем наши вершины в заранее выделенную память
     glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertices.size() * sizeof(Vertex), &m_vertices[0]);
+    m_vbo.setSubData(m_vertices, 0);
 
     m_shader.use();
 

@@ -3,6 +3,8 @@
 
 #include <cstddef>
 #include <vector>
+#include <array>
+#include <glad/gl.h>
 #include "IGLObject.h"
 
 class Buffer : public IGLObject
@@ -18,10 +20,20 @@ public:
     void unbind() const;
     void destroy() override;
 
-    template<typename T>
-    void setBufferData(const std::vector<T>& data, unsigned int usage);
+    void setData(const void* data, size_t size, unsigned int usage) const;
+    void setSubData(const void* data, GLintptr offset, size_t size) const;
 
-    void setBufferData(const void* data, size_t size, unsigned int usage) const;
+    template<typename T>
+    void setData(const std::vector<T>& data, unsigned int usage) const
+    {
+        glNamedBufferData(m_id, data.size() * sizeof(T), data.data(), usage);
+    }
+    
+    template<typename T>
+    void setSubData(const std::vector<T>& data, GLintptr offset)
+    {
+        glNamedBufferSubData(m_id, offset, data.size() * sizeof(T), data.data());
+    }
 
     unsigned int getId() const override;
     unsigned int getTarget() const;

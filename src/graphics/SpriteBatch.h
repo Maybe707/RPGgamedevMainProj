@@ -11,6 +11,13 @@
 #include "Shader.h"
 #include "Sprite.h"
 
+struct Vertex
+{
+    glm::vec3 position;
+    glm::vec2 texCoords;
+    float texId;
+};
+
 // TODO: Класс пока еще сырой, его стоит дальше дорабатывать и оптимизировать
 class SpriteBatch
 {
@@ -21,12 +28,6 @@ class SpriteBatch
     Buffer m_vbo;
     Buffer m_ibo;
 
-    struct Vertex
-    {
-        glm::vec3 position;
-        glm::vec2 texCoords;
-        float texId;
-    };
 
     std::vector<Vertex> m_vertices;
 

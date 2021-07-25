@@ -1,5 +1,4 @@
 #include "Buffer.h"
-#include <glad/gl.h>
 
 Buffer::Buffer(unsigned int target) : m_target(target)
 {
@@ -23,16 +22,16 @@ void Buffer::destroy()
     m_target = 0;
 }
 
-template<typename T>
-void Buffer::setBufferData(const std::vector<T>& data, unsigned int usage)
-{
-    glNamedBufferData(m_id, data.size() * sizeof(T), data.data(), usage);
-}
-
-void Buffer::setBufferData(const void* data, size_t size, unsigned int usage) const
+void Buffer::setData(const void* data, size_t size, unsigned int usage) const
 {
     glNamedBufferData(m_id, static_cast<GLsizeiptr>(size), data, usage);
 }
+
+void Buffer::setSubData(const void* data, GLintptr offset, size_t size) const
+{
+    glNamedBufferSubData(m_id, offset, size, data);
+}
+
 
 unsigned int Buffer::getId() const
 {
