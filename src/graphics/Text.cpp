@@ -1,7 +1,7 @@
 #include "Text.h"
 
 Text::Text(Font &font, std::string text)
-        : m_font(font), m_text(std::move(text))
+        : m_font(font), m_color(1.f), m_text(std::move(text))
 {
     Sprite sprite(m_font.getTexture());
 
