@@ -57,7 +57,9 @@ void Text::draw(SpriteBatch &batch)
 {
     for (auto sprite : m_sprites)
     {
-        sprite.setPosition(sprite.getPosition() + m_position);
+        // Шаманим, чтобы центр был в левом нижнем углу текста и работал ориджин
+        sprite.setPosition(sprite.getPosition() + m_position + glm::vec2(0.f, m_height - m_font.getSize() / 2) - m_origin);
+        sprite.setColor(m_color);
         batch.draw(sprite);
     }
 }
@@ -70,6 +72,26 @@ glm::vec2 Text::getPosition() const
 void Text::setPosition(glm::vec2 position)
 {
     m_position = position;
+}
+
+glm::vec2 Text::getOrigin() const
+{
+    return m_origin;
+}
+
+void Text::setOrigin(glm::vec2 origin)
+{
+    m_origin = origin;
+}
+
+glm::vec4 Text::getColor() const
+{
+    return m_color;
+}
+
+void Text::setColor(glm::vec4 color)
+{
+    m_color = color;
 }
 
 float Text::getWidth() const

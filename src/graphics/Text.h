@@ -15,6 +15,10 @@ class Text
 
     glm::vec2 m_position{};
 
+    glm::vec2 m_origin{};
+
+    glm::vec4 m_color{};
+
     float m_width;
     float m_height;
 
@@ -28,10 +32,14 @@ public:
     glm::vec2 getPosition() const;
     void setPosition(glm::vec2 position);
 
+    glm::vec2 getOrigin() const;
+    void setOrigin(glm::vec2 origin);
+
+    glm::vec4 getColor() const;
+    void setColor(glm::vec4 color);
+
     float getWidth() const;
     float getHeight() const;
-
-private:
 };
 
 #endif //RPG_TEXT_H
