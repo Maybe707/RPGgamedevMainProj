@@ -1,7 +1,5 @@
 #include "Text.h"
 
-#include <utility>
-
 Text::Text(Font &font, std::string text)
         : m_font(font), m_text(std::move(text))
 {
