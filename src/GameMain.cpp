@@ -487,6 +487,7 @@ int main()
     wallTexture.destroy();
     heroTexture.destroy();
     spriteBatch.destroy();
+    font.destroy();
 
     window.destroy();
 
