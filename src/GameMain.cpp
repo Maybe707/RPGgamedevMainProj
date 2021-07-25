@@ -16,6 +16,8 @@
 #include "ElementsForRandSprites.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
+#include "graphics/Font.h"
+#include "graphics/Text.h"
 
 #define WALL_SIZE_1 10
 #define WALL_SIZE_2 4
@@ -245,8 +247,12 @@ int main()
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
+
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader);
+
+    Font font("../res/fonts/vt323.ttf", 32);
+    Text text(font, "True RPG!\n Welcome!");
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
@@ -466,6 +472,9 @@ int main()
 
         playerHero.draw(spriteBatch);
 
+        text.setPosition(-camera.getPosition() + glm::vec2(-text.getWidth() / 2, SCR_HEIGHT / 2 - font.getSize()));
+        text.draw(spriteBatch);
+
         spriteBatch.end();
 
         // glfw: обмен содержимым front- и back- буферов.
@@ -516,5 +525,3 @@ void resizeCallback(Window *window, int width, int height)
     // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
     glViewport(0, 0, width, height);
 }
-
-
