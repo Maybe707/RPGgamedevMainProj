@@ -99,8 +99,7 @@ void SpriteBatch::draw(const Sprite &sprite)
     }
 
     // Тут мы ничего не рисуем, а просто сохраняем наши спрайты, чтобы потом отрисовать их все вместе
-    //glm::vec2(0.5f) - размер спрайта от точки (0, 0)
-    glm::vec2 quadPos = sprite.getPosition() - glm::vec2(0.5f);
+    glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin();
     IntRect rect = sprite.getTextureRect();
 
     // Чтобы не сохранять дубликаты текстур, решил складывать их в мапу

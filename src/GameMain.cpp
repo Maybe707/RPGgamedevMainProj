@@ -68,13 +68,13 @@ int main()
     wallSprite.setTextureRect(IntRect(0, 224, 128 -32, 128 -32));
     wallSprite.setHeight(64);
     wallSprite.setWidth(64);
-    wallSprite.setOrigin(glm::vec2(32, 32));
+    wallSprite.setOrigin(glm::vec2(0.5f, 0.5f));
 
     Sprite heroSprite(heroTexture);
     heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
     heroSprite.setHeight(64);
     heroSprite.setWidth(64);
-    heroSprite.setOrigin(glm::vec2(32, 32));
+    heroSprite.setOrigin(glm::vec2(0.5f, 0.5f));
 
     // Создание игрока
     Player playerHero(heroSprite, 15.0f);
