@@ -27,7 +27,7 @@ namespace map
         return
         {
             ((CHUNK_SIZE + (x % CHUNK_SIZE)) % CHUNK_SIZE),
-            ((CHUNK_SIZE + (x % CHUNK_SIZE)) % CHUNK_SIZE)
+            ((CHUNK_SIZE + (y % CHUNK_SIZE)) % CHUNK_SIZE)
         };
     }
 
