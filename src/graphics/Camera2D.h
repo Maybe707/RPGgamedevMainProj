@@ -18,6 +18,8 @@ public:
     glm::vec2 getPosition() const;
     void setPosition(glm::vec2 position);
 
+    void update();
+
     glm::mat4 getProjectionMatrix() const;
     glm::mat4 getViewMatrix() const;
 };

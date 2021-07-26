@@ -10,7 +10,7 @@
 #include "Collision.h"
 #include "Input.h"
 #include "Data.h"
-#include "ChronoGuard.h"
+#include "RTime.h"
 #include "KeyInputNotifier.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
@@ -37,6 +37,7 @@ const unsigned int SCR_HEIGHT = 800;
 KeyInputNotifier inputNotifier;
 std::vector<int> inputVec{};
 
+// TODO: Почистить main
 int main()
 {
     // Создание окна
@@ -51,7 +52,7 @@ int main()
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
     // Создание батча, который будет рисовать наши спрайты
-    SpriteBatch spriteBatch(ourShader);
+    SpriteBatch spriteBatch(ourShader, 30000);
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
@@ -60,7 +61,7 @@ int main()
     std::cout << "rand seed: " << seedDeb << std::endl;
     srand(seedDeb);
 
-    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
+    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.007f);
 
     // Подготовка спрайтов
     Sprite wallSprite(wallTexture);
@@ -76,8 +77,8 @@ int main()
     heroSprite.setOrigin(glm::vec2(32, 32));
 
     // Создание игрока
-    Player playerHero(heroSprite, 2.0f);
-    playerHero.setPosition(glm::vec2(0.0f, 0.0f));
+    Player playerHero(heroSprite, 15.0f);
+    playerHero.setPosition(glm::vec2(2.0f, 2.0f));
 
     inputNotifier.attach(&playerHero);
 
@@ -87,7 +88,7 @@ int main()
     float animationDelta = 0;
 
     // Game timer.
-    ChronoGuard chrono(0.0f, 0.0f, 0.0f);
+    RTime chrono(0.0f, 0.0f, 0.0f);
     Collision collision;
 
     glEnable(GL_BLEND);
@@ -101,18 +102,18 @@ int main()
 
         spriteBatch.begin();
       
-        deltaTime = chrono.getDeltaTime() * 200;
+        deltaTime = chrono.getDeltaTime();
         processInput(playerHero, deltaTime);
+        Collision::detection(world, playerHero, deltaTime);
 
         camera.setPosition(-playerHero.getPosition());
+        camera.update();
         spriteBatch.setProjectionMatrix(camera.getProjectionMatrix());
         spriteBatch.setViewMatrix(camera.getViewMatrix());
 
-        world.draw(spriteBatch, wallSprite);
-
         if (window.getKey(GLFW_KEY_S))
         {
-            animationDelta += deltaTime;
+            animationDelta += deltaTime * 200;
             if (animationDelta > 30.0f)
             {
                 switch (animCount)
@@ -135,7 +136,7 @@ int main()
         }
         else if (window.getKey(GLFW_KEY_A))
         {
-            animationDelta += deltaTime;
+            animationDelta += deltaTime * 200;
             if (animationDelta > 30.0f)
             {
                 switch (animCount)
@@ -158,7 +159,7 @@ int main()
         }
         else if (window.getKey(GLFW_KEY_D))
         {
-            animationDelta += deltaTime;
+            animationDelta += deltaTime * 200;
             if (animationDelta > 30.0f)
             {
                 switch (animCount)
@@ -181,7 +182,7 @@ int main()
         }
         else if (window.getKey(GLFW_KEY_W))
         {
-            animationDelta += deltaTime;
+            animationDelta += deltaTime * 200;
             if (animationDelta > 30.0f)
             {
                 switch (animCount)
@@ -204,6 +205,7 @@ int main()
         }
 
         playerHero.draw(spriteBatch);
+        world.draw(spriteBatch, wallSprite);
 
         spriteBatch.end();
 

@@ -1,12 +1,12 @@
 #include <GLFW/glfw3.h>
 
-class ChronoGuard
+class RTime
 {
     float m_prevFrameTime;
     float m_frameTime;
     float m_deltaTime;
 public:
-    ChronoGuard(float prevFrameTime, float frameTime, float delta_time) :
+    RTime(float prevFrameTime, float frameTime, float delta_time) :
         m_prevFrameTime(prevFrameTime),
         m_frameTime(frameTime),
         m_deltaTime(delta_time)
