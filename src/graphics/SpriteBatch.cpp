@@ -94,45 +94,45 @@ void SpriteBatch::draw(const Sprite &sprite)
 {
     if (m_vertices.size() / 4 >= m_spriteCount)
     {
-        std::cout << "Cannot draw a sprite! Maximum number of sprites reached!" << std::endl;
+        std::cerr << "Cannot draw a sprite! Maximum number of sprites reached!" << std::endl;
         return;
     }
 
     // Тут мы ничего не рисуем, а просто сохраняем наши спрайты, чтобы потом отрисовать их все вместе
-    glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin();
+    //glm::vec2(0.5f) - размер спрайта от точки (0, 0)
+    glm::vec2 quadPos = sprite.getPosition() - glm::vec2(0.5f);
     IntRect rect = sprite.getTextureRect();
 
     // Чтобы не сохранять дубликаты текстур, решил складывать их в мапу
-    Texture texture = sprite.getTexture();
+    Texture& texture = sprite.getTexture();
     auto result = m_textures.find(texture);
     if (result == m_textures.end())
     {
         if (m_textures.size() >= MaxTextures)
         {
-            std::cout << "Cannot draw a sprite with texture " << texture.getPath()
+            std::cerr << "Cannot draw a sprite with texture " << texture.getPath()
                       << "! Maximum number of textures reached!" << std::endl;
             return;
         }
         // Если такой текстуры еще нет, то добавляем ее в кэш
         result = m_textures.insert({texture, m_textures.size()}).first;
     }
-    auto texId = (float) result->second;
+    auto texId = static_cast<float>(result->second);
 
     m_vertices.push_back({
                                  glm::vec3(quadPos, 0.f), // низ лево
                                  glm::vec2(rect.getLeft(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), 0.f), 0.f), // низ право
+                                 glm::vec3(quadPos + glm::vec2(1.f, 0.f), 0.f), // низ право
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()),
-                                           0.f), // верх право
+                                 glm::vec3(quadPos + glm::vec2(1.f, 1.f), 0.f), // верх право
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(0.f, sprite.getHeight()), 0.f), // верх лево
+                                 glm::vec3(quadPos + glm::vec2(0.f, 1.f), 0.f), // верх лево
                                  glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
                          });
 }

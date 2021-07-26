@@ -16,11 +16,17 @@ namespace map
                 int realX = x + pos.x * CHUNK_SIZE;
                 int realY = y + pos.y * CHUNK_SIZE;
 
-                id = (realX == 0 || realY == 0) ? 1 : 0;
+                id = (realX == 0 || realX == (15 * 5) + 4
+                    || realY == 0 || realY == (15 * 5) + 4) ? 1 : 0;
 
                 m_tiles[y * CHUNK_SIZE + x] = id;
             }
         }
+    }
+
+    const glm::ivec2& Chunk::getPosition() const
+    {
+        return m_pos;
     }
 
     u8 Chunk::getTile(const glm::ivec2& tilePos) const
@@ -45,7 +51,7 @@ namespace map
 
                 if (tileId == 0) continue;
 
-                sprite.setPosition({realX * 64, realY * 64});
+                sprite.setPosition({realX, realY});
                 batch.draw(sprite);
             }
         }

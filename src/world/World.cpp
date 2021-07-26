@@ -13,9 +13,13 @@ namespace map
             {
                 // m_chunks[y * m_size + x] = Chunk({x, y});
                 m_testChunks[glm::ivec2(x, y)] = Chunk({x, y});
-                m_testChunks[glm::ivec2(-x, -y)] = Chunk({-x, -y});
             }
         }
+    }
+
+    int World::getSize() const
+    {
+        return m_size;
     }
 
     const ChunkVector& World::getChunks() const
@@ -23,13 +27,13 @@ namespace map
         return m_chunks;
     }
 
-    const Chunk& World::getChunk(glm::ivec2 chunkPos)
+    const Chunk& World::getChunk(glm::ivec2 chunkPos) const
     {
         // return m_chunks.at(chunkPos.y * CHUNK_SIZE + chunkPos.x);
         return m_testChunks.at(chunkPos);
     }
 
-    u8 World::getTile(glm::ivec2 tilePos)
+    u8 World::getTile(glm::ivec2 tilePos) const
     {
         auto chunkPos = toChunkPos(tilePos);
         // return m_chunks.at(chunkPos.y * 5 + chunkPos.x).getTile(toLocalTilePos(tilePos));

@@ -31,11 +31,12 @@ namespace map
         World();
         
         void init();
-        void destroy();
         
+        int getSize() const;
+
         const ChunkVector& getChunks() const;
-        const Chunk& getChunk(glm::ivec2 chunkPos);
-        u8 getTile(glm::ivec2 tilePos);
+        const Chunk& getChunk(glm::ivec2 chunkPos) const;
+        u8 getTile(glm::ivec2 tilePos) const;
 
         // TODO: временное решение. Переделать под структуру Tile
         void draw(SpriteBatch& batch, Sprite& sprite);

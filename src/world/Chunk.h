@@ -24,6 +24,7 @@ namespace map
         Chunk(const glm::ivec2& pos);
         ~Chunk() = default;
 
+        const glm::ivec2& getPosition() const;
         u8 getTile(const glm::ivec2& tilePos) const;
         void setTile(const glm::ivec2& tilePos, const Tile& tile);
         
