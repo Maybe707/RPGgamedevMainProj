@@ -123,15 +123,15 @@ void SpriteBatch::draw(const Sprite &sprite)
                                  glm::vec2(rect.getLeft(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(1.f, 0.f), 0.f), // низ право
+                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), 0.f), 0.f), // низ право
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(1.f, 1.f), 0.f), // верх право
+                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()), 0.f), // верх право
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
                          });
     m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(0.f, 1.f), 0.f), // верх лево
+                                 glm::vec3(quadPos + glm::vec2(0.f, sprite.getHeight()), 0.f), // верх лево
                                  glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
                          });
 }
