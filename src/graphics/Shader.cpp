@@ -22,6 +22,11 @@ void Shader::setUniform(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
+void Shader::setUniform(const std::string &name, const glm::vec3 &vec) const
+{
+    glUniform3f(glGetUniformLocation(m_id, name.c_str()), vec.x, vec.y, vec.z);
+}
+
 void Shader::setUniform(const std::string &name, const glm::mat4& mat) const
 {
     glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
@@ -102,13 +107,13 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
     return shader;
 }
 
-void Shader::checkCompileErrors(unsigned int glHandel, unsigned int status, 
+void Shader::checkCompileErrors(unsigned int glHandel, unsigned int status,
                                     void (*GLget)(unsigned int, unsigned int, int*),
                                     void (*GLinfoLog)(unsigned int, int, int*, char*))
 {
     char infoLog[1024];
     int success;
-    
+
     GLget(glHandel, status, &success);
 
     if(!success)

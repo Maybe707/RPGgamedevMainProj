@@ -11,6 +11,7 @@ class Sprite
     glm::vec2 m_origin{};
     float m_width;
     float m_height;
+    glm::vec4 m_color;
     IntRect m_textureRect;
     Texture& m_texture;
 
@@ -32,6 +33,10 @@ public:
     float getHeight() const;
 
     void setHeight(float height);
+
+    glm::vec4 getColor() const;
+
+    void setColor(glm::vec4 color);
 
     Texture& getTexture() const;
 

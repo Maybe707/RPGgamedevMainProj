@@ -1,8 +1,10 @@
 #include "Sprite.h"
 
 
-Sprite::Sprite(Texture& texture)
-        : m_width((float) texture.getWidth()), m_height((float) texture.getHeight()),
+Sprite::Sprite(Texture &texture)
+        : m_width((float) texture.getWidth()),
+          m_height((float) texture.getHeight()),
+          m_color(1.f),
           m_textureRect(0, 0, texture.getWidth(), texture.getHeight()),
           m_texture(texture) {}
 
@@ -46,7 +48,17 @@ void Sprite::setHeight(float height)
     m_height = height;
 }
 
-Texture& Sprite::getTexture() const
+glm::vec4 Sprite::getColor() const
+{
+    return m_color;
+}
+
+void Sprite::setColor(glm::vec4 color)
+{
+    m_color = color;
+}
+
+Texture &Sprite::getTexture() const
 {
     return m_texture;
 }

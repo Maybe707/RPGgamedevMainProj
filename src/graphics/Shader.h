@@ -27,6 +27,8 @@ public:
 
     void setUniform(const std::string &name, float value) const;
 
+    void setUniform(const std::string &name, const glm::vec3& vec) const;
+
     void setUniform(const std::string &name, const glm::mat4& mat) const;
 
     void setUniform(const std::string &name, const int arr[], int size) const;

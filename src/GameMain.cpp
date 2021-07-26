@@ -16,6 +16,8 @@
 #include "ElementsForRandSprites.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
+#include "graphics/Font.h"
+#include "graphics/Text.h"
 
 #define WALL_SIZE_1 10
 #define WALL_SIZE_2 4
@@ -57,7 +59,7 @@ int getRandomNumber2(int min, int max)
     return static_cast<int>(rand() * fraction * (max - min + 1) + min);
 }
 
-char** genRandomLevel(const int lHeight, const int lWidth)
+char **genRandomLevel(const int lHeight, const int lWidth)
 {
 
     char **arr_ptr = new char *[lHeight];
@@ -238,15 +240,23 @@ std::vector<int> inputVec{};
 int main()
 {
     // Создание окна
-    auto& window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
+    auto &window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
     // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
+
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader);
+
+    Font font("../res/fonts/vt323.ttf", 32);
+    Text text(font, "True RPG!\n Welcome!");
+    text.setOrigin(glm::vec2(text.getWidth() / 2, text.getHeight()));
+
+    Text fpsText(font, "FPS: ");
+    float t = 0;
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
@@ -256,10 +266,10 @@ int main()
     srand(seedDeb);
 
     // FIXME: Нужно исправить генерацию размера что бы избавиться от рандомного SIGSEGV
-    int lHeight  = getRandomNumber2(4, 7) * 7 + 2;
-    int lWidth   = getRandomNumber2(4, 7) * 7 + 2;
+    int lHeight = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth = getRandomNumber2(4, 7) * 7 + 2;
     int lHeight2 = getRandomNumber2(4, 7) * 7 + 2;
-    int lWidth2  = getRandomNumber2(4, 7) * 7 + 2;
+    int lWidth2 = getRandomNumber2(4, 7) * 7 + 2;
 
     Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
 
@@ -305,7 +315,7 @@ int main()
 
     // Подготовка спрайтов
     Sprite wallSprite(wallTexture);
-    wallSprite.setTextureRect(IntRect(0, 224, 128 -32, 128 -32));
+    wallSprite.setTextureRect(IntRect(0, 224, 128 - 32, 128 - 32));
     wallSprite.setHeight(64);
     wallSprite.setWidth(64);
     wallSprite.setOrigin(glm::vec2(32, 32));
@@ -354,7 +364,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         spriteBatch.begin();
-      
+
         deltaTime = chrono.getDeltaTime() * 200;
         processInput(playerHero, deltaTime);
 
@@ -466,6 +476,21 @@ int main()
 
         playerHero.draw(spriteBatch);
 
+        text.setPosition(-camera.getPosition() + glm::vec2(0.f, (int) SCR_HEIGHT / 2));
+        text.draw(spriteBatch);
+        // Анимация просто для теста
+        text.setColor(glm::vec4(
+                (std::sin(t) + 1) / 2,
+                (std::sin(2 * t + 1) + 1) / 2,
+                (std::sin(0.5 * t) + 2) / 2, 1.f
+        ));
+        t += deltaTime / 100;
+
+        fpsText.setText("FPS: " + std::to_string(chrono.getFps()));
+        fpsText.setPosition(-camera.getPosition() + glm::vec2(-(int) SCR_WIDTH / 2, -(int) SCR_HEIGHT / 2));
+        fpsText.setOrigin(glm::vec2(0, 0));
+        fpsText.draw(spriteBatch);
+
         spriteBatch.end();
 
         // glfw: обмен содержимым front- и back- буферов.
@@ -478,11 +503,12 @@ int main()
     wallTexture.destroy();
     heroTexture.destroy();
     spriteBatch.destroy();
+    font.destroy();
 
     window.destroy();
 
     // for (int counter2 = 0; counter2 < mapObjectsRow; ++counter2)
-        // delete[] mapObjectsPointer[counter2];
+    // delete[] mapObjectsPointer[counter2];
     // delete[] mapObjectsPointer;
 
     for (int counter3 = 0; counter3 < mapObjectsRow2; ++counter3)
@@ -505,7 +531,7 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
     if (action == GLFW_RELEASE)
     {
         inputNotifier.notifier(inputVec.back(), action);
-		inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
+        inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
     }
 }
 
@@ -516,5 +542,3 @@ void resizeCallback(Window *window, int width, int height)
     // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
     glViewport(0, 0, width, height);
 }
-
-

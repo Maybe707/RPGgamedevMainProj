@@ -17,7 +17,8 @@ add_subdirectory(libs/glfw)
 find_package(OpenGL REQUIRED)
 add_subdirectory(libs/stb_image)
 add_subdirectory(libs/glm)
+add_subdirectory(libs/freetype)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
