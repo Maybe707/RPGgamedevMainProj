@@ -65,11 +65,10 @@ Font::Font(const std::string &path, int size)
     int x = 0;
     for (int i = 32; i < 128; i++)
     {
-        // По какой-то неведомой причине без условия !glyph->bitmap.buffer этот код не работает на винде.
-        // Если кто-то знает, почему так происходит, сообщите. Очень интересно узнать.
         if (FT_Load_Char(face, i, FT_LOAD_RENDER) || !glyph->bitmap.buffer)
         {
-            std::cout << "Failed to load Glyph" << std::endl;
+            // Иногда могут не загрузиться какие-то глифы (например, такое может быть на винде),
+            // поэтому просто пропускаем такие случаи.
             continue;
         }
 
