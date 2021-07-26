@@ -10,7 +10,7 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
 
     glm::vec2 playerPosition = player.getPosition();
 
-    if (playerPosition.x < tilePos.x + 0.7f && //HACK: Кто знает, почему тут 58? Это хак
+    if (playerPosition.x < tilePos.x + 0.7f && // 0.7f - это прибовление к размеру. Еракто это как reactangel collider
         playerPosition.x + 0.7f > tilePos.x &&
         playerPosition.y < tilePos.y + 0.7f &&
         playerPosition.y + 0.7f > tilePos.y)
