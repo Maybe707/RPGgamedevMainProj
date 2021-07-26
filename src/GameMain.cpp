@@ -254,6 +254,8 @@ int main()
     Font font("../res/fonts/vt323.ttf", 32);
     Text text(font, "True RPG!\n Welcome!");
     text.setOrigin(glm::vec2(text.getWidth() / 2, text.getHeight()));
+
+    Text fpsText(font, "FPS: ");
     float t = 0;
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
@@ -474,7 +476,7 @@ int main()
 
         playerHero.draw(spriteBatch);
 
-        text.setPosition(-camera.getPosition() + glm::vec2(0.f, SCR_HEIGHT / 2 - 10));
+        text.setPosition(-camera.getPosition() + glm::vec2(0.f, (int) SCR_HEIGHT / 2));
         text.draw(spriteBatch);
         // Анимация просто для теста
         text.setColor(glm::vec4(
@@ -483,6 +485,11 @@ int main()
                 (std::sin(0.5 * t) + 2) / 2, 1.f
         ));
         t += deltaTime / 100;
+
+        fpsText.setText("FPS: " + std::to_string(chrono.getFps()));
+        fpsText.setPosition(-camera.getPosition() + glm::vec2(-(int) SCR_WIDTH / 2, -(int) SCR_HEIGHT / 2));
+        fpsText.setOrigin(glm::vec2(0, 0));
+        fpsText.draw(spriteBatch);
 
         spriteBatch.end();
 

@@ -71,7 +71,7 @@ Font::Font(const std::string &path, int size)
             continue;
         }
 
-        fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows, glyph->bitmap.pitch);
+        fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows);
 
         // уOffset нужен, чтобы разместить наши символы на одной линии
         int yOffset = height - glyph->bitmap_top;
@@ -118,7 +118,7 @@ void Font::destroy()
 
 // Выглядит жутко, но похожую штуку увидал в SFML. У нас особо нет выбора,
 // потому что хочется переиспользовать уже имеющийся шейдер, а freetype умеет только в один канал.
-void Font::fillPixelBuffer(const unsigned char *buffer, size_t width, size_t height, size_t pitch)
+void Font::fillPixelBuffer(const unsigned char *buffer, size_t width, size_t height)
 {
     m_pixelBuffer.resize(width * height * 4);
     for (unsigned int y = 0; y < height; ++y)

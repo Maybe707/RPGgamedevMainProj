@@ -14,9 +14,7 @@ class Text
     std::string m_text;
 
     glm::vec2 m_position{};
-
     glm::vec2 m_origin{};
-
     glm::vec4 m_color;
 
     float m_width;
@@ -29,6 +27,9 @@ public:
 
     void draw(SpriteBatch& batch);
 
+    std::string getText() const;
+    void setText(const std::string& text);
+
     glm::vec2 getPosition() const;
     void setPosition(glm::vec2 position);
 
@@ -40,6 +41,9 @@ public:
 
     float getWidth() const;
     float getHeight() const;
+
+private:
+    void initSprites();
 };
 
 #endif //RPG_TEXT_H

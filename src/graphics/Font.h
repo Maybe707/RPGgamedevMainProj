@@ -36,7 +36,7 @@ public:
     void destroy();
 
 private:
-    void fillPixelBuffer(const unsigned char* buffer, size_t width, size_t height, size_t pitch);
+    void fillPixelBuffer(const unsigned char* buffer, size_t width, size_t height);
 };
 
 #endif //RPG_FONT_H
