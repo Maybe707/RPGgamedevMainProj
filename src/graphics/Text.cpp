@@ -106,9 +106,9 @@ void Text::initSprites()
         // Не спрашивайте, почему тут такой ориджин.
         // По какой-то причине так оказалось удобнее
         sprite.setOrigin(glm::vec2(0.f, character.size.y));
-        sprite.setWidth(character.size.x);
-        sprite.setHeight(character.size.y);
-        sprite.setPosition(pos);
+        sprite.setWidth((float) character.size.x);
+        sprite.setHeight((float) character.size.y);
+        sprite.setPosition(pos - glm::vec2(0.f, character.baseline));
 
         m_sprites.push_back(sprite);
 

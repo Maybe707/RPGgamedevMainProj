@@ -35,16 +35,8 @@ Font::Font(const std::string &path, int size)
             continue;
         }
 
-        width += glyph->bitmap.width;
+        width += (int) glyph->bitmap.width;
         height = std::max(height, (int) glyph->bitmap.rows);
-    }
-
-    // Решил сразу размещать все глифы на текстуре с необходимым смещением, поэтому нужно чуть больше пикселей по высоте.
-    // Тут вычисляем необходимую высоту.
-    int heightWithOffset = 0;
-    for (int i = 32; i < 128; i++)
-    {
-        heightWithOffset = height + (height - glyph->bitmap_top);
     }
 
     // Так как мы узнали ширину и высоту, то можем заранее создать текстуру для всех глифов
@@ -59,7 +51,7 @@ Font::Font(const std::string &path, int size)
     glTextureParameteri(textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureStorage2D(textureId, 1, GL_RGBA8, width, heightWithOffset);
+    glTextureStorage2D(textureId, 1, GL_RGBA8, width, height);
 
     // Загружаем глифы в текстуру
     int x = 0;
@@ -75,17 +67,17 @@ Font::Font(const std::string &path, int size)
         fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows);
 
         // уOffset нужен, чтобы разместить наши символы на одной линии
-        int yOffset = height - glyph->bitmap_top;
-        glTextureSubImage2D(textureId, 0, x, yOffset, glyph->bitmap.width, glyph->bitmap.rows,
+        glTextureSubImage2D(textureId, 0, x, 0, glyph->bitmap.width, glyph->bitmap.rows,
                             GL_RGBA, GL_UNSIGNED_BYTE, &m_pixelBuffer[0]);
 
-        Character character = {glm::ivec2(glyph->bitmap.width, heightWithOffset), x};
+        int baseline = height - glyph->bitmap_top;
+        Character character = {glm::ivec2(glyph->bitmap.width, glyph->bitmap.rows), x, baseline};
         m_characters.insert({i, character});
 
         x += glyph->bitmap.width;
     }
 
-    m_texture = Texture(textureId, path, width, heightWithOffset);
+    m_texture = Texture(textureId, path, width, height);
 
     // Уничтожаем все это безобразие
     FT_Done_Face(face);

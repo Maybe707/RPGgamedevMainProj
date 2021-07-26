@@ -9,6 +9,7 @@
 struct Character {
     glm::ivec2 size; // Размер символа
     int xOffset; // Смещение от начала текстуры, до символа
+    int baseline;
 };
 
 class Font
