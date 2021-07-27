@@ -22,13 +22,17 @@ SpriteBatch::SpriteBatch(Shader &shader, int spriteCount)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) 0);
     glEnableVertexAttribArray(0);
 
-    // Атрибуты текстурных координат
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (3 * sizeof(float)));
+    // Атрибуты цвета
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // Атрибуты индекса текстуры
-    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (5 * sizeof(float)));
+    // Атрибуты текстурных координат
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (7 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    // Атрибуты индекса текстуры
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (9 * sizeof(float)));
+    glEnableVertexAttribArray(3);
 
     // Паттерн такой:
     // 0, 1, 2, 2, 3, 0
@@ -120,18 +124,27 @@ void SpriteBatch::draw(const Sprite &sprite)
 
     m_vertices.push_back({
                                  glm::vec3(quadPos, 0.f), // низ лево
+                                 sprite.getColor(),
                                  glm::vec2(rect.getLeft(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
                                  glm::vec3(quadPos + glm::vec2(sprite.getWidth(), 0.f), 0.f), // низ право
+                                 sprite.getColor(),
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
+<<<<<<< HEAD
                                  glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()), 0.f), // верх право
+=======
+                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()),
+                                           0.f), // верх право
+                                 sprite.getColor(),
+>>>>>>> a10ef7a2409c4a738dd8c67918c4150ea12e049f
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
                          });
     m_vertices.push_back({
                                  glm::vec3(quadPos + glm::vec2(0.f, sprite.getHeight()), 0.f), // верх лево
+                                 sprite.getColor(),
                                  glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
                          });
 }

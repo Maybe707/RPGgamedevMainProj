@@ -15,6 +15,8 @@
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
 #include "world/World.h"
+#include "graphics/Font.h"
+#include "graphics/Text.h"
 
 #define WALL_SIZE_1 10
 #define WALL_SIZE_2 4
@@ -41,7 +43,7 @@ std::vector<int> inputVec{};
 int main()
 {
     // Создание окна
-    auto& window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
+    auto &window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
     // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
@@ -51,8 +53,16 @@ int main()
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
+
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader, 30000);
+
+    Font font("../res/fonts/vt323.ttf", 32);
+    Text text(font, "True RPG!\n Welcome!");
+    text.setOrigin(glm::vec2(text.getWidth() / 2, text.getHeight()));
+
+    Text fpsText(font, "FPS: ");
+    float t = 0;
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
@@ -98,7 +108,7 @@ int main()
     {
         // Рендеринг
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         spriteBatch.begin();
       
@@ -207,6 +217,21 @@ int main()
         playerHero.draw(spriteBatch);
         world.draw(spriteBatch, wallSprite);
 
+        text.setPosition(-camera.getPosition() + glm::vec2(0.f, (int) SCR_HEIGHT / 2));
+        text.draw(spriteBatch);
+        // Анимация просто для теста
+        text.setColor(glm::vec4(
+                (std::sin(t) + 1) / 2,
+                (std::sin(2 * t + 1) + 1) / 2,
+                (std::sin(0.5 * t) + 2) / 2, 1.f
+        ));
+        t += deltaTime / 100;
+
+        fpsText.setText("FPS: " + std::to_string(chrono.getFps()));
+        fpsText.setPosition(-camera.getPosition() + glm::vec2(-(int) SCR_WIDTH / 2, -(int) SCR_HEIGHT / 2));
+        fpsText.setOrigin(glm::vec2(0, 0));
+        fpsText.draw(spriteBatch);
+
         spriteBatch.end();
 
         // glfw: обмен содержимым front- и back- буферов.
@@ -219,6 +244,7 @@ int main()
     wallTexture.destroy();
     heroTexture.destroy();
     spriteBatch.destroy();
+    font.destroy();
 
     window.destroy();
 
@@ -235,7 +261,7 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods)
     if (action == GLFW_RELEASE)
     {
         inputNotifier.notifier(inputVec.back(), action);
-		inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
+        inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
     }
 }
 
@@ -246,5 +272,3 @@ void resizeCallback(Window *window, int width, int height)
     // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
     glViewport(0, 0, width, height);
 }
-
-
