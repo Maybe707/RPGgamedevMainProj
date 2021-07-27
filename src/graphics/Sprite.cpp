@@ -62,14 +62,14 @@ void Sprite::setTextureRect(const IntRect &rect)
     m_textureRect = rect;
 }
 
-FloatRect Sprite::getLocalBounds()
+FloatRect Sprite::getLocalBounds() const
 {
     return FloatRect(0.f, 0.f,
                      std::abs((float) m_textureRect.getWidth()),
                      std::abs((float) m_textureRect.getHeight()));
 }
 
-FloatRect Sprite::getGlobalBounds()
+FloatRect Sprite::getGlobalBounds() const
 {
     return FloatRect(m_position.x - m_origin.x * m_scale.x,
                      m_position.y - m_origin.y * m_scale.y,

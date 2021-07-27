@@ -48,14 +48,14 @@ public:
      *
      * @return локальные границы текста
      */
-    FloatRect getLocalBounds();
+    FloatRect getLocalBounds() const;
 
     /**
      * Получить границы текста с учетом всех трансформаций.
      *
      * @return глобальные границы текста
      */
-    FloatRect getGlobalBounds();
+    FloatRect getGlobalBounds() const;
 
 private:
     void initSprites();

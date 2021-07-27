@@ -71,12 +71,12 @@ void Text::setColor(glm::vec4 color)
     m_color = color;
 }
 
-FloatRect Text::getLocalBounds()
+FloatRect Text::getLocalBounds() const
 {
     return FloatRect(0.f, 0.f, m_width, m_height);
 }
 
-FloatRect Text::getGlobalBounds()
+FloatRect Text::getGlobalBounds() const
 {
     return FloatRect(m_position.x - m_origin.x * m_scale.x,
                      m_position.y - m_origin.y * m_scale.y,

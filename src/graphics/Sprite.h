@@ -39,14 +39,14 @@ public:
      *
      * @return локальные границы спрайта
      */
-    FloatRect getLocalBounds();
+    FloatRect getLocalBounds() const;
 
     /**
      * Получить границы спрайта с учетом всех трансформаций.
      *
      * @return глобальные границы спрайта
      */
-    FloatRect getGlobalBounds();
+    FloatRect getGlobalBounds() const;
 };
 
 #endif //RPG_SPRITE_H
