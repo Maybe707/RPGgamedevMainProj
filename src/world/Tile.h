@@ -1,6 +1,8 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include <vector>
+#include <memory>
 #include "../graphics/Sprite.h"
 #include "../utils/Types.h"
 
@@ -26,10 +28,12 @@ namespace map
             m_sprite(sprite),
             m_id(id),
             m_collide(collide) {};
-    };   
+        // может ли игрок столкнуться с тайлом
+        inline bool isCollide() const { return m_collide; }
+    };
+
+    // TODO: временное решение в виде глобальной переменной. Определение в GameMain.cpp
+    extern std::vector<std::unique_ptr<Tile>> TilesData;
 } // namespace world
-
-
-
 
 #endif

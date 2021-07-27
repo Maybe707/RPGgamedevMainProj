@@ -29,7 +29,7 @@ namespace map
         void setTile(const glm::ivec2& tilePos, const Tile& tile);
         
         // TODO: временное решение. Переделать под структуру Tile
-        void draw(SpriteBatch& batch, Sprite& sprite);
+        void draw(SpriteBatch& batch);
     };
 } // namespace world
 

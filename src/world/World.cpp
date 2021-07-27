@@ -40,11 +40,11 @@ namespace map
         return m_testChunks.at(chunkPos).getTile(toLocalTilePos(tilePos));
     }
 
-    void World::draw(SpriteBatch& batch, Sprite& sprite)
+    void World::draw(SpriteBatch& batch)
     {
         for (auto& chunk : m_testChunks)
         {
-            chunk.second.draw(batch, sprite);
+            chunk.second.draw(batch);
         }
     }
 

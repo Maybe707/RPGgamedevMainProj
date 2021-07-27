@@ -8,6 +8,16 @@ Camera2D::Camera2D(glm::vec2 position, float width, float height,  float scale, 
           m_width(width), m_height(height),
           m_zn(zn), m_zf(zf), m_scale(scale) {}
 
+float Camera2D::getScale() const
+{
+    return m_scale;
+}
+
+void Camera2D::setScale(float scale)
+{
+    m_scale = scale;
+}
+
 glm::vec2 Camera2D::getPosition() const
 {
     return m_position;
@@ -27,10 +37,6 @@ void Camera2D::update()
 
 glm::mat4 Camera2D::getProjectionMatrix() const
 {
-    auto& wnd = Window::getInstance();
-    int width = wnd.getWidth();
-    int height = wnd.getHeight();
-
     return glm::ortho(
             -m_width  * m_scale, m_width  * m_scale,
             -m_height * m_scale, m_height * m_scale,

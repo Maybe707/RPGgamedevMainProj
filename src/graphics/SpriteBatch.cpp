@@ -133,13 +133,9 @@ void SpriteBatch::draw(const Sprite &sprite)
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
                          });
     m_vertices.push_back({
-<<<<<<< HEAD
-                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()), 0.f), // верх право
-=======
                                  glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()),
                                            0.f), // верх право
                                  sprite.getColor(),
->>>>>>> a10ef7a2409c4a738dd8c67918c4150ea12e049f
                                  glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
                          });
     m_vertices.push_back({

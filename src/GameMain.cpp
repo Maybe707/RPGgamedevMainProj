@@ -2,19 +2,19 @@
 #include <GLFW/glfw3.h>
 #include <ctime>
 #include <algorithm>
+#include "world/World.h"
 #include "window/Window.h"
 #include "graphics/Shader.h"
 #include "graphics/Buffer.h"
 #include "Player.h"
 #include "graphics/Camera2D.h"
-#include "Collision.h"
 #include "Input.h"
 #include "Data.h"
 #include "RTime.h"
 #include "KeyInputNotifier.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
-#include "world/World.h"
+#include "Collision.h"
 #include "graphics/Font.h"
 #include "graphics/Text.h"
 
@@ -28,6 +28,8 @@
 // summonDestructor3000 
 // 2021-2021
 // Покойся с миром 
+
+namespace map { std::vector<std::unique_ptr<Tile>> TilesData; }
 
 void inputCallback(Window *window, int key, int scancode, int action, int mods);
 
@@ -48,22 +50,27 @@ int main()
     // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
 
+    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.008f);
+    Camera2D guiCamera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.5f);
     map::World world;
-    world.init();
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
+    Shader guiShader = Shader::createShader("../res/shaders/shader_gui.vs", "../res/shaders/shader_gui.fs");
 
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader, 30000);
 
+    SpriteBatch textBatch(guiShader, 30000);
+
     Font font("../res/fonts/vt323.ttf", 32);
     Text text(font, "True RPG!\n Welcome!");
-    text.setOrigin(glm::vec2(text.getWidth() / 2, text.getHeight()));
+    text.setOrigin(glm::vec2(text.getWidth() * camera.getScale(), text.getHeight()));
 
-    Text fpsText(font, "FPS: ");
+    Text fpsText(font, "Debug:\nFPS: ");
     float t = 0;
 
+    Texture emptyTexture(0, "", 0, 0);
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
 
@@ -71,20 +78,31 @@ int main()
     std::cout << "rand seed: " << seedDeb << std::endl;
     srand(seedDeb);
 
-    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.007f);
-
     // Подготовка спрайтов
+    Sprite emptySprite(heroTexture);
+    emptySprite.setTextureRect(IntRect(0, 0, 0, 0));
+    emptySprite.setHeight(0);
+    emptySprite.setWidth(0);
+    emptySprite.setOrigin(glm::vec2(0));
+
     Sprite wallSprite(wallTexture);
     wallSprite.setTextureRect(IntRect(0, 224, 128 -32, 128 -32));
     wallSprite.setHeight(1);
     wallSprite.setWidth(1);
-    wallSprite.setOrigin(glm::vec2(0.5f, 0.5f));
+    wallSprite.setOrigin(glm::vec2(.5f));
+
 
     Sprite heroSprite(heroTexture);
     heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
     heroSprite.setHeight(1);
     heroSprite.setWidth(1);
-    heroSprite.setOrigin(glm::vec2(0.5f, 0.5f));
+    heroSprite.setOrigin(glm::vec2(.5f));
+
+    world.init();
+
+    // TODO: Так добовляется информация о тайле.
+    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::Tile(map::TileType::EMPTY, emptySprite, 0, false)));
+    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::Tile(map::TileType::WALL, wallSprite, 1, true)));
 
     // Создание игрока
     Player playerHero(heroSprite, 15.0f);
@@ -106,6 +124,9 @@ int main()
 
     while (window.isOpen())
     {
+        camera.update();
+        guiCamera.update();
+
         // Рендеринг
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -117,7 +138,6 @@ int main()
         Collision::detection(world, playerHero, deltaTime);
 
         camera.setPosition(-playerHero.getPosition());
-        camera.update();
         spriteBatch.setProjectionMatrix(camera.getProjectionMatrix());
         spriteBatch.setViewMatrix(camera.getViewMatrix());
 
@@ -215,24 +235,30 @@ int main()
         }
 
         playerHero.draw(spriteBatch);
-        world.draw(spriteBatch, wallSprite);
+        world.draw(spriteBatch);
 
-        text.setPosition(-camera.getPosition() + glm::vec2(0.f, (int) SCR_HEIGHT / 2));
-        text.draw(spriteBatch);
+        spriteBatch.end();
+
+        textBatch.begin();
+
+        textBatch.setProjectionMatrix(guiCamera.getProjectionMatrix());
+
+        text.setPosition(-guiCamera.getPosition() + glm::vec2(0.f, (int) window.getHeight() * guiCamera.getScale()));
+        text.draw(textBatch);
         // Анимация просто для теста
         text.setColor(glm::vec4(
                 (std::sin(t) + 1) / 2,
                 (std::sin(2 * t + 1) + 1) / 2,
                 (std::sin(0.5 * t) + 2) / 2, 1.f
         ));
-        t += deltaTime / 100;
+        t += deltaTime * 200 / 100;
 
-        fpsText.setText("FPS: " + std::to_string(chrono.getFps()));
-        fpsText.setPosition(-camera.getPosition() + glm::vec2(-(int) SCR_WIDTH / 2, -(int) SCR_HEIGHT / 2));
+        fpsText.setText("Debug:\nFPS: " + std::to_string(chrono.getFps()));
+        fpsText.setPosition(-guiCamera.getPosition() + glm::vec2(-(int) window.getWidth() * guiCamera.getScale(), -(int) window.getHeight() * guiCamera.getScale()));
         fpsText.setOrigin(glm::vec2(0, 0));
-        fpsText.draw(spriteBatch);
+        fpsText.draw(textBatch);
 
-        spriteBatch.end();
+        textBatch.end();
 
         // glfw: обмен содержимым front- и back- буферов.
         // Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)

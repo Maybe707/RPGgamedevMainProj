@@ -39,7 +39,7 @@ namespace map
         m_tiles[toLocalTileIndex(tilePos)] = static_cast<u8>(tile.m_type);
     }
 
-    void Chunk::draw(SpriteBatch& batch, Sprite& sprite)
+    void Chunk::draw(SpriteBatch& batch)
     {
         for (size_t y = 0; y < CHUNK_SIZE; y++)
         {
@@ -51,8 +51,10 @@ namespace map
 
                 if (tileId == 0) continue;
 
-                sprite.setPosition({realX, realY});
-                batch.draw(sprite);
+                auto& spr = TilesData.at(tileId)->m_sprite;
+
+                spr.setPosition({realX * spr.getWidth(), realY * spr.getHeight()});
+                batch.draw(spr);
             }
         }
     }

@@ -7,7 +7,7 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
 {
     bool stateX;
     Window& wnd = Window::getInstance();
-
+    
     glm::vec2 playerPosition = player.getPosition();
 
     if (playerPosition.x < tilePos.x + 0.7f && // 0.7f - это прибовление к размеру. Еракто это как reactangel collider
@@ -60,7 +60,7 @@ void Collision::detection(const map::World& world, Player& player, float& deltaT
             {
                 for (size_t y = 0; y < CHUNK_SIZE; y++)
                 {
-                    if (chunk.getTile({x, y}) == 1 && detectionBox(player, {
+                    if (map::TilesData.at(chunk.getTile({x, y}))->isCollide() && detectionBox(player, {
                             x + chunk.getPosition().x * CHUNK_SIZE, 
                             y + chunk.getPosition().y * CHUNK_SIZE
                         }, deltaTime))

@@ -39,7 +39,7 @@ namespace map
         u8 getTile(glm::ivec2 tilePos) const;
 
         // TODO: временное решение. Переделать под структуру Tile
-        void draw(SpriteBatch& batch, Sprite& sprite);
+        void draw(SpriteBatch& batch);
     };
 
 } // namespace world
