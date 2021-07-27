@@ -1,11 +1,8 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include <ctime>
 #include <algorithm>
 #include "world/World.h"
 #include "window/Window.h"
-#include "graphics/Shader.h"
-#include "graphics/Buffer.h"
 #include "Player.h"
 #include "graphics/Camera2D.h"
 #include "Input.h"
@@ -18,9 +15,8 @@
 #include "graphics/Font.h"
 #include "graphics/Text.h"
 
-#define WALL_SIZE_1 10
-#define WALL_SIZE_2 4
-#define RAND_SPRITE_SIZE 7
+#define SCR_WIDTH 800
+#define SCR_HEIGHT 800
 
 // Никто не забыт, ничто не забыто
 
@@ -35,8 +31,6 @@ void inputCallback(Window *window, int key, int scancode, int action, int mods);
 
 void resizeCallback(Window *window, int width, int height);
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 800;
 
 KeyInputNotifier inputNotifier;
 std::vector<int> inputVec{};
@@ -50,7 +44,7 @@ int main()
     // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
 
-    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.008f);
+    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.5f);
     Camera2D guiCamera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.5f);
     map::World world;
 
@@ -61,7 +55,7 @@ int main()
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader, 30000);
 
-    SpriteBatch textBatch(guiShader, 30000);
+    SpriteBatch textBatch(guiShader, 5000);
 
     Font font("../res/fonts/vt323.ttf", 32);
     Text text(font, "True RPG!\n Welcome!");
@@ -83,16 +77,16 @@ int main()
 
     Sprite wallSprite(wallTexture);
     wallSprite.setTextureRect(IntRect(0, 224, 128 -32, 128 -32));
-    wallSprite.setHeight(1);
-    wallSprite.setWidth(1);
-    wallSprite.setOrigin(glm::vec2(.5f));
+    wallSprite.setHeight(64);
+    wallSprite.setWidth(64);
+    wallSprite.setOrigin(glm::vec2(32));
 
 
     Sprite heroSprite(heroTexture);
     heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
-    heroSprite.setHeight(1);
-    heroSprite.setWidth(1);
-    heroSprite.setOrigin(glm::vec2(.5f));
+    heroSprite.setHeight(64);
+    heroSprite.setWidth(64);
+    heroSprite.setOrigin(glm::vec2(32));
 
     world.init();
 
@@ -101,8 +95,8 @@ int main()
     map::TilesData.emplace_back(std::make_unique<map::Tile>(map::Tile(map::TileType::WALL, wallSprite, 1, true)));
 
     // Создание игрока
-    Player playerHero(heroSprite, 15.0f);
-    playerHero.setPosition(glm::vec2(2.0f, 2.0f));
+    Player playerHero(heroSprite, 200.0f);
+    playerHero.setPosition(glm::vec2(200.0f, 200.0f));
 
     inputNotifier.attach(&playerHero);
 

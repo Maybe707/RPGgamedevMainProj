@@ -33,12 +33,31 @@ namespace map
         void init();
         
         int getSize() const;
-
+        /**
+         * <p>Возвращает ссылку на чанки в мире</p>
+         * 
+         * @return const ChunkVector&
+        */
         const ChunkVector& getChunks() const;
+        /**
+         * <p>Возвращает ссылку на чанк по его позиции</p>
+         * 
+         * @param chunkPos Позиция чанка в мире
+         * @return const ChunkVector&
+        */
         const Chunk& getChunk(glm::ivec2 chunkPos) const;
+        /**
+         * <p>Возвращает id тайла по позиции в мире</p>
+         * 
+         * @param tilePos Позиция тайла в мире
+         * @return const ChunkVector&
+        */
         u8 getTile(glm::ivec2 tilePos) const;
-
-        // TODO: временное решение. Переделать под структуру Tile
+        /**
+         * <p>Рисуте мир</p>
+         * 
+         * @param batch Пакетный рендер
+        */
         void draw(SpriteBatch& batch);
     };
 

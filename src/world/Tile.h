@@ -28,10 +28,29 @@ namespace map
             m_sprite(sprite),
             m_id(id),
             m_collide(collide) {};
-        // может ли игрок столкнуться с тайлом
+        /**
+         * <p>Проверяет может ли что то столкнуться с тайлом</p>
+         * 
+         * @return true если да, false иначе
+        */
         inline bool isCollide() const { return m_collide; }
+        /**
+         * <p>Возвращает ссылку на спрайт</p>
+         * 
+         * @return Sprite&
+        */
         inline Sprite& getSprite() const { return m_sprite; }
+        /**
+         * <p>Возвращает тип тайла</p>
+         * 
+         * @return TileType
+        */
         inline TileType getType() const { return m_type; }
+        /**
+         * <p>Возвращает id тайла</p>
+         * 
+         * @return u8 id
+        */
         inline u8 getId() const { return m_id; }
     };
 

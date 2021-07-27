@@ -10,10 +10,10 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
     
     glm::vec2 playerPosition = player.getPosition();
 
-    if (playerPosition.x < tilePos.x + 0.7f && // 0.7f - это прибовление к размеру. Еракто это как reactangel collider
-        playerPosition.x + 0.7f > tilePos.x &&
-        playerPosition.y < tilePos.y + 0.7f &&
-        playerPosition.y + 0.7f > tilePos.y)
+    if (playerPosition.x < tilePos.x + 58.f && // 0.7f - это прибовление к размеру. Еракто это как reactangel collider
+        playerPosition.x + 58.f > tilePos.x &&
+        playerPosition.y < tilePos.y + 58.f &&
+        playerPosition.y + 58.f > tilePos.y)
     {
 
         // TODO: В инпуте кнопки проверяются, тут проверяются. Что-то очень странное...
@@ -60,10 +60,10 @@ void Collision::detection(const map::World& world, Player& player, float& deltaT
             {
                 for (size_t y = 0; y < CHUNK_SIZE; y++)
                 {
-                    if (map::TilesData.at(chunk.getTile({x, y}))->isCollide() && detectionBox(player, {
-                            x + chunk.getPosition().x * CHUNK_SIZE, 
-                            y + chunk.getPosition().y * CHUNK_SIZE
-                        }, deltaTime))
+                    float wd = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getWidth();
+                    float ht = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getHeight();
+                    if (map::TilesData.at(chunk.getTile({x, y}))->isCollide() && 
+                        detectionBox(player, map::toGlobalTilePos({x, y}, chunk.getPosition()) * glm::ivec2(wd, ht), deltaTime))
                     {
                         return;
                     }

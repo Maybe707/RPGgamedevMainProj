@@ -4,7 +4,6 @@
 #include <glm/vec2.hpp>
 #include "WorldConst.h"
 
-// TODO: требоутся доработка
 namespace map
 {
     inline glm::ivec2 toChunkPos(const glm::ivec2& globalTilePos)

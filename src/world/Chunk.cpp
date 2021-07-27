@@ -36,7 +36,7 @@ namespace map
 
     void Chunk::setTile(const glm::ivec2& tilePos, const Tile& tile)
     {
-        m_tiles[toLocalTileIndex(tilePos)] = static_cast<u8>(tile.m_type);
+        m_tiles[toLocalTileIndex(tilePos)] = tile.getId();
     }
 
     void Chunk::draw(SpriteBatch& batch)
