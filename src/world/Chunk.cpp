@@ -24,6 +24,11 @@ namespace map
         }
     }
 
+    const TileArray& Chunk::getTiles() const
+    {
+        return m_tiles;
+    }
+
     const glm::ivec2& Chunk::getPosition() const
     {
         return m_pos;

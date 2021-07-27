@@ -3,16 +3,15 @@
 
 namespace map
 {
-    World::World() : m_chunks(25), m_size(5) { }
+    World::World() : m_size(5) { }
 
     void World::init()
     {
-        for (size_t y = 0; y < m_size; y++)
+        for (int y = -3; y < 2; y++)
         {
-            for (size_t x = 0; x < m_size; x++)
+            for (int x = -2; x < 3; x++)
             {
-                // m_chunks[y * m_size + x] = Chunk({x, y});
-                m_testChunks[glm::ivec2(x, y)] = Chunk({x, y});
+                m_chunks[glm::ivec2(x, y)] = Chunk({x, y});
             }
         }
     }
@@ -22,7 +21,7 @@ namespace map
         return m_size;
     }
 
-    const ChunkVector& World::getChunks() const
+    const ChunkHashMap& World::getChunks() const
     {
         return m_chunks;
     }
@@ -30,19 +29,19 @@ namespace map
     const Chunk& World::getChunk(glm::ivec2 chunkPos) const
     {
         // return m_chunks.at(chunkPos.y * CHUNK_SIZE + chunkPos.x);
-        return m_testChunks.at(chunkPos);
+        return m_chunks.at(chunkPos);
     }
 
     u8 World::getTile(glm::ivec2 tilePos) const
     {
         auto chunkPos = toChunkPos(tilePos);
         // return m_chunks.at(chunkPos.y * 5 + chunkPos.x).getTile(toLocalTilePos(tilePos));
-        return m_testChunks.at(chunkPos).getTile(toLocalTilePos(tilePos));
+        return m_chunks.at(chunkPos).getTile(toLocalTilePos(tilePos));
     }
 
     void World::draw(SpriteBatch& batch)
     {
-        for (auto& chunk : m_testChunks)
+        for (auto& chunk : m_chunks)
         {
             chunk.second.draw(batch);
         }

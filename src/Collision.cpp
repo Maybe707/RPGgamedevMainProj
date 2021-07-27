@@ -51,24 +51,21 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
 
 void Collision::detection(const map::World& world, Player& player, float& deltaTime)
 {
-    for (int i = 0; i < world.getSize(); ++i)
+    for (auto& ch : world.getChunks())
     {
-        for (int j = 0; j < world.getSize(); ++j)
+        for (size_t x = 0; x < CHUNK_SIZE; x++)
         {
-            auto& chunk = world.getChunk({i, j}); 
-            for (size_t x = 0; x < CHUNK_SIZE; x++)
+            for (size_t y = 0; y < CHUNK_SIZE; y++)
             {
-                for (size_t y = 0; y < CHUNK_SIZE; y++)
+                float wd = map::TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getWidth();
+                float ht = map::TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getHeight();
+                if (map::TilesData.at(ch.second.getTile({x, y}))->isCollide() && 
+                        detectionBox(player, map::toGlobalTilePos({x, y}, ch.second.getPosition()) * glm::ivec2(wd, ht), deltaTime))
                 {
-                    float wd = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getGlobalBounds().getWidth();
-                    float ht = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getGlobalBounds().getHeight();
-                    if (map::TilesData.at(chunk.getTile({x, y}))->isCollide() && 
-                        detectionBox(player, map::toGlobalTilePos({x, y}, chunk.getPosition()) * glm::ivec2(wd, ht), deltaTime))
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
+            
         }
     }
 }

@@ -24,6 +24,8 @@ namespace map
         Chunk(const glm::ivec2& pos);
         ~Chunk() = default;
         
+        const TileArray& getTiles() const;
+
         /**
          * <p>Возвращает позицию в мире</p>
          * 

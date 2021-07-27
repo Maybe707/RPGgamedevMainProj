@@ -24,8 +24,7 @@ namespace map
     class World
     {
     private:
-        ChunkVector m_chunks;
-        ChunkHashMap m_testChunks;
+        ChunkHashMap m_chunks;
         int m_size;
     public:
         World();
@@ -38,7 +37,7 @@ namespace map
          * 
          * @return const ChunkVector&
         */
-        const ChunkVector& getChunks() const;
+        const ChunkHashMap& getChunks() const;
         /**
          * <p>Возвращает ссылку на чанк по его позиции</p>
          * 
