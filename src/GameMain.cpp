@@ -79,7 +79,7 @@ int main()
     srand(seedDeb);
 
     // Подготовка спрайтов
-    Sprite emptySprite(heroTexture);
+    Sprite emptySprite(emptyTexture);
     emptySprite.setTextureRect(IntRect(0, 0, 0, 0));
     emptySprite.setHeight(0);
     emptySprite.setWidth(0);
