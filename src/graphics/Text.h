@@ -15,6 +15,7 @@ class Text
 
     glm::vec2 m_position{};
     glm::vec2 m_origin{};
+    glm::vec2 m_scale{};
     glm::vec4 m_color;
 
     float m_width;
@@ -36,10 +37,24 @@ public:
     glm::vec2 getOrigin() const;
     void setOrigin(glm::vec2 origin);
 
+    glm::vec2 getScale() const;
+    void setScale(glm::vec2 scale);
+
     glm::vec4 getColor() const;
     void setColor(glm::vec4 color);
 
+    /**
+     * Вспомогательный метод, который позволяет узнать ширину текста.
+     *
+     * @return ширина текста в пикселях
+     */
     float getWidth() const;
+
+    /**
+     * Вспомогательный метод, который позволяет узнать высоту текста в пикселях.
+     *
+     * @return высота текста в пикселях
+     */
     float getHeight() const;
 
 private:

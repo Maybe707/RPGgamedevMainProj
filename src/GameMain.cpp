@@ -256,6 +256,7 @@ int main()
     text.setOrigin(glm::vec2(text.getWidth() / 2, text.getHeight()));
 
     Text fpsText(font, "FPS: ");
+    fpsText.setScale(glm::vec2(0.8f, 0.8f));
     float t = 0;
 
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
@@ -315,16 +316,14 @@ int main()
 
     // Подготовка спрайтов
     Sprite wallSprite(wallTexture);
-    wallSprite.setTextureRect(IntRect(0, 224, 128 - 32, 128 - 32));
-    wallSprite.setHeight(64);
-    wallSprite.setWidth(64);
-    wallSprite.setOrigin(glm::vec2(32, 32));
+    wallSprite.setTextureRect(IntRect(0, 224, 96, 96));
+    wallSprite.setScale(glm::vec2(2.f / 3.f, 2.f / 3.f));
+    wallSprite.setOrigin(glm::vec2(48, 48));
 
     Sprite heroSprite(heroTexture);
     heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
-    heroSprite.setHeight(64);
-    heroSprite.setWidth(64);
-    heroSprite.setOrigin(glm::vec2(32, 32));
+    heroSprite.setScale(glm::vec2(2.f, 2.f));
+    heroSprite.setOrigin(glm::vec2(16, 16));
 
     // Создание игрока
     Player playerHero(heroSprite, 2.0f);

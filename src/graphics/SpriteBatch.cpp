@@ -96,14 +96,14 @@ void SpriteBatch::end()
 
 void SpriteBatch::draw(const Sprite &sprite)
 {
+    // Тут мы ничего не рисуем, а просто сохраняем наши спрайты, чтобы потом отрисовать их все вместе
     if (m_vertices.size() / 4 >= m_spriteCount)
     {
         std::cout << "Cannot draw a sprite! Maximum number of sprites reached!" << std::endl;
         return;
     }
 
-    // Тут мы ничего не рисуем, а просто сохраняем наши спрайты, чтобы потом отрисовать их все вместе
-    glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin();
+    glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin() * sprite.getScale();
     IntRect rect = sprite.getTextureRect();
 
     // Чтобы не сохранять дубликаты текстур, решил складывать их в мапу
@@ -122,27 +122,33 @@ void SpriteBatch::draw(const Sprite &sprite)
     }
     auto texId = (float) result->second;
 
-    m_vertices.push_back({
-                                 glm::vec3(quadPos, 0.f), // низ лево
-                                 sprite.getColor(),
-                                 glm::vec2(rect.getLeft(), rect.getBottom()), texId
-                         });
-    m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), 0.f), 0.f), // низ право
-                                 sprite.getColor(),
-                                 glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
-                         });
-    m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(sprite.getWidth(), sprite.getHeight()),
-                                           0.f), // верх право
-                                 sprite.getColor(),
-                                 glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
-                         });
-    m_vertices.push_back({
-                                 glm::vec3(quadPos + glm::vec2(0.f, sprite.getHeight()), 0.f), // верх лево
-                                 sprite.getColor(),
-                                 glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
-                         });
+    float w = std::abs(rect.getWidth()) * sprite.getScale().x;
+    float h = std::abs(rect.getHeight()) * sprite.getScale().y;
+
+    m_vertices.push_back(
+            {
+                    glm::vec3(quadPos, 0.f), // низ лево
+                    sprite.getColor(),
+                    glm::vec2(rect.getLeft(), rect.getBottom()), texId
+            });
+    m_vertices.push_back(
+            {
+                    glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // низ право
+                    sprite.getColor(),
+                    glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
+            });
+    m_vertices.push_back(
+            {
+                    glm::vec3(quadPos + glm::vec2(w, h),0.f), // верх право
+                    sprite.getColor(),
+                    glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
+            });
+    m_vertices.push_back(
+            {
+                    glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // верх лево
+                    sprite.getColor(),
+                    glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
+            });
 }
 
 void SpriteBatch::setProjectionMatrix(glm::mat4 projMat)

@@ -1,7 +1,8 @@
 #include "Text.h"
 
 Text::Text(Font &font, std::string text)
-        : m_font(font), m_color(1.f), m_text(std::move(text))
+        : m_font(font), m_scale(1.f),
+          m_color(1.f), m_text(std::move(text))
 {
     initSprites();
 }
@@ -11,7 +12,8 @@ void Text::draw(SpriteBatch &batch)
     for (auto sprite : m_sprites)
     {
         // Шаманим, чтобы центр был в левом нижнем углу текста и работал ориджин
-        sprite.setPosition(sprite.getPosition() + m_position + glm::vec2(0.f, m_height) - m_origin);
+        sprite.setPosition(m_position + (sprite.getPosition() + glm::vec2(0.f, m_height) - m_origin) * m_scale);
+        sprite.setScale(m_scale);
         sprite.setColor(m_color);
         batch.draw(sprite);
     }
@@ -23,7 +25,7 @@ std::string Text::getText() const
 }
 
 // Нужно иметь в виду, что от текста зависят размеры
-void Text::setText(const std::string& text)
+void Text::setText(const std::string &text)
 {
     m_text = text;
     initSprites();
@@ -47,6 +49,16 @@ glm::vec2 Text::getOrigin() const
 void Text::setOrigin(glm::vec2 origin)
 {
     m_origin = origin;
+}
+
+glm::vec2 Text::getScale() const
+{
+    return m_scale;
+}
+
+void Text::setScale(glm::vec2 scale)
+{
+    m_scale = scale;
 }
 
 glm::vec4 Text::getColor() const
@@ -106,13 +118,11 @@ void Text::initSprites()
         // Не спрашивайте, почему тут такой ориджин.
         // По какой-то причине так оказалось удобнее
         sprite.setOrigin(glm::vec2(0.f, character.size.y));
-        sprite.setWidth((float) character.size.x);
-        sprite.setHeight((float) character.size.y);
         sprite.setPosition(pos - glm::vec2(0.f, character.baseline));
 
         m_sprites.push_back(sprite);
 
-        pos += glm::vec2(sprite.getWidth(), 0.f);
+        pos += glm::vec2((float) character.size.x, 0.f);
     }
     // Еще раз проверяем ширину для последней строки
     maxWidth = std::max(maxWidth, pos.x);
