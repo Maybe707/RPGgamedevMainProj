@@ -15,6 +15,7 @@ class Text
 
     glm::vec2 m_position{};
     glm::vec2 m_origin{};
+    glm::vec2 m_scale{};
     glm::vec4 m_color;
 
     float m_width;
@@ -36,11 +37,25 @@ public:
     glm::vec2 getOrigin() const;
     void setOrigin(glm::vec2 origin);
 
+    glm::vec2 getScale() const;
+    void setScale(glm::vec2 scale);
+
     glm::vec4 getColor() const;
     void setColor(glm::vec4 color);
 
-    float getWidth() const;
-    float getHeight() const;
+    /**
+     * Получить границы текста без учета всех трансформаций.
+     *
+     * @return локальные границы текста
+     */
+    FloatRect getLocalBounds() const;
+
+    /**
+     * Получить границы текста с учетом всех трансформаций.
+     *
+     * @return глобальные границы текста
+     */
+    FloatRect getGlobalBounds() const;
 
 private:
     void initSprites();

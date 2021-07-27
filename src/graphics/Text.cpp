@@ -1,7 +1,8 @@
 #include "Text.h"
 
 Text::Text(Font &font, std::string text)
-        : m_font(font), m_color(1.f), m_text(std::move(text))
+        : m_font(font), m_scale(1.f),
+          m_color(1.f), m_text(std::move(text))
 {
     initSprites();
 }
@@ -11,7 +12,8 @@ void Text::draw(SpriteBatch &batch)
     for (auto sprite : m_sprites)
     {
         // Шаманим, чтобы центр был в левом нижнем углу текста и работал ориджин
-        sprite.setPosition(sprite.getPosition() + m_position + glm::vec2(0.f, m_height) - m_origin);
+        sprite.setPosition(m_position + (sprite.getPosition() + glm::vec2(0.f, m_height) - m_origin) * m_scale);
+        sprite.setScale(m_scale);
         sprite.setColor(m_color);
         batch.draw(sprite);
     }
@@ -23,7 +25,7 @@ std::string Text::getText() const
 }
 
 // Нужно иметь в виду, что от текста зависят размеры
-void Text::setText(const std::string& text)
+void Text::setText(const std::string &text)
 {
     m_text = text;
     initSprites();
@@ -49,6 +51,16 @@ void Text::setOrigin(glm::vec2 origin)
     m_origin = origin;
 }
 
+glm::vec2 Text::getScale() const
+{
+    return m_scale;
+}
+
+void Text::setScale(glm::vec2 scale)
+{
+    m_scale = scale;
+}
+
 glm::vec4 Text::getColor() const
 {
     return m_color;
@@ -59,14 +71,17 @@ void Text::setColor(glm::vec4 color)
     m_color = color;
 }
 
-float Text::getWidth() const
+FloatRect Text::getLocalBounds() const
 {
-    return m_width;
+    return FloatRect(0.f, 0.f, m_width, m_height);
 }
 
-float Text::getHeight() const
+FloatRect Text::getGlobalBounds() const
 {
-    return m_height;
+    return FloatRect(m_position.x - m_origin.x * m_scale.x,
+                     m_position.y - m_origin.y * m_scale.y,
+                     m_width * m_scale.x,
+                     m_width * m_scale.y);
 }
 
 void Text::initSprites()
@@ -106,13 +121,11 @@ void Text::initSprites()
         // Не спрашивайте, почему тут такой ориджин.
         // По какой-то причине так оказалось удобнее
         sprite.setOrigin(glm::vec2(0.f, character.size.y));
-        sprite.setWidth((float) character.size.x);
-        sprite.setHeight((float) character.size.y);
         sprite.setPosition(pos - glm::vec2(0.f, character.baseline));
 
         m_sprites.push_back(sprite);
 
-        pos += glm::vec2(sprite.getWidth(), 0.f);
+        pos += glm::vec2((float) character.size.x, 0.f);
     }
     // Еще раз проверяем ширину для последней строки
     maxWidth = std::max(maxWidth, pos.x);
@@ -122,5 +135,3 @@ void Text::initSprites()
     m_width = maxWidth;
     m_height = maxHeight;
 }
-
-
