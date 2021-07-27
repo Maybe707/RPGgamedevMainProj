@@ -9,8 +9,8 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
     Window& wnd = Window::getInstance();
     
     glm::vec2 playerPosition = player.getPosition();
-
-    if (playerPosition.x < tilePos.x + 58.f && // 0.7f - это прибовление к размеру. Еракто это как reactangel collider
+    // TODO: нужно сдлеать нормальный коллайдер что бы удалить 58.f
+    if (playerPosition.x < tilePos.x + 58.f && // 58.f - это прибовление к размеру. Еракто это как reactangel collider
         playerPosition.x + 58.f > tilePos.x &&
         playerPosition.y < tilePos.y + 58.f &&
         playerPosition.y + 58.f > tilePos.y)
