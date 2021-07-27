@@ -59,9 +59,11 @@ int main()
 
     Font font("../res/fonts/vt323.ttf", 32);
     Text text(font, "True RPG!\n Welcome!");
-    text.setOrigin(glm::vec2(text.getWidth() * camera.getScale(), text.getHeight()));
+    FloatRect bounds = text.getLocalBounds();
+    text.setOrigin(glm::vec2(bounds.getWidth() / 2, bounds.getHeight()));
 
-    Text fpsText(font, "Debug:\nFPS: ");
+    Text fpsText(font, "FPS: ");
+    fpsText.setScale(glm::vec2(0.8f, 0.8f));
     float t = 0;
 
     Texture emptyTexture(0, "", 0, 0);
@@ -76,23 +78,14 @@ int main()
     emptySprite.setOrigin(glm::vec2(0));
 
     Sprite wallSprite(wallTexture);
-    wallSprite.setTextureRect(IntRect(0, 224, 128 -32, 128 -32));
-    wallSprite.setHeight(64);
-    wallSprite.setWidth(64);
-    wallSprite.setOrigin(glm::vec2(32));
-
+    wallSprite.setTextureRect(IntRect(0, 224, 96, 96));
+    wallSprite.setScale(glm::vec2(2.f / 3.f, 2.f / 3.f));
+    wallSprite.setOrigin(glm::vec2(48, 48));
 
     Sprite heroSprite(heroTexture);
     heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
-    heroSprite.setHeight(64);
-    heroSprite.setWidth(64);
-    heroSprite.setOrigin(glm::vec2(32));
-
-    world.init();
-
-    // TODO: Так добовляется информация о тайле.
-    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::Tile(map::TileType::EMPTY, emptySprite, 0, false)));
-    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::Tile(map::TileType::WALL, wallSprite, 1, true)));
+    heroSprite.setScale(glm::vec2(2.f, 2.f));
+    heroSprite.setOrigin(glm::vec2(16, 16));
 
     // Создание игрока
     Player playerHero(heroSprite, 200.0f);

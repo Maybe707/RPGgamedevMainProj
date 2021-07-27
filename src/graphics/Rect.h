@@ -34,6 +34,7 @@ Rect<T>::Rect(T left, T bottom, T width, T height)
 
 }
 
-using IntRect = Rect<int>;
+typedef Rect<int> IntRect;
+typedef Rect<float> FloatRect;
 
 #endif //RPG_RECT_H
