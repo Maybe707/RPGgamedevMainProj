@@ -53,7 +53,7 @@ namespace map
 
                 auto& spr = TilesData.at(tileId)->getSprite();
 
-                spr.setPosition({realX * spr.getWidth(), realY * spr.getHeight()});
+                spr.setPosition({realX * spr.getGlobalBounds().getWidth(), realY * spr.getGlobalBounds().getHeight()});
                 batch.draw(spr);
             }
         }

@@ -60,8 +60,8 @@ void Collision::detection(const map::World& world, Player& player, float& deltaT
             {
                 for (size_t y = 0; y < CHUNK_SIZE; y++)
                 {
-                    float wd = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getWidth();
-                    float ht = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getHeight();
+                    float wd = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getGlobalBounds().getWidth();
+                    float ht = map::TilesData.at(chunk.getTile({x, y}))->getSprite().getGlobalBounds().getHeight();
                     if (map::TilesData.at(chunk.getTile({x, y}))->isCollide() && 
                         detectionBox(player, map::toGlobalTilePos({x, y}, chunk.getPosition()) * glm::ivec2(wd, ht), deltaTime))
                     {

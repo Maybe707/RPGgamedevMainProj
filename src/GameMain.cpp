@@ -73,8 +73,7 @@ int main()
     // Подготовка спрайтов
     Sprite emptySprite(emptyTexture);
     emptySprite.setTextureRect(IntRect(0, 0, 0, 0));
-    emptySprite.setHeight(0);
-    emptySprite.setWidth(0);
+    emptySprite.setScale({0, 0});
     emptySprite.setOrigin(glm::vec2(0));
 
     Sprite wallSprite(wallTexture);
@@ -86,6 +85,9 @@ int main()
     heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
     heroSprite.setScale(glm::vec2(2.f, 2.f));
     heroSprite.setOrigin(glm::vec2(16, 16));
+
+    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::TileType::EMPTY, emptySprite, 0, false));
+    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::TileType::WALL, wallSprite, 1, true));
 
     // Создание игрока
     Player playerHero(heroSprite, 200.0f);
@@ -101,6 +103,8 @@ int main()
     // Game timer.
     RTime chrono(0.0f, 0.0f, 0.0f);
     Collision collision;
+
+    world.init();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
