@@ -74,10 +74,6 @@ int main()
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
     Texture heroTexture = Texture::create("../res/textures/hero.png");
 
-    unsigned int seedDeb = static_cast<unsigned>(time(0));
-    std::cout << "rand seed: " << seedDeb << std::endl;
-    srand(seedDeb);
-
     // Подготовка спрайтов
     Sprite emptySprite(emptyTexture);
     emptySprite.setTextureRect(IntRect(0, 0, 0, 0));
