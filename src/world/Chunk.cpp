@@ -51,7 +51,7 @@ namespace map
 
                 if (tileId == 0) continue;
 
-                auto& spr = TilesData.at(tileId)->m_sprite;
+                auto& spr = TilesData.at(tileId)->getSprite();
 
                 spr.setPosition({realX * spr.getWidth(), realY * spr.getHeight()});
                 batch.draw(spr);

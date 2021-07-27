@@ -30,6 +30,9 @@ namespace map
             m_collide(collide) {};
         // может ли игрок столкнуться с тайлом
         inline bool isCollide() const { return m_collide; }
+        inline Sprite& getSprite() const { return m_sprite; }
+        inline TileType getType() const { return m_type; }
+        inline u8 getId() const { return m_id; }
     };
 
     // TODO: временное решение в виде глобальной переменной. Определение в GameMain.cpp
