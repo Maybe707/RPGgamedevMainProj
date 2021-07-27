@@ -44,18 +44,18 @@ public:
     void setColor(glm::vec4 color);
 
     /**
-     * Вспомогательный метод, который позволяет узнать ширину текста.
+     * Получить границы текста без учета всех трансформаций.
      *
-     * @return ширина текста в пикселях
+     * @return локальные границы текста
      */
-    float getWidth() const;
+    FloatRect getLocalBounds();
 
     /**
-     * Вспомогательный метод, который позволяет узнать высоту текста.
+     * Получить границы текста с учетом всех трансформаций.
      *
-     * @return высота текста в пикселях
+     * @return глобальные границы текста
      */
-    float getHeight() const;
+    FloatRect getGlobalBounds();
 
 private:
     void initSprites();

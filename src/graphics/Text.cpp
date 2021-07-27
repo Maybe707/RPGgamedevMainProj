@@ -71,14 +71,17 @@ void Text::setColor(glm::vec4 color)
     m_color = color;
 }
 
-float Text::getWidth() const
+FloatRect Text::getLocalBounds()
 {
-    return m_width;
+    return FloatRect(0.f, 0.f, m_width, m_height);
 }
 
-float Text::getHeight() const
+FloatRect Text::getGlobalBounds()
 {
-    return m_height;
+    return FloatRect(m_position.x - m_origin.x * m_scale.x,
+                     m_position.y - m_origin.y * m_scale.y,
+                     m_width * m_scale.x,
+                     m_width * m_scale.y);
 }
 
 void Text::initSprites()
@@ -132,5 +135,3 @@ void Text::initSprites()
     m_width = maxWidth;
     m_height = maxHeight;
 }
-
-

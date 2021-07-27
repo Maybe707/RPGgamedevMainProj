@@ -253,7 +253,8 @@ int main()
 
     Font font("../res/fonts/vt323.ttf", 32);
     Text text(font, "True RPG!\n Welcome!");
-    text.setOrigin(glm::vec2(text.getWidth() / 2, text.getHeight()));
+    FloatRect bounds = text.getLocalBounds();
+    text.setOrigin(glm::vec2(bounds.getWidth() / 2, bounds.getHeight()));
 
     Text fpsText(font, "FPS: ");
     fpsText.setScale(glm::vec2(0.8f, 0.8f));

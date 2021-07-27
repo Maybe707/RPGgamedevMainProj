@@ -34,6 +34,19 @@ public:
     IntRect getTextureRect() const;
     void setTextureRect(const IntRect &rect);
 
+    /**
+     * Получить границы спрайта без учета всех трансформаций.
+     *
+     * @return локальные границы спрайта
+     */
+    FloatRect getLocalBounds();
+
+    /**
+     * Получить границы спрайта с учетом всех трансформаций.
+     *
+     * @return глобальные границы спрайта
+     */
+    FloatRect getGlobalBounds();
 };
 
 #endif //RPG_SPRITE_H
