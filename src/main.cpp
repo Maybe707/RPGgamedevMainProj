@@ -1,23 +1,19 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <ctime>
-#include <algorithm>
 #include "window/Window.h"
 #include "graphics/Shader.h"
 #include "graphics/Buffer.h"
 #include "Map.h"
-#include "Player.h"
 #include "graphics/Camera2D.h"
 #include "Collision.h"
-#include "Input.h"
 #include "Data.h"
 #include "ChronoGuard.h"
-#include "KeyInputNotifier.h"
 #include "ElementsForRandSprites.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
-#include "graphics/Font.h"
 #include "graphics/Text.h"
+#include "Game.h"
 
 #define WALL_SIZE_1 10
 #define WALL_SIZE_2 4
@@ -227,23 +223,22 @@ void summonDestructor3000(char **arrObj, const int height, const int width)
     arrObj = nullptr;
 }
 
-void inputCallback(Window *window, int key, int scancode, int action, int mods);
-
 void resizeCallback(Window *window, int width, int height);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
-
-KeyInputNotifier inputNotifier;
-std::vector<int> inputVec{};
 
 int main()
 {
     // Создание окна
     auto &window = Window::getInstance(SCR_WIDTH, SCR_HEIGHT, "TRUE RPG");
     window.makeContextCurrent();
-    // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
+
+    Game game;
+
+    // TODO: Пока сделал такой костыль, чтобы рисовать карту
+    Camera2D* camera = game.getCamera();
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
@@ -251,17 +246,7 @@ int main()
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader);
 
-    Font font("../res/fonts/vt323.ttf", 32);
-    Text text(font, "True RPG!\n Welcome!");
-    FloatRect bounds = text.getLocalBounds();
-    text.setOrigin(glm::vec2(bounds.getWidth() / 2, bounds.getHeight()));
-
-    Text fpsText(font, "FPS: ");
-    fpsText.setScale(glm::vec2(0.8f, 0.8f));
-    float t = 0;
-
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
-    Texture heroTexture = Texture::create("../res/textures/hero.png");
 
     unsigned int seedDeb = static_cast<unsigned>(time(0));
     std::cout << "rand seed: " << seedDeb << std::endl;
@@ -273,10 +258,8 @@ int main()
     int lHeight2 = getRandomNumber2(4, 7) * 7 + 2;
     int lWidth2 = getRandomNumber2(4, 7) * 7 + 2;
 
-    Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT);
-
-    WorldMap worldMap1(SCR_WIDTH, SCR_HEIGHT, lHeight, lWidth);
-    WorldMap worldMap2(SCR_WIDTH, SCR_HEIGHT, lHeight2, lWidth2);
+    WorldMap worldMap1(lHeight, lWidth);
+    WorldMap worldMap2(lHeight2, lWidth2);
 
     char **levelArray1 = genRandomLevel(lHeight, lWidth);
     int randId = getRandomNumber2(1, 4);
@@ -284,11 +267,11 @@ int main()
     WorldMap *pipe = nullptr;
     if (randId == 1 || randId == 3)
     {
-        pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, WALL_SIZE_1, WALL_SIZE_2);
+        pipe = new WorldMap(WALL_SIZE_1, WALL_SIZE_2);
     }
     if (randId == 2 || randId == 4)
     {
-        pipe = new WorldMap(SCR_WIDTH, SCR_HEIGHT, WALL_SIZE_2, WALL_SIZE_1);
+        pipe = new WorldMap(WALL_SIZE_2, WALL_SIZE_1);
     }
     char **pipePtr = createPipe(randId);
     pipe->initialize(pipePtr);
@@ -320,17 +303,6 @@ int main()
     wallSprite.setTextureRect(IntRect(0, 224, 96, 96));
     wallSprite.setScale(glm::vec2(2.f / 3.f, 2.f / 3.f));
     wallSprite.setOrigin(glm::vec2(48, 48));
-
-    Sprite heroSprite(heroTexture);
-    heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
-    heroSprite.setScale(glm::vec2(2.f, 2.f));
-    heroSprite.setOrigin(glm::vec2(16, 16));
-
-    // Создание игрока
-    Player playerHero(heroSprite, 2.0f);
-    playerHero.setPosition(glm::vec2(450.0f, -150.0f));
-
-    inputNotifier.attach(&playerHero);
 
     const int animIndexArray = 3;
     int animCount = 0;
@@ -366,132 +338,26 @@ int main()
         spriteBatch.begin();
 
         deltaTime = chrono.getDeltaTime() * 200;
-        processInput(playerHero, deltaTime);
 
+        // TODO: Пока отключил коллизии, их нужно реализовать в рамках ecs
         worldMap1.render(mapObjectsPointer, spriteBatch, wallSprite, 0, 0, 3, 0);
-        collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1);
+        //collision.detection(mapObjectsPointer, playerHero, deltaTime, worldMap1);
 
         pipe->render(mapObjectsPointer, spriteBatch, wallSprite, offset1, offset2, randId, 0);
-        collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe);
+        //collision.detection(mapObjectsPointer, playerHero, deltaTime, *pipe);
 
         worldMap2.render(mapObjectsPointer2, spriteBatch, wallSprite, offset1and1, offset2and2, 0, randId2);
-        collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2);
+        //collision.detection(mapObjectsPointer2, playerHero, deltaTime, worldMap2);
 
-        camera.setPosition(-playerHero.getPosition());
-        spriteBatch.setProjectionMatrix(camera.getProjectionMatrix());
-        spriteBatch.setViewMatrix(camera.getViewMatrix());
+        spriteBatch.setProjectionMatrix(camera->getProjectionMatrix());
+        spriteBatch.setViewMatrix(camera->getViewMatrix());
 
-        if (window.getKey(GLFW_KEY_S))
-        {
-            animationDelta += deltaTime;
-            if (animationDelta > 30.0f)
-            {
-                switch (animCount)
-                {
-                    default:
-                        animCount = 0;
-                    case 0:
-                        heroSprite.setTextureRect(IntRect(0, 96, 32, 32));
-                        break;
-                    case 1:
-                        heroSprite.setTextureRect(IntRect(32, 96, 32, 32));
-                        break;
-                    case 2:
-                        heroSprite.setTextureRect(IntRect(64, 96, 32, 32));
-                        break;
-                }
-                ++animCount;
-                animationDelta = 0;
-            }
-        }
-        else if (window.getKey(GLFW_KEY_A))
-        {
-            animationDelta += deltaTime;
-            if (animationDelta > 30.0f)
-            {
-                switch (animCount)
-                {
-                    default:
-                        animCount = 0;
-                    case 0:
-                        heroSprite.setTextureRect(IntRect(0, 64, 32, 32));
-                        break;
-                    case 1:
-                        heroSprite.setTextureRect(IntRect(32, 64, 32, 32));
-                        break;
-                    case 2:
-                        heroSprite.setTextureRect(IntRect(64, 64, 32, 32));
-                        break;
-                }
-                ++animCount;
-                animationDelta = 0;
-            }
-        }
-        else if (window.getKey(GLFW_KEY_D))
-        {
-            animationDelta += deltaTime;
-            if (animationDelta > 30.0f)
-            {
-                switch (animCount)
-                {
-                    default:
-                        animCount = 0;
-                    case 0:
-                        heroSprite.setTextureRect(IntRect(0, 32, 32, 32));
-                        break;
-                    case 1:
-                        heroSprite.setTextureRect(IntRect(32, 32, 32, 32));
-                        break;
-                    case 2:
-                        heroSprite.setTextureRect(IntRect(64, 32, 32, 32));
-                        break;
-                }
-                ++animCount;
-                animationDelta = 0;
-            }
-        }
-        else if (window.getKey(GLFW_KEY_W))
-        {
-            animationDelta += deltaTime;
-            if (animationDelta > 30.0f)
-            {
-                switch (animCount)
-                {
-                    default:
-                        animCount = 0;
-                    case 0:
-                        heroSprite.setTextureRect(IntRect(0, 0, 32, 32));
-                        break;
-                    case 1:
-                        heroSprite.setTextureRect(IntRect(32, 0, 32, 32));
-                        break;
-                    case 2:
-                        heroSprite.setTextureRect(IntRect(64, 0, 32, 32));
-                        break;
-                }
-                ++animCount;
-                animationDelta = 0;
-            }
-        }
-
-        playerHero.draw(spriteBatch);
-
-        text.setPosition(-camera.getPosition() + glm::vec2(0.f, (int) SCR_HEIGHT / 2));
-        text.draw(spriteBatch);
-        // Анимация просто для теста
-        text.setColor(glm::vec4(
-                (std::sin(t) + 1) / 2,
-                (std::sin(2 * t + 1) + 1) / 2,
-                (std::sin(0.5 * t) + 2) / 2, 1.f
-        ));
-        t += deltaTime / 100;
-
-        fpsText.setText("FPS: " + std::to_string(chrono.getFps()));
-        fpsText.setPosition(-camera.getPosition() + glm::vec2(-(int) SCR_WIDTH / 2, -(int) SCR_HEIGHT / 2));
-        fpsText.setOrigin(glm::vec2(0, 0));
-        fpsText.draw(spriteBatch);
+        spriteBatch.setProjectionMatrix(camera->getProjectionMatrix());
+        spriteBatch.setViewMatrix(camera->getViewMatrix());
 
         spriteBatch.end();
+
+        game.update(deltaTime);
 
         // glfw: обмен содержимым front- и back- буферов.
         // Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
@@ -501,9 +367,7 @@ int main()
 
     ourShader.destroy();
     wallTexture.destroy();
-    heroTexture.destroy();
     spriteBatch.destroy();
-    font.destroy();
 
     window.destroy();
 
@@ -519,20 +383,6 @@ int main()
 //    summon_Destructor3000(levelArray2, 16, 24);
 
     return 0;
-}
-
-void inputCallback(Window *window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS)
-    {
-        inputVec.push_back(key);
-        inputNotifier.notifier(inputVec.back(), action);
-    }
-    if (action == GLFW_RELEASE)
-    {
-        inputNotifier.notifier(inputVec.back(), action);
-        inputVec.erase(std::remove(inputVec.begin(), inputVec.end(), key), inputVec.end());
-    }
 }
 
 // всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция

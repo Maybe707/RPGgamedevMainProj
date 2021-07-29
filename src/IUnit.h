@@ -5,6 +5,7 @@
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
 
+// TODO: удалить
 class IUnit
 {
 public:

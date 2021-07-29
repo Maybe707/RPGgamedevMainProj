@@ -2,10 +2,8 @@
 
 
 Sprite::Sprite(Texture &texture)
-        : m_scale(1.f),
-          m_color(1.f),
-          m_textureRect(0, 0, texture.getWidth(), texture.getHeight()),
-          m_texture(texture) {}
+        : m_textureRect(0, 0, texture.getWidth(), texture.getHeight()),
+          m_texture(&texture) {}
 
 glm::vec2 Sprite::getPosition() const
 {
@@ -49,7 +47,7 @@ void Sprite::setColor(glm::vec4 color)
 
 Texture &Sprite::getTexture() const
 {
-    return m_texture;
+    return *m_texture;
 }
 
 IntRect Sprite::getTextureRect() const

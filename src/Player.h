@@ -4,6 +4,7 @@
 #include "IUnit.h"
 #include "graphics/Sprite.h"
 
+// TODO: удалить
 class Player : public IUnit
 {
     Sprite& m_sprite;

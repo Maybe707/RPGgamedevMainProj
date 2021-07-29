@@ -12,12 +12,9 @@ class WorldMap
 {
     const int m_mapHeight;
     const int m_mapWidth;
-    const unsigned int m_screenWidth;
-    const unsigned int m_screenHeight;
     char** m_tileMap;
 public:
-    WorldMap(const unsigned int screenWidth, const unsigned int screenHeight,
-             const int mapHeight, const int mapWidth);
+    WorldMap(const int mapHeight, const int mapWidth);
 
     virtual ~WorldMap();
     

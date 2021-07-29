@@ -23,7 +23,7 @@ static const size_t MaxTextures = 16;
 // TODO: Класс пока еще сырой, его стоит дальше дорабатывать и оптимизировать
 class SpriteBatch
 {
-    Shader& m_shader;
+    Shader m_shader;
     int m_spriteCount;
 
     VertexArray m_vao;
@@ -42,7 +42,8 @@ class SpriteBatch
     std::map<Texture, unsigned int, decltype(&compareTextures)> m_textures;
 
 public:
-    SpriteBatch(Shader& shader, int spriteCount = 2000);
+    SpriteBatch() = default;
+    SpriteBatch(Shader shader, int spriteCount = 2000);
 
     void begin();
 

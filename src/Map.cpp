@@ -1,10 +1,7 @@
 #include <glad/gl.h>
 #include "Map.h"
 
-WorldMap::WorldMap(const unsigned int screenWidth, const unsigned int screenHeight,
-                   const int mapHeight, const int mapWidth) :
-        m_screenWidth(screenWidth),
-        m_screenHeight(screenHeight),
+WorldMap::WorldMap(const int mapHeight, const int mapWidth) :
         m_mapHeight(mapHeight),
         m_mapWidth(mapWidth)
 {

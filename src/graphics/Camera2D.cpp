@@ -17,6 +17,16 @@ void Camera2D::setPosition(glm::vec2 position)
     m_position = position;
 }
 
+float Camera2D::getWidth() const
+{
+    return m_width;
+}
+
+float Camera2D::getHeight() const
+{
+    return m_height;
+}
+
 glm::mat4 Camera2D::getProjectionMatrix() const
 {
     return glm::ortho(
