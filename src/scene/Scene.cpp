@@ -137,16 +137,20 @@ void Scene::update(float deltaTime)
                 text.setPosition(transformComponent.position);
                 FloatRect localBound = text.getLocalBounds();
                 glm::vec2 textOrigin = transformComponent.origin;
-                if (textComponent.horizontalAlign == HorizontalAlign::Center) {
+                if (textComponent.horizontalAlign == HorizontalAlign::Center)
+                {
                     textOrigin += glm::vec2(localBound.getWidth() / 2, 0.f);
                 }
-                if (textComponent.horizontalAlign == HorizontalAlign::Right) {
+                if (textComponent.horizontalAlign == HorizontalAlign::Right)
+                {
                     textOrigin += glm::vec2(localBound.getWidth(), 0.f);
                 }
-                if (textComponent.verticalAlign == VerticalAlign::Center) {
+                if (textComponent.verticalAlign == VerticalAlign::Center)
+                {
                     textOrigin += glm::vec2(0.f, localBound.getHeight() / 2);
                 }
-                if (textComponent.verticalAlign == VerticalAlign::Top) {
+                if (textComponent.verticalAlign == VerticalAlign::Top)
+                {
                     textOrigin += glm::vec2(0.f, localBound.getHeight());
                 }
                 text.setOrigin(textOrigin);
@@ -166,7 +170,7 @@ void Scene::destroy()
     auto view = m_registry.view<NativeScriptComponent>();
     for (auto entity : view)
     {
-        auto& nativeScriptComponent = view.get<NativeScriptComponent>(entity);
+        auto &nativeScriptComponent = view.get<NativeScriptComponent>(entity);
         if (nativeScriptComponent.instance)
         {
             nativeScriptComponent.onDestroyFunction(nativeScriptComponent.instance);
@@ -184,7 +188,8 @@ TransformComponent Scene::computeTransform(entt::entity entity)
     auto &entityHierarchy = m_registry.get<HierarchyComponent>(entity);
     auto current = entityHierarchy.parent;
 
-    while(current) {
+    while (current)
+    {
         auto currentTransform = current.getComponent<TransformComponent>();
         entityTransform.position += currentTransform.position;
         entityTransform.origin += currentTransform.origin;

@@ -33,15 +33,15 @@ public:
             m_lastTime = m_currentTime;
         }
 
-        auto &fpsTransform = getComponent<TransformComponent>();
-        fpsTransform.position = glm::vec2(-m_camera.getWidth() / 2, -m_camera.getWidth() / 2);
-        auto &fpsRenderer = getComponent<TextRendererComponent>();
-        fpsRenderer.text = "FPS: " + std::to_string(m_fps);
+        auto &transform = getComponent<TransformComponent>();
+        transform.position = glm::vec2(-m_camera.getWidth() / 2, -m_camera.getWidth() / 2);
+        auto &textRenderer = getComponent<TextRendererComponent>();
+        textRenderer.text = "FPS: " + std::to_string(m_fps);
 
         Entity playerEntity = getComponent<HierarchyComponent>().parent;
         auto& playerPosition = playerEntity.getComponent<TransformComponent>().position;
 
-        fpsRenderer.text += "\nx: " + std::to_string(playerPosition.x) + " y: " + std::to_string(playerPosition.y);
+        textRenderer.text += "\nx: " + std::to_string(playerPosition.x) + " y: " + std::to_string(playerPosition.y);
     }
 
     void onDestroy() {}

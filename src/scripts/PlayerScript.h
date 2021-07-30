@@ -60,7 +60,7 @@ public:
         // Анимация
         auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
 
-        if (movement == glm::ivec2(0.f))
+        if (movement == glm::ivec2(0.f) || m_frame > 2)
         {
             m_frame = 0;
         }
@@ -73,11 +73,6 @@ public:
                 m_animationDelay = 0.f;
             }
             m_animationDelay += deltaTime;
-        }
-
-        if (m_frame > 2)
-        {
-            m_frame = 0;
         }
     }
 
