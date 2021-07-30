@@ -89,7 +89,7 @@ void SpriteBatch::end()
     }
 
     m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_spriteCount * 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, m_vertices.size() / 4 * 6, GL_UNSIGNED_INT, nullptr);
 
     delete[] ids;
 }

@@ -7,7 +7,7 @@
 
 #include "scripts/PlayerScript.h"
 #include "scripts/TextScript.h"
-#include "scripts/FPSCounterScript.h"
+#include "scripts/DebugInfoScript.h"
 #include "scripts/WorldGenScript.h"
 
 Game::Game()
@@ -37,11 +37,11 @@ Game::Game()
 
 
     // Создание fps счетчика
-    m_fpsEntity = m_scene.createEntity("fps");
-    m_fpsEntity.addComponent<TextRendererComponent>(&m_font, "FPS: 0");
-    auto &fpsTransform = m_fpsEntity.getComponent<TransformComponent>();
+    m_debugInfoEntity = m_scene.createEntity("debugInfo");
+    m_debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
+    auto &fpsTransform = m_debugInfoEntity.getComponent<TransformComponent>();
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
-    m_fpsEntity.addComponent<NativeScriptComponent>().bind<FPSCounterScript>(m_camera);
+    m_debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_camera);
 
 
     // Создание игрока
@@ -59,7 +59,7 @@ Game::Game()
 
     Hierarchy::addChild(m_playerEntity, spriteEntity);
     Hierarchy::addChild(m_playerEntity, m_textEntity);
-    Hierarchy::addChild(m_playerEntity, m_fpsEntity);
+    Hierarchy::addChild(m_playerEntity, m_debugInfoEntity);
     Hierarchy::addChild(m_playerEntity, cameraEntity);
 
     // Биндим скрипт к игроку

@@ -19,7 +19,7 @@ class Game
     Entity m_playerEntity;
 
     Entity m_textEntity;
-    Entity m_fpsEntity;
+    Entity m_debugInfoEntity;
 
 public:
     Game();
