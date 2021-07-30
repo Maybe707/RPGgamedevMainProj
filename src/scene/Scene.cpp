@@ -73,10 +73,10 @@ void Scene::update(float deltaTime)
         // TODO: доделать. Скорее всего переделать весь.
         // Рендеринг карты тайлов
         {
-            auto view = m_registry.view<TileMapComponent>();
+            auto view = m_registry.view<TileMap>();
             for (auto entity : view)
             {
-                auto& tilemapComponent = view.get<TileMapComponent>(entity);
+                auto& tilemapComponent = view.get<TileMap>(entity);
                 for (auto& chunkPair : tilemapComponent.chunks)
                 {
                     auto& chunk = chunkPair.second;

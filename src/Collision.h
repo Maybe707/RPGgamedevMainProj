@@ -2,14 +2,14 @@
 #define COLLISION_H
 
 #include "Player.h"
-#include "world/TileMap.h"
+#include "scene/TileMapComponent.h"
 
 // TODO: Нуэно изменить коллизию. 
 
 class Collision
 {
 public:
-    static void detection(const map::TileMap& world, Player& player, float& deltaTime);
+    static void detection(const TileMap& world, Player& player, float& deltaTime);
 private:
     static bool detectionBox(Player& player, const glm::ivec2& tilePos, float& deltaTime);
 };

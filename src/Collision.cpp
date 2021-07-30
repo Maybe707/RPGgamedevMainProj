@@ -49,9 +49,9 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
     return stateX;
 }
 
-void Collision::detection(const map::TileMap& world, Player& player, float& deltaTime)
+void Collision::detection(const TileMap& world, Player& player, float& deltaTime)
 {
-    for (auto& ch : world.getChunks())
+    for (auto& ch : world.chunks)
     {
         for (size_t x = 0; x < CHUNK_SIZE; x++)
         {

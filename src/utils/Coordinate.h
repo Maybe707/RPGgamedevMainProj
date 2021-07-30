@@ -6,7 +6,6 @@
 
 namespace utils
 {
-    //TODO: фиксануть это т.к. неправильно работает с отрицательными координатмаи
     inline glm::ivec2 toChunkPos(const glm::ivec2& globalTilePos)
     {
         int x = globalTilePos.x;
@@ -14,8 +13,8 @@ namespace utils
 
         return 
         {
-            x < 0 ? ((x - CHUNK_SIZE) / CHUNK_SIZE) : (x / CHUNK_SIZE),
-            y < 0 ? ((y - CHUNK_SIZE) / CHUNK_SIZE) : (y / CHUNK_SIZE)
+            x < 0 ? ((x - CHUNK_SIZE + 1) / CHUNK_SIZE) : (x / CHUNK_SIZE),
+            y < 0 ? ((y - CHUNK_SIZE + 1) / CHUNK_SIZE) : (y / CHUNK_SIZE)
         };
     }
 
