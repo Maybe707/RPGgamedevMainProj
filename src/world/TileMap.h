@@ -21,17 +21,17 @@ namespace map
     using ChunkVector = std::vector<Chunk>;
     using ChunkHashMap = std::unordered_map<glm::ivec2, Chunk, ChunkHash>;
 
-    class World
+    class TileMap
     {
     private:
         ChunkHashMap m_chunks;
-        int m_size;
+        IntRect m_size;
     public:
-        World();
+        TileMap();
         
         void init();
         
-        int getSize() const;
+        const IntRect& getSize() const;
         /**
          * <p>Возвращает ссылку на чанки в мире</p>
          * 

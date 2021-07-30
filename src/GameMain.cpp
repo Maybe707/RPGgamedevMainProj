@@ -1,7 +1,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include <algorithm>
-#include "world/World.h"
+#include "world/TileMap.h"
 #include "window/Window.h"
 #include "Player.h"
 #include "graphics/Camera2D.h"
@@ -46,7 +46,7 @@ int main()
 
     Camera2D camera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.5f);
     Camera2D guiCamera(glm::vec2(0), SCR_WIDTH, SCR_HEIGHT, 0.5f);
-    map::World world;
+    map::TileMap world;
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");

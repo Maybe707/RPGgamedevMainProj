@@ -1,11 +1,11 @@
-#include "World.h"
+#include "TileMap.h"
 #include "../utils/Coordinate.h"
 
 namespace map
 {
-    World::World() : m_size(5) { }
+    TileMap::TileMap() : m_size({-2, -3, 3, 2}) { }
 
-    void World::init()
+    void TileMap::init()
     {
         for (int y = -3; y < 2; y++)
         {
@@ -16,30 +16,30 @@ namespace map
         }
     }
 
-    int World::getSize() const
+    const IntRect& TileMap::getSize() const
     {
         return m_size;
     }
 
-    const ChunkHashMap& World::getChunks() const
+    const ChunkHashMap& TileMap::getChunks() const
     {
         return m_chunks;
     }
 
-    const Chunk& World::getChunk(glm::ivec2 chunkPos) const
+    const Chunk& TileMap::getChunk(glm::ivec2 chunkPos) const
     {
         // return m_chunks.at(chunkPos.y * CHUNK_SIZE + chunkPos.x);
         return m_chunks.at(chunkPos);
     }
 
-    u8 World::getTile(glm::ivec2 tilePos) const
+    u8 TileMap::getTile(glm::ivec2 tilePos) const
     {
         auto chunkPos = toChunkPos(tilePos);
         // return m_chunks.at(chunkPos.y * 5 + chunkPos.x).getTile(toLocalTilePos(tilePos));
         return m_chunks.at(chunkPos).getTile(toLocalTilePos(tilePos));
     }
 
-    void World::draw(SpriteBatch& batch)
+    void TileMap::draw(SpriteBatch& batch)
     {
         for (auto& chunk : m_chunks)
         {
