@@ -26,18 +26,20 @@ class Font
 public:
     Font(const std::string& path, int size);
 
-    Character getCharacter(char c);
-
     std::string getPath() const;
 
     int getSize() const;
 
-    Texture& getTexture();
-
     void destroy();
 
 private:
+    Texture& getTexture();
+
+    Character getCharacter(char c);
+
     void fillPixelBuffer(const unsigned char* buffer, size_t width, size_t height);
+
+    friend class Text;
 };
 
 #endif //RPG_FONT_H

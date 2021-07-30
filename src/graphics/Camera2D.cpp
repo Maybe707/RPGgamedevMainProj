@@ -35,6 +35,16 @@ void Camera2D::update()
     m_height = wnd.getHeight();
 }
 
+float Camera2D::getWidth() const
+{
+    return m_width;
+}
+
+float Camera2D::getHeight() const
+{
+    return m_height;
+}
+
 glm::mat4 Camera2D::getProjectionMatrix() const
 {
     return glm::ortho(

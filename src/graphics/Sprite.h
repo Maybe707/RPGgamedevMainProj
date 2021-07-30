@@ -9,12 +9,13 @@ class Sprite
 {
     glm::vec2 m_position{};
     glm::vec2 m_origin{};
-    glm::vec2 m_scale;
-    glm::vec4 m_color;
-    IntRect m_textureRect;
-    Texture& m_texture;
+    glm::vec2 m_scale{1.f};
+    glm::vec4 m_color{1.f};
+    IntRect m_textureRect{0, 0, 0, 0};
+    Texture* m_texture;
 
 public:
+    Sprite() = default;
     Sprite(Texture& texture);
 
     glm::vec2 getPosition() const;

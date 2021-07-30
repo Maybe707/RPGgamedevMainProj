@@ -1,5 +1,6 @@
 #include "Player.h"
 
+// TODO: удалить
 Player::Player(Sprite& sprite, float speed)
         : m_sprite(sprite),
           m_speed(speed) {}

@@ -3,7 +3,7 @@
 #include <glad/gl.h>
 #include <numeric>
 
-SpriteBatch::SpriteBatch(Shader &shader, int spriteCount)
+SpriteBatch::SpriteBatch(Shader shader, int spriteCount)
         : m_shader(shader), m_spriteCount(spriteCount),
           m_vbo(GL_ARRAY_BUFFER), m_ibo(GL_ELEMENT_ARRAY_BUFFER),
           m_textures(&compareTextures)
