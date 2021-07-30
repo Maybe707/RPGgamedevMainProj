@@ -3,9 +3,9 @@
 
 #include <unordered_map>
 #include <glm/vec2.hpp>
-#include "../utils/Types.h"
-#include "../utils/Coordinate.h"
-#include "../world/Chunk.h"
+#include "../../utils/Types.h"
+#include "../../utils/Coordinate.h"
+#include "../../world/Chunk.h"
 
 struct ChunkHash
 {

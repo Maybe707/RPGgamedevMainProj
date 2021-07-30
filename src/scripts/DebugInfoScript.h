@@ -2,6 +2,7 @@
 #define RPG_DEBUGINFOSCRIPT_H
 
 #include <GLFW/glfw3.h>
+#include "../scene/components/HierarchyComponent.h"
 
 class DebugInfoScript : public Script
 {

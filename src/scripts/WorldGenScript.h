@@ -2,7 +2,7 @@
 #define WORLDGENSCRIPT_H
 
 #include "../scene/Script.h"
-#include "../scene/TileMapComponent.h"
+#include "../scene/components/TileMapComponent.h"
 
 class WorldGenScript : public Script
 {

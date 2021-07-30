@@ -4,15 +4,17 @@
 #include <entt.hpp>
 #include "../graphics/SpriteBatch.h"
 
+#include "systems/ScriptSystem.h"
+#include "systems/RenderSystem.h"
+
 class Entity;
-class TransformComponent;
 
 class Scene
 {
     entt::registry m_registry;
 
-    Shader m_shader;
-    SpriteBatch m_batch;
+    ScriptSystem m_scriptSystem;
+    RenderSystem m_renderSystem;
 public:
     Scene();
 
@@ -25,9 +27,6 @@ public:
     void destroy();
 
     friend class Entity;
-
-private:
-    TransformComponent computeTransform(entt::entity entity);
 };
 
 #endif //RPG_SCENE_H

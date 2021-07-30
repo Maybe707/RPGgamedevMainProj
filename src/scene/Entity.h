@@ -1,10 +1,8 @@
 #ifndef RPG_ENTITY_H
 #define RPG_ENTITY_H
 
-#include "Scene.h"
 #include <entt.hpp>
-
-class Scene;
+#include "Scene.h"
 
 class Entity
 {

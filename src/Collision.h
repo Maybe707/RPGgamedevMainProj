@@ -2,7 +2,7 @@
 #define COLLISION_H
 
 #include "Player.h"
-#include "scene/TileMapComponent.h"
+#include "scene/components/TileMapComponent.h"
 
 // TODO: Нуэно изменить коллизию. 
 

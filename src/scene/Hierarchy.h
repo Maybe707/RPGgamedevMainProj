@@ -2,7 +2,6 @@
 #define RPG_HIERARCHY_H
 
 #include "Entity.h"
-#include "Components.h"
 
 /**
  * Утилитный класс для работы с иерархией энтити.

@@ -18,7 +18,7 @@ public:
         return m_entity;
     }
 
-    friend class Scene;
+    friend class ScriptSystem;
 };
 
 

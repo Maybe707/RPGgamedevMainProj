@@ -1,8 +1,11 @@
 #include "Game.h"
 
 #include "scene/Entity.h"
-#include "scene/Components.h"
-#include "scene/TileMapComponent.h"
+#include "scene/components/CameraComponent.h"
+#include "scene/components/NativeScriptComponent.h"
+#include "scene/components/SpriteRendererComponent.h"
+#include "scene/components/TextRendererComponent.h"
+#include "scene/components/TileMapComponent.h"
 #include "scene/Hierarchy.h"
 
 #include "scripts/PlayerScript.h"
@@ -57,6 +60,7 @@ Game::Game()
     heroTransform.scale = glm::vec2(2.f, 2.f);
     heroTransform.origin = glm::vec2(16, 16);
 
+    // Крепим к игроку спрайт, текст и камеру
     Hierarchy::addChild(m_playerEntity, spriteEntity);
     Hierarchy::addChild(m_playerEntity, m_textEntity);
     Hierarchy::addChild(m_playerEntity, m_debugInfoEntity);
