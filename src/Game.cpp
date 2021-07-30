@@ -2,11 +2,13 @@
 
 #include "scene/Entity.h"
 #include "scene/Components.h"
+#include "scene/TileMapComponent.h"
 #include "scene/Hierarchy.h"
 
 #include "scripts/PlayerScript.h"
 #include "scripts/TextScript.h"
 #include "scripts/FPSCounterScript.h"
+#include "scripts/WorldGenScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -18,6 +20,9 @@ Game::Game()
     Entity cameraEntity = m_scene.createEntity("camera");
     cameraEntity.addComponent<CameraComponent>().camera = &m_camera;
 
+    Entity tileMapEntity = m_scene.createEntity("TileMap");
+    auto& tileMap = tileMapEntity.addComponent<TileMapComponent>(IntRect(-3, -3, 3, 3));
+    tileMapEntity.addComponent<NativeScriptComponent>().bind<WorldGenScript>();
 
     // Создание текста
     m_textEntity = m_scene.createEntity("text");
@@ -42,7 +47,7 @@ Game::Game()
     // Создание игрока
     m_playerEntity = m_scene.createEntity("player");
     auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
-    playerTransform.position = glm::vec2(450.0f, -150.0f);
+    playerTransform.position = glm::vec2(0.0f, 0.0f);
 
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);

@@ -60,7 +60,7 @@ void Collision::detection(const map::TileMap& world, Player& player, float& delt
                 float wd = map::TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getWidth();
                 float ht = map::TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getHeight();
                 if (map::TilesData.at(ch.second.getTile({x, y}))->isCollide() && 
-                        detectionBox(player, map::toGlobalTilePos({x, y}, ch.second.getPosition()) * glm::ivec2(wd, ht), deltaTime))
+                        detectionBox(player, utils::toGlobalTilePos({x, y}, ch.second.getPosition()) * glm::ivec2(wd, ht), deltaTime))
                 {
                     return;
                 }

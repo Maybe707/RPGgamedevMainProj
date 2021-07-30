@@ -5,10 +5,8 @@
 #include "window/Window.h"
 #include "Player.h"
 #include "graphics/Camera2D.h"
-#include "Input.h"
 #include "Data.h"
 #include "RTime.h"
-#include "KeyInputNotifier.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
 #include "Collision.h"
@@ -49,9 +47,9 @@ int main()
 
     // Создание батча, который будет рисовать наши спрайты
     SpriteBatch spriteBatch(ourShader, 30000);
-
     SpriteBatch textBatch(guiShader, 5000);
 
+    Texture emptyTexture;
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
 
     // Подготовка спрайтов
@@ -65,6 +63,9 @@ int main()
     wallSprite.setScale(glm::vec2(2.f / 3.f, 2.f / 3.f));
     wallSprite.setOrigin(glm::vec2(48, 48));
 
+    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::TileType::EMPTY, emptySprite, 0, false));
+    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::TileType::WALL, wallSprite, 1, true));
+
     const int animIndexArray = 3;
     int animCount = 0;
     float deltaTime = 0;
@@ -74,35 +75,19 @@ int main()
     RTime chrono(0.0f, 0.0f, 0.0f);
     Collision collision;
 
-    world.init();
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     while (window.isOpen())
     {
-        camera.update();
-        guiCamera.update();
-
+        camera->update();
         // Рендеринг
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        spriteBatch.begin();
-      
         deltaTime = chrono.getDeltaTime();
-        processInput(playerHero, deltaTime);
-        Collision::detection(world, playerHero, deltaTime);
 
-        spriteBatch.setProjectionMatrix(camera->getProjectionMatrix());
-        spriteBatch.setViewMatrix(camera->getViewMatrix());
-
-        spriteBatch.setProjectionMatrix(camera->getProjectionMatrix());
-        spriteBatch.setViewMatrix(camera->getViewMatrix());
-
-        textBatch.end();
-
-        game.update(deltaTime);
+        game.update(deltaTime * 200);
 
         // glfw: обмен содержимым front- и back- буферов.
         // Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)

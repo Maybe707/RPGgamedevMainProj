@@ -2,11 +2,12 @@
 
 #include "Entity.h"
 #include "Components.h"
+#include "TileMapComponent.h"
 #include "../graphics/Text.h"
 
 Scene::Scene()
         : m_shader(Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs")),
-          m_batch(m_shader) {}
+          m_batch(m_shader, 30000) {}
 
 Entity Scene::createEntity(const std::string &name)
 {
@@ -68,6 +69,39 @@ void Scene::update(float deltaTime)
         m_batch.setProjectionMatrix(camera->getProjectionMatrix());
         m_batch.setViewMatrix(camera->getViewMatrix());
         m_batch.begin();
+
+        // TODO: доделать. Скорее всего переделать весь.
+        // Рендеринг карты тайлов
+        {
+            auto view = m_registry.view<TileMapComponent>();
+            for (auto entity : view)
+            {
+                auto& tilemapComponent = view.get<TileMapComponent>(entity);
+                for (auto& chunkPair : tilemapComponent.chunks)
+                {
+                    auto& chunk = chunkPair.second;
+                    for (size_t y = 0; y < CHUNK_SIZE; y++)
+                    {
+                        for (size_t x = 0; x < CHUNK_SIZE; x++)
+                        {
+                            u8 tileId = chunk.getTile({x, y});
+                            if (tileId == 0) continue;
+
+                            auto& tileSprite = map::TilesData.at(tileId)->getSprite();
+                            int realX = chunk.getPosition().x * CHUNK_SIZE + x;
+                            int realY = chunk.getPosition().y * CHUNK_SIZE + y;
+
+                            tileSprite.setPosition({
+                                realX * tileSprite.getGlobalBounds().getWidth(),
+                                realY * tileSprite.getGlobalBounds().getHeight()
+                            });
+
+                            m_batch.draw(tileSprite);
+                        }   
+                    }
+                }
+            }
+        }
 
         // Рендеринг спрайтов
         {

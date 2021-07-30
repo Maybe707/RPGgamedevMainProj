@@ -34,9 +34,9 @@ namespace map
 
     u8 TileMap::getTile(glm::ivec2 tilePos) const
     {
-        auto chunkPos = toChunkPos(tilePos);
+        auto chunkPos = utils::toChunkPos(tilePos);
         // return m_chunks.at(chunkPos.y * 5 + chunkPos.x).getTile(toLocalTilePos(tilePos));
-        return m_chunks.at(chunkPos).getTile(toLocalTilePos(tilePos));
+        return m_chunks.at(chunkPos).getTile(utils::toLocalTilePos(tilePos));
     }
 
     void TileMap::draw(SpriteBatch& batch)

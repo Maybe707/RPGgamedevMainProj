@@ -15,7 +15,7 @@ private:
 
 public:
     Texture();
-    Texture(unsigned int id, const std::string& path, int width, int height);
+    explicit Texture(unsigned int id, const std::string& path, int width, int height);
 
     void bind(unsigned int slot = 0) const;
 

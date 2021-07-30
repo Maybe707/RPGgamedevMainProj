@@ -18,7 +18,6 @@ struct ChunkHash
 
 namespace map
 {
-    using ChunkVector = std::vector<Chunk>;
     using ChunkHashMap = std::unordered_map<glm::ivec2, Chunk, ChunkHash>;
 
     class TileMap

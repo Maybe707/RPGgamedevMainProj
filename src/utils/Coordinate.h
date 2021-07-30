@@ -4,8 +4,9 @@
 #include <glm/vec2.hpp>
 #include "WorldConst.h"
 
-namespace map
+namespace utils
 {
+    //TODO: фиксануть это т.к. неправильно работает с отрицательными координатмаи
     inline glm::ivec2 toChunkPos(const glm::ivec2& globalTilePos)
     {
         int x = globalTilePos.x;

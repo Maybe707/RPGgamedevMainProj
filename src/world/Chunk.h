@@ -11,7 +11,7 @@
 
 namespace map
 {
-    using TileArray = std::array<u8, CHUNK_VOLUME>;
+    using TileArray = u8[CHUNK_VOLUME];
 
     class Chunk
     {
@@ -32,6 +32,8 @@ namespace map
          * @return const glm::ivec2&
         */
         const glm::ivec2& getPosition() const;
+
+        bool hasTile(const glm::ivec2 tilePos) const;
 
         /**
          * <p>Возвращает id тайла по позиции в чанке</p>
