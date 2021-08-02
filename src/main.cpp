@@ -12,6 +12,7 @@
 #include "graphics/Font.h"
 #include "graphics/Text.h"
 #include "Game.h"
+#include "audio/AudioDevice.h"
 
 #define SCR_WIDTH 800
 #define SCR_HEIGHT 800
@@ -36,6 +37,12 @@ int main()
     window.setResizeCallback(resizeCallback);
 
     Game game;
+
+    AudioDevice audioDevice;
+
+    Sound music("../res/audio/music.mp3");
+    music.setLoop(true);
+    audioDevice.play(music);
 
     // TODO: Пока сделал такой костыль, чтобы рисовать карту
     Camera2D* camera = game.getCamera();
