@@ -51,7 +51,6 @@ void RenderSystem::draw()
                         for (size_t x = 0; x < CHUNK_SIZE; x++)
                         {
                             u8 tileId = chunk.getTile({x, y});
-                            if (tileId == 0) continue;
 
                             auto &tileSprite = TilesData.at(tileId)->getSprite();
                             int realX = chunk.getPosition().x * CHUNK_SIZE + x;

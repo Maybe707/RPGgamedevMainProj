@@ -47,22 +47,34 @@ int main()
     // TODO: Пока сделал такой костыль, чтобы рисовать карту
     Camera2D* camera = game.getCamera();
 
-    Texture emptyTexture;
-    Texture wallTexture = Texture::create("../res/textures/enemy.png");
+    Texture baseTexture = Texture::create("../res/textures/base.png");
+    Texture waterTexture = Texture::create("../res/textures/water.png");
 
     // Подготовка спрайтов
-    Sprite emptySprite(emptyTexture);
-    emptySprite.setTextureRect(IntRect(0, 0, 0, 0));
-    emptySprite.setScale({0, 0});
-    emptySprite.setOrigin(glm::vec2(0));
+    Sprite waterSprite(waterTexture);
+    waterSprite.setTextureRect(IntRect(0, 0, 32, 32));
+    waterSprite.setScale(glm::vec2(2.f, 2.f));
+    waterSprite.setOrigin(glm::vec2(16, 16));
 
-    Sprite wallSprite(wallTexture);
-    wallSprite.setTextureRect(IntRect(0, 224, 96, 96));
-    wallSprite.setScale(glm::vec2(2.f / 3.f, 2.f / 3.f));
-    wallSprite.setOrigin(glm::vec2(48, 48));
+    Sprite sandSprite(baseTexture);
+    sandSprite.setTextureRect(IntRect(192, 4256 - 32, 32, 32));
+    sandSprite.setScale(glm::vec2(2.f, 2.f));
+    sandSprite.setOrigin(glm::vec2(16, 16));
 
-    TilesData.emplace_back(std::make_unique<Tile>(TileType::EMPTY, emptySprite, 0, false));
-    TilesData.emplace_back(std::make_unique<Tile>(TileType::WALL, wallSprite, 1, true));
+    Sprite grassSprite(baseTexture);
+    grassSprite.setTextureRect(IntRect(96, 4256 - 32, 32, 32));
+    grassSprite.setScale(glm::vec2(2.f, 2.f));
+    grassSprite.setOrigin(glm::vec2(16, 16));
+
+    Sprite dirtSprite(baseTexture);
+    dirtSprite.setTextureRect(IntRect(160, 4256 - 32, 32, 32));
+    dirtSprite.setScale(glm::vec2(2.f, 2.f));
+    dirtSprite.setOrigin(glm::vec2(16, 16));
+
+    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, waterSprite, 0, false));
+    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, sandSprite, 1, false));
+    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, grassSprite, 2, false));
+    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, dirtSprite, 3, false));
 
     const int animIndexArray = 3;
     int animCount = 0;
@@ -93,7 +105,8 @@ int main()
         glfwPollEvents();
     }
 
-    wallTexture.destroy();
+    baseTexture.destroy();
+    waterTexture.destroy();
     game.destroy();
 
     window.destroy();

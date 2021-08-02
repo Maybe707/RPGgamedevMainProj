@@ -16,7 +16,7 @@ public:
     void onUpdate(float deltaTime)
     {
         static float t = 0;
-        t += deltaTime / 100;
+        t += deltaTime;
 
         auto &textTransform = getComponent<TransformComponent>();
         textTransform.position = glm::vec2(0.f, m_camera.getHeight() / 2);

@@ -32,8 +32,20 @@ public:
         {
             for (int y = m_map->globalBounds.getBottom(); y < m_map->globalBounds.getHeight(); y++)
             {
-                // u8 id = abs(m_simplexNoise->eval(x, y)) * 2 > 0.5f;
-                u8 id = abs(m_simplexNoise->getNoise(x, y)) * 2 > 0.6f;
+                double value = m_simplexNoise->getNoise(x, y);
+                u8 id = 0;
+                if (value > -0.2f)
+                {
+                    id = 1;
+                }
+                if (value > 0.f)
+                {
+                    id = 2;
+                }
+                if (value > 1.f)
+                {
+                    id = 3;
+                }
 
                 m_map->setTile({x, y}, *TilesData.at(id));
             }
