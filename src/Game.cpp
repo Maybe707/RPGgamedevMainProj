@@ -24,7 +24,7 @@ Game::Game()
     cameraEntity.addComponent<CameraComponent>().camera = &m_camera;
 
     Entity tileMapEntity = m_scene.createEntity("TileMap");
-    auto& tileMap = tileMapEntity.addComponent<TileMap>(IntRect(-2, -2, 2, 2));
+    auto& tileMap = tileMapEntity.addComponent<TileMap>(IntRect(-10, -10, 10, 10));
     tileMapEntity.addComponent<NativeScriptComponent>().bind<WorldGenScript>();
 
     // Создание текста
