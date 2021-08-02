@@ -25,5 +25,5 @@ git clone --recurse-submodules https://github.com/rpgdeveloper707/TrueRPG
 - [x] Заменить кастомную математику на glm.
 - [ ] Добавить ECS.
 - [ ] Новая система анимации.
-- [ ] Звук.
+- [x] Звук.
 - [ ] ...
