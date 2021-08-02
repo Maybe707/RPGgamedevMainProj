@@ -4,7 +4,7 @@
 #include "../scene/Script.h"
 #include "../scene/components/TileMapComponent.h"
 #include "../graphics/Rect.h"
-#include <glm/gtc/noise.hpp>
+#include "../utils/OpenSimplexNoise.h"
 
 struct LvlRoom
 {
@@ -20,8 +20,9 @@ class WorldGenScript : public Script
 {
 private:
     TileMap* m_map = nullptr;
+    OpenSimplexNoise* m_simplexNoise;
 public:
-    WorldGenScript() { }
+    WorldGenScript() : m_simplexNoise(new OpenSimplexNoise(time(nullptr))) { }
 
     void onCreate() 
     {
@@ -31,7 +32,7 @@ public:
         {
             for (int y = m_map->globalBounds.getBottom(); y < m_map->globalBounds.getHeight(); y++)
             {
-                u8 id = glm::perlin(glm::vec3(x * 0.25f, y * 0.05f, 0.0f)) < 0.055f;
+                u8 id = abs(m_simplexNoise->eval(x, y)) * 2 > 0.5f;
 
                 m_map->setTile({x, y}, *TilesData.at(id));
             }
@@ -40,7 +41,10 @@ public:
 
     void onUpdate(float deltaTime) { }
 
-    void onDestroy() { }
+    void onDestroy() 
+    {
+        delete m_simplexNoise;
+    }
 };
 
 #endif
