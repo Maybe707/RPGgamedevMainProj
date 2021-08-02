@@ -22,7 +22,7 @@ private:
     TileMap* m_map = nullptr;
     OpenSimplexNoise* m_simplexNoise;
 public:
-    WorldGenScript() : m_simplexNoise(new OpenSimplexNoise(time(nullptr))) { }
+    WorldGenScript() : m_simplexNoise(new OpenSimplexNoise()) { }
 
     void onCreate() 
     {
@@ -32,7 +32,8 @@ public:
         {
             for (int y = m_map->globalBounds.getBottom(); y < m_map->globalBounds.getHeight(); y++)
             {
-                u8 id = abs(m_simplexNoise->eval(x, y)) * 2 > 0.5f;
+                // u8 id = abs(m_simplexNoise->eval(x, y)) * 2 > 0.5f;
+                u8 id = abs(m_simplexNoise->getNoise(x, y)) * 2 > 0.6f;
 
                 m_map->setTile({x, y}, *TilesData.at(id));
             }
