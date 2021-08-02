@@ -18,7 +18,8 @@ find_package(OpenGL REQUIRED)
 add_subdirectory(libs/stb_image)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/freetype)
+add_subdirectory(libs/miniaudio)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})

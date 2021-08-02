@@ -18,6 +18,7 @@
 #include "graphics/SpriteBatch.h"
 #include "graphics/Font.h"
 #include "graphics/Text.h"
+#include "audio/AudioDevice.h"
 
 #define WALL_SIZE_1 10
 #define WALL_SIZE_2 4
@@ -244,6 +245,12 @@ int main()
     window.makeContextCurrent();
     // window.setInputCallback(inputCallback);
     window.setResizeCallback(resizeCallback);
+
+    AudioDevice audioDevice;
+
+    Sound music("../res/audio/music.mp3");
+    music.setLoop(true);
+    audioDevice.play(music);
 
     // Создание шейдерной программы
     Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
