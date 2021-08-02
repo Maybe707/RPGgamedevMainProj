@@ -9,7 +9,7 @@
 class Collision
 {
 public:
-    static void detection(const TileMap& world, Player& player, float& deltaTime);
+    static void detection(const TileMapComponent& world, Player& player, float& deltaTime);
 private:
     static bool detectionBox(Player& player, const glm::ivec2& tilePos, float& deltaTime);
 };

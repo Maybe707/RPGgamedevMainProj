@@ -19,14 +19,14 @@ struct LvlRoom
 class WorldGenScript : public Script
 {
 private:
-    TileMap* m_map = nullptr;
+    TileMapComponent* m_map = nullptr;
     OpenSimplexNoise* m_simplexNoise;
 public:
     WorldGenScript() : m_simplexNoise(new OpenSimplexNoise()) { }
 
     void onCreate() 
     {
-        m_map = &getComponent<TileMap>();
+        m_map = &getComponent<TileMapComponent>();
         
         for (int x = m_map->globalBounds.getLeft(); x < m_map->globalBounds.getWidth(); x++)
         {

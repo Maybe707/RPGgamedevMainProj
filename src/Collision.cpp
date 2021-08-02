@@ -49,7 +49,7 @@ bool Collision::detectionBox(Player& player, const glm::ivec2& tilePos, float& d
     return stateX;
 }
 
-void Collision::detection(const TileMap& world, Player& player, float& deltaTime)
+void Collision::detection(const TileMapComponent& world, Player& player, float& deltaTime)
 {
     for (auto& ch : world.chunks)
     {

@@ -5,11 +5,11 @@
 
 class TextScript : public Script
 {
-    Camera2D &m_camera;
+    Entity m_cameraEntity;
 
 public:
-    TextScript(Camera2D &camera)
-            : m_camera(camera) {}
+    TextScript(Entity cameraEntity)
+            : m_cameraEntity(cameraEntity) {}
 
     void onCreate() {}
 
@@ -19,7 +19,11 @@ public:
         t += deltaTime;
 
         auto &textTransform = getComponent<TransformComponent>();
-        textTransform.position = glm::vec2(0.f, m_camera.getHeight() / 2);
+        auto &cameraComponent = m_cameraEntity.getComponent<CameraComponent>();
+
+        textTransform.position = glm::vec2(0.f, cameraComponent.getHeight() / 2);
+        textTransform.scale = glm::vec2(1 / cameraComponent.zoom);
+
         auto &textRenderer = getComponent<TextRendererComponent>();
         textRenderer.color = glm::vec4(
                 (std::sin(t) + 1) / 2,

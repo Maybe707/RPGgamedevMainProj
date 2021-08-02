@@ -1,6 +1,7 @@
 #include "RenderSystem.h"
 
 #include <entt.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include "../../graphics/Text.h"
 #include "../components/CameraComponent.h"
 #include "../components/TileMapComponent.h"
@@ -19,30 +20,30 @@ void RenderSystem::draw()
     //  Например, если нам нужно нарисовать спрайт поверх текста.
 
     // Находим камеру
-    Camera2D *camera = nullptr;
+    glm::mat4 viewMatrix(1.f);
+    CameraComponent *cameraComponent = nullptr;
     {
         auto view = m_registry.view<CameraComponent>();
         for (auto entity : view)
         {
-            auto &cameraComponent = view.get<CameraComponent>(entity);
+            cameraComponent = &view.get<CameraComponent>(entity);
             auto transformComponent = computeTransform(entity);
-            camera = cameraComponent.camera;
-            camera->setPosition(-transformComponent.position);
+            viewMatrix = glm::translate(glm::mat4(1), glm::vec3(-transformComponent.position, 0));
         }
     }
-    if (camera != nullptr)
+    if (cameraComponent != nullptr)
     {
-        m_batch.setProjectionMatrix(camera->getProjectionMatrix());
-        m_batch.setViewMatrix(camera->getViewMatrix());
+        m_batch.setViewMatrix(viewMatrix);
+        m_batch.setProjectionMatrix(cameraComponent->getProjectionMatrix());
         m_batch.begin();
 
         // TODO: доделать. Скорее всего переделать весь.
         // Рендеринг карты тайлов
         {
-            auto view = m_registry.view<TileMap>();
+            auto view = m_registry.view<TileMapComponent>();
             for (auto entity : view)
             {
-                auto &tilemapComponent = view.get<TileMap>(entity);
+                auto &tilemapComponent = view.get<TileMapComponent>(entity);
                 for (auto &chunkPair : tilemapComponent.chunks)
                 {
                     auto &chunk = chunkPair.second;
@@ -57,9 +58,9 @@ void RenderSystem::draw()
                             int realY = chunk.getPosition().y * CHUNK_SIZE + y;
 
                             tileSprite.setPosition({
-                                                           realX * tileSprite.getGlobalBounds().getWidth(),
-                                                           realY * tileSprite.getGlobalBounds().getHeight()
-                                                   });
+                                realX * tileSprite.getGlobalBounds().getWidth(),
+                                realY * tileSprite.getGlobalBounds().getHeight()
+                            });
 
                             m_batch.draw(tileSprite);
                         }

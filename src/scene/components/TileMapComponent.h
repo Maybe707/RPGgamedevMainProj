@@ -24,7 +24,7 @@ class TilePallet
 
 };
 
-struct TileMap
+struct TileMapComponent
 {
     ChunkHashMap chunks;
     IntRect bounds;
@@ -33,7 +33,7 @@ struct TileMap
     // временная реализация через указатель.
     TilePallet* tilePallet;
 
-    TileMap(const IntRect& startBounds) : bounds(startBounds), globalBounds(bounds * CHUNK_SIZE)
+    TileMapComponent(const IntRect& startBounds) : bounds(startBounds), globalBounds(bounds * CHUNK_SIZE)
     {
         for (int x = bounds.getLeft(); x < bounds.getWidth(); x++)
         {

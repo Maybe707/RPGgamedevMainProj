@@ -17,39 +17,38 @@ Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
           m_heroTexture(Texture::create("../res/textures/hero.png"))
 {
-    // TODO: Пока с камерой работаем так, потому что нужно поддерживать старый говнокод.
-    //  Когда полностью переедем на ecs, нужно будет сделать нормальный компонент
-    m_camera = Camera2D(glm::vec2(0), 800, 800);
-    Entity cameraEntity = m_scene.createEntity("camera");
-    cameraEntity.addComponent<CameraComponent>().camera = &m_camera;
+    m_cameraEntity = m_scene.createEntity("camera");
+    m_cameraEntity.addComponent<CameraComponent>();
 
-    Entity tileMapEntity = m_scene.createEntity("TileMap");
-    auto& tileMap = tileMapEntity.addComponent<TileMap>(IntRect(-10, -10, 10, 10));
+
+    Entity tileMapEntity = m_scene.createEntity("TileMapComponent");
+    auto& tileMap = tileMapEntity.addComponent<TileMapComponent>(IntRect(-10, -10, 10, 10));
     tileMapEntity.addComponent<NativeScriptComponent>().bind<WorldGenScript>();
 
+
     // Создание текста
-    m_textEntity = m_scene.createEntity("text");
-    auto &textRenderer = m_textEntity.addComponent<TextRendererComponent>(&m_font, "True RPG!\n Welcome!");
+    Entity textEntity = m_scene.createEntity("text");
+    auto &textRenderer = textEntity.addComponent<TextRendererComponent>(&m_font, "True RPG!\n Welcome!");
 
     // Некоторые настройки текста для примера
     textRenderer.horizontalAlign = HorizontalAlign::Center;
     textRenderer.verticalAlign = VerticalAlign::Top;
 
     // Биндим скрипт к энтити и передаем туда камеру
-    m_textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_camera);
+    textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_cameraEntity);
 
 
     // Создание fps счетчика
-    m_debugInfoEntity = m_scene.createEntity("debugInfo");
-    m_debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
-    auto &fpsTransform = m_debugInfoEntity.getComponent<TransformComponent>();
+    Entity debugInfoEntity = m_scene.createEntity("debugInfo");
+    debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
+    auto &fpsTransform = debugInfoEntity.getComponent<TransformComponent>();
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
-    m_debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_camera);
+    debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
 
 
     // Создание игрока
-    m_playerEntity = m_scene.createEntity("player");
-    auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
+    Entity playerEntity = m_scene.createEntity("player");
+    auto &playerTransform = playerEntity.getComponent<TransformComponent>();
     playerTransform.position = glm::vec2(0.0f, 0.0f);
 
     Entity spriteEntity = m_scene.createEntity("sprite");
@@ -61,13 +60,13 @@ Game::Game()
     heroTransform.origin = glm::vec2(16, 16);
 
     // Крепим к игроку спрайт, текст и камеру
-    Hierarchy::addChild(m_playerEntity, spriteEntity);
-    Hierarchy::addChild(m_playerEntity, m_textEntity);
-    Hierarchy::addChild(m_playerEntity, m_debugInfoEntity);
-    Hierarchy::addChild(m_playerEntity, cameraEntity);
+    Hierarchy::addChild(playerEntity, spriteEntity);
+    Hierarchy::addChild(playerEntity, textEntity);
+    Hierarchy::addChild(playerEntity, debugInfoEntity);
+    Hierarchy::addChild(playerEntity, m_cameraEntity);
 
     // Биндим скрипт к игроку
-    m_playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
+    playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
 }
 
 void Game::update(float deltaTime)
@@ -80,9 +79,4 @@ void Game::destroy()
     m_scene.destroy();
     m_font.destroy();
     m_heroTexture.destroy();
-}
-
-Camera2D *Game::getCamera()
-{
-    return &m_camera;
 }

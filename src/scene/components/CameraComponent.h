@@ -1,12 +1,17 @@
 #ifndef RPG_CAMERACOMPONENT_H
 #define RPG_CAMERACOMPONENT_H
 
-#include "../../graphics/Camera2D.h"
+#include <glm/glm.hpp>
 
-// TODO: переделать компонент камеры
 struct CameraComponent
 {
-    Camera2D *camera;
+    float zoom{1.f};
+
+    glm::mat4 getProjectionMatrix() const;
+
+    float getWidth() const;
+
+    float getHeight() const;
 };
 
 #endif //RPG_CAMERACOMPONENT_H
