@@ -10,18 +10,28 @@ class Sound
 
     ma_decoder m_decoder;
 
-    bool m_loop;
+    float m_volume{1.f};
+    float m_pan{0.f};
+    bool m_loop{false};
 
 public:
     Sound(const std::string &path);
 
     ~Sound();
 
+    std::string getPath();
+
+    float getVolume();
+
+    void setVolume(float volume);
+
+    float getPan();
+
+    void setPan(float pan);
+
     bool isLoop();
 
     void setLoop(bool loop);
-
-    std::string getPath();
 
     friend class AudioDevice;
 };

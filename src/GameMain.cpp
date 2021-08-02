@@ -250,6 +250,8 @@ int main()
 
     Sound music("../res/audio/music.mp3");
     music.setLoop(true);
+    music.setVolume(0.5f);
+    music.setPan(0.f);
     audioDevice.play(music);
 
     // Создание шейдерной программы

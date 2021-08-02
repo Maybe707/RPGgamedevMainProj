@@ -79,10 +79,17 @@ bool AudioDevice::readAndMixSound(Sound &sound, float *pOutputF32, ma_uint32 fra
     }
 
     // Смешиваем фреймы
-    for (ma_uint32 sample = 0; sample < frameCount * CHANNELS; ++sample)
+    for (ma_uint32 sample = 0; sample < frameCount * CHANNELS; sample += CHANNELS)
     {
-        pOutputF32[sample] += temp[sample];
+        // Громкость левого канала
+        float left = 1 - std::clamp(sound.getPan(), 0.f, 1.f);
+        pOutputF32[sample] += sound.getVolume() * left * temp[sample];
         std::clamp(pOutputF32[sample], -1.f, 1.f);
+
+        // Громкость правого канала
+        float right = 1 - std::abs(std::clamp(sound.getPan(), -1.f, 0.f));
+        pOutputF32[sample + 1] += sound.getVolume() * right * temp[sample + 1];
+        std::clamp(pOutputF32[sample + 1], -1.f, 1.f);
     }
 
     delete[] temp;
