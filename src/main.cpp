@@ -23,7 +23,7 @@
 // 2021-2021
 // Покойся с миром 
 
-namespace map { std::vector<std::unique_ptr<Tile>> TilesData; }
+std::vector<std::unique_ptr<Tile>> TilesData;
 
 void resizeCallback(Window *window, int width, int height);
 
@@ -40,14 +40,6 @@ int main()
     // TODO: Пока сделал такой костыль, чтобы рисовать карту
     Camera2D* camera = game.getCamera();
 
-    // Создание шейдерной программы
-    Shader ourShader = Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs");
-    Shader guiShader = Shader::createShader("../res/shaders/shader_gui.vs", "../res/shaders/shader_gui.fs");
-
-    // Создание батча, который будет рисовать наши спрайты
-    SpriteBatch spriteBatch(ourShader, 30000);
-    SpriteBatch textBatch(guiShader, 5000);
-
     Texture emptyTexture;
     Texture wallTexture = Texture::create("../res/textures/enemy.png");
 
@@ -62,8 +54,8 @@ int main()
     wallSprite.setScale(glm::vec2(2.f / 3.f, 2.f / 3.f));
     wallSprite.setOrigin(glm::vec2(48, 48));
 
-    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::TileType::EMPTY, emptySprite, 0, false));
-    map::TilesData.emplace_back(std::make_unique<map::Tile>(map::TileType::WALL, wallSprite, 1, true));
+    TilesData.emplace_back(std::make_unique<Tile>(TileType::EMPTY, emptySprite, 0, false));
+    TilesData.emplace_back(std::make_unique<Tile>(TileType::WALL, wallSprite, 1, true));
 
     const int animIndexArray = 3;
     int animCount = 0;
@@ -86,7 +78,7 @@ int main()
 
         deltaTime = chrono.getDeltaTime();
 
-        game.update(deltaTime * 200);
+        game.update(deltaTime);
 
         // glfw: обмен содержимым front- и back- буферов.
         // Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
@@ -94,9 +86,8 @@ int main()
         glfwPollEvents();
     }
 
-    ourShader.destroy();
     wallTexture.destroy();
-    spriteBatch.destroy();
+    game.destroy();
 
     window.destroy();
 

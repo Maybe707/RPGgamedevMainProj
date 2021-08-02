@@ -16,7 +16,7 @@ struct ChunkHash
     }
 };
 
-using ChunkHashMap = std::unordered_map<glm::ivec2, map::Chunk, ChunkHash>;
+using ChunkHashMap = std::unordered_map<glm::ivec2, Chunk, ChunkHash>;
 
 class TilePallet
 {
@@ -28,17 +28,18 @@ struct TileMap
 {
     ChunkHashMap chunks;
     IntRect bounds;
+    IntRect globalBounds;
 
     // временная реализация через указатель.
     TilePallet* tilePallet;
 
-    TileMap(const IntRect& startBounds) : bounds(startBounds)
+    TileMap(const IntRect& startBounds) : bounds(startBounds), globalBounds(bounds * CHUNK_SIZE)
     {
         for (int x = bounds.getLeft(); x < bounds.getWidth(); x++)
         {
             for (int y = bounds.getBottom(); y < bounds.getHeight(); y++)
             {
-                chunks[glm::ivec2(x, y)] = map::Chunk({x, y});
+                chunks[glm::ivec2(x, y)] = Chunk({x, y});
             }
         }
     }
@@ -65,7 +66,7 @@ struct TileMap
             .getTile(utils::toLocalTilePos(tilePosition));
     }
 
-    void setTile(const glm::ivec2& position, const map::Tile& tile)
+    void setTile(const glm::ivec2& position, const Tile& tile)
     {
         chunks.at(utils::toChunkPos(position))
             .setTile(utils::toLocalTilePos(position), tile);

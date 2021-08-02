@@ -57,9 +57,9 @@ void Collision::detection(const TileMap& world, Player& player, float& deltaTime
         {
             for (size_t y = 0; y < CHUNK_SIZE; y++)
             {
-                float wd = map::TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getWidth();
-                float ht = map::TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getHeight();
-                if (map::TilesData.at(ch.second.getTile({x, y}))->isCollide() && 
+                float wd = TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getWidth();
+                float ht = TilesData.at(ch.second.getTile({x, y}))->getSprite().getGlobalBounds().getHeight();
+                if (TilesData.at(ch.second.getTile({x, y}))->isCollide() && 
                         detectionBox(player, utils::toGlobalTilePos({x, y}, ch.second.getPosition()) * glm::ivec2(wd, ht), deltaTime))
                 {
                     return;

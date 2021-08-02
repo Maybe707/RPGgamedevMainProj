@@ -53,7 +53,7 @@ void RenderSystem::draw()
                             u8 tileId = chunk.getTile({x, y});
                             if (tileId == 0) continue;
 
-                            auto &tileSprite = map::TilesData.at(tileId)->getSprite();
+                            auto &tileSprite = TilesData.at(tileId)->getSprite();
                             int realX = chunk.getPosition().x * CHUNK_SIZE + x;
                             int realY = chunk.getPosition().y * CHUNK_SIZE + y;
 

@@ -22,6 +22,7 @@ public:
     void onUpdate(float deltaTime)
     {
         Window &window = Window::getInstance();
+        float dt = deltaTime * 200;
 
         // Пока поместил выход из игры сюда
         if (window.getKey(GLFW_KEY_ESCAPE))
@@ -54,7 +55,7 @@ public:
             m_currentAnimation = 1;
         }
 
-        transform.position += glm::vec2(movement) * deltaTime * m_speed;
+        transform.position += glm::vec2(movement) * dt * m_speed;
 
 
         // Анимация
@@ -63,17 +64,16 @@ public:
         if (movement == glm::ivec2(0.f) || m_frame > 2)
         {
             m_frame = 0;
+            return;
         }
-        else
+
+        if (m_animationDelay > 30.0f)
         {
-            if (m_animationDelay > 30.0f)
-            {
-                renderer.textureRect = IntRect(m_frame * 32, m_currentAnimation * 32, 32, 32);
-                m_frame++;
-                m_animationDelay = 0.f;
-            }
-            m_animationDelay += deltaTime;
+            renderer.textureRect = IntRect(m_frame * 32, m_currentAnimation * 32, 32, 32);
+            m_frame++;
+            m_animationDelay = 0.f;
         }
+        m_animationDelay += dt;
     }
 
     void onDestroy() {}

@@ -35,14 +35,14 @@ public:
         }
 
         auto &transform = getComponent<TransformComponent>();
-        transform.position = glm::vec2(-m_camera.getWidth() / 2, -m_camera.getWidth() / 2);
+        transform.position = glm::vec2(-m_camera.getWidth() / 2, -m_camera.getHeight() / 2);
         auto &textRenderer = getComponent<TextRendererComponent>();
         textRenderer.text = "FPS: " + std::to_string(m_fps);
 
         Entity playerEntity = getComponent<HierarchyComponent>().parent;
         auto& playerPosition = playerEntity.getComponent<TransformComponent>().position;
 
-        textRenderer.text += "\nx: " + std::to_string(playerPosition.x) + " y: " + std::to_string(playerPosition.y);
+        textRenderer.text += "\nx: " + std::to_string(playerPosition.x / 64) + " y: " + std::to_string(playerPosition.y / 64);
     }
 
     void onDestroy() {}
