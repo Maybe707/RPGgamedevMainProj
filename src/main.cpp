@@ -33,6 +33,7 @@ int main()
 
     Sound music("../res/audio/music.mp3");
     music.setLoop(true);
+    music.setVolume(0.5f);
     audioDevice.play(music);
 
     Texture baseTexture = Texture::create("../res/textures/base.png");
