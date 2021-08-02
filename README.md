@@ -8,12 +8,12 @@
 Это форк той самой оригинальной рпгешечки, которую когда-то разрабатывал [Screamlark](https://www.twitch.tv/screamlark). Проект был отвергнут создателем, потому чатик решил продолжить разработку данного творения вместо него. Мы доведем дело до конца, во что бы то ни стало!
 
 Не оставайся в стороне, помоги проекту! Пулл реквесты приветствуются!<br>
-Обсуждать проект можно [тут](https://github.com/rpgdeveloper707/RPGgamedevMainProj/discussions).
+Обсуждать проект можно [тут](https://github.com/rpgdeveloper707/TrueRPG/discussions).
 
 ### Клонирование
 Для того, чтобы склонировать репозиторий со всеми зависимостями, нужно добавить флаг --recurse-submodules:
 ```bash
-git clone --recurse-submodules https://github.com/rpgdeveloper707/RPGgamedevMainProj
+git clone --recurse-submodules https://github.com/rpgdeveloper707/TrueRPG
 ```
 
 ### TODO
@@ -25,5 +25,5 @@ git clone --recurse-submodules https://github.com/rpgdeveloper707/RPGgamedevMain
 - [x] Заменить кастомную математику на glm.
 - [ ] Добавить ECS.
 - [ ] Новая система анимации.
-- [ ] Звук.
+- [x] Звук.
 - [ ] ...
