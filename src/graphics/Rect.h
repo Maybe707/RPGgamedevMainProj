@@ -34,6 +34,17 @@ Rect<T>::Rect(T left, T bottom, T width, T height)
 
 }
 
+template<typename T, typename T2>
+constexpr Rect<T> operator*(const Rect<T>& rect, T2 value)
+{
+    return Rect<T>(
+        rect.getLeft() * value,
+        rect.getBottom() * value,
+        rect.getWidth() * value,
+        rect.getHeight() * value
+    );
+}
+
 using IntRect = Rect<int>;
 using FloatRect = Rect<float>;
 
