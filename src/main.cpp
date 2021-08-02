@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include "window/Window.h"
-#include "Data.h"
 #include "RTime.h"
 #include "graphics/Texture.h"
 #include "graphics/SpriteBatch.h"
