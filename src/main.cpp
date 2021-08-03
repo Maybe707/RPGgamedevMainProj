@@ -5,9 +5,9 @@
 #include "RTime.h"
 #include "client/graphics/Texture.h"
 #include "client/graphics/SpriteBatch.h"
-#include "Collision.h"
 #include "Game.h"
 #include "client/audio/AudioDevice.h"
+#include "scene/resources/Tile.h"
 
 // Никто не забыт, ничто не забыто
 
@@ -68,7 +68,6 @@ int main()
 
     // Game timer
     RTime time(0.0f, 0.0f, 0.0f);
-    Collision collision;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
