@@ -5,7 +5,7 @@
 #include <array>
 
 #define PSIZE 2048
-#define MAX_OCTAVES 6
+#define MAX_OCTAVES 9
 
 class OpenSimplexNoise
 {

@@ -36,8 +36,7 @@ void RenderSystem::draw()
         m_batch.setViewMatrix(viewMatrix);
         m_batch.setProjectionMatrix(cameraComponent->getProjectionMatrix());
         m_batch.begin();
-
-        // TODO: доделать. Скорее всего переделать весь.
+        
         // Рендеринг карты тайлов
         {
             auto view = m_registry.view<TileMapComponent>();
@@ -52,17 +51,20 @@ void RenderSystem::draw()
                         for (size_t x = 0; x < CHUNK_SIZE; x++)
                         {
                             u8 tileId = chunk.getTile({x, y});
+                            Sprite tSprite(*tilemapComponent.getPallet()->getTexture());
+                            tSprite.setTextureRect(tilemapComponent.getPallet()->getTile(tileId).getRect());
+                            tSprite.setScale(tilemapComponent.getPallet()->getCellScale());
+                            tSprite.setOrigin(tilemapComponent.getPallet()->getCellOrigin());
 
-                            auto &tileSprite = TilesData.at(tileId)->getSprite();
                             int realX = chunk.getPosition().x * CHUNK_SIZE + x;
                             int realY = chunk.getPosition().y * CHUNK_SIZE + y;
 
-                            tileSprite.setPosition({
-                                realX * tileSprite.getGlobalBounds().getWidth(),
-                                realY * tileSprite.getGlobalBounds().getHeight()
+                            tSprite.setPosition({
+                                realX * tSprite.getGlobalBounds().getWidth(),
+                                realY * tSprite.getGlobalBounds().getHeight()
                             });
 
-                            m_batch.draw(tileSprite);
+                            m_batch.draw(tSprite);
                         }
                     }
                 }

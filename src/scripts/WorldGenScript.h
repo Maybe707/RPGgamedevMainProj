@@ -30,6 +30,25 @@ public:
     {
         m_map = &getComponent<TileMapComponent>();
         
+        generateWorld();
+    }
+
+    void onUpdate(float deltaTime) 
+    {
+        if (Window::getInstance().getKey(GLFW_KEY_U))
+        {
+            m_simplexNoise->setSeed(time(nullptr));
+            generateWorld();
+        }
+    }
+
+    void onDestroy() 
+    {
+        delete m_simplexNoise;
+    }
+private:
+    void generateWorld()
+    {
         for (int x = m_map->globalBounds.getLeft(); x < m_map->globalBounds.getWidth(); x++)
         {
             for (int y = m_map->globalBounds.getBottom(); y < m_map->globalBounds.getHeight(); y++)
@@ -49,16 +68,9 @@ public:
                     id = 3;
                 }
 
-                m_map->setTile({x, y}, *TilesData.at(id));
+                m_map->setTile({x, y}, m_map->getPallet()->getTile(id));
             }
         }
-    }
-
-    void onUpdate(float deltaTime) { }
-
-    void onDestroy() 
-    {
-        delete m_simplexNoise;
     }
 };
 

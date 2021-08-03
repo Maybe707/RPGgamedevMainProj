@@ -16,8 +16,6 @@
 // 2021-2021
 // Покойся с миром 
 
-std::vector<std::unique_ptr<Tile>> TilesData;
-
 void resizeCallback(Window *window, int width, int height);
 
 int main()
@@ -35,36 +33,6 @@ int main()
     music.setLoop(true);
     music.setVolume(0.5f);
     audioDevice.play(music);
-
-    Texture baseTexture = Texture::create("../res/textures/base.png");
-    Texture waterTexture = Texture::create("../res/textures/water.png");
-
-    // Подготовка спрайтов
-    Sprite waterSprite(waterTexture);
-    waterSprite.setTextureRect(IntRect(0, 0, 32, 32));
-    waterSprite.setScale(glm::vec2(2.f, 2.f));
-    waterSprite.setOrigin(glm::vec2(16, 16));
-
-    Sprite sandSprite(baseTexture);
-    sandSprite.setTextureRect(IntRect(192, 4256 - 32, 32, 32));
-    sandSprite.setScale(glm::vec2(2.f, 2.f));
-    sandSprite.setOrigin(glm::vec2(16, 16));
-
-    Sprite grassSprite(baseTexture);
-    grassSprite.setTextureRect(IntRect(96, 4256 - 32, 32, 32));
-    grassSprite.setScale(glm::vec2(2.f, 2.f));
-    grassSprite.setOrigin(glm::vec2(16, 16));
-
-    Sprite dirtSprite(baseTexture);
-    dirtSprite.setTextureRect(IntRect(160, 4256 - 32, 32, 32));
-    dirtSprite.setScale(glm::vec2(2.f, 2.f));
-    dirtSprite.setOrigin(glm::vec2(16, 16));
-
-    // TODO: Лучше сделать нормальный настраиваемый компонент, а не манипулировать тут сырыми спрайтами
-    TilesData.emplace_back(std::make_unique<Tile>(waterSprite, 0, false));
-    TilesData.emplace_back(std::make_unique<Tile>(sandSprite, 1, false));
-    TilesData.emplace_back(std::make_unique<Tile>(grassSprite, 2, false));
-    TilesData.emplace_back(std::make_unique<Tile>(dirtSprite, 3, false));
 
     // Game timer
     RTime time(0.0f, 0.0f, 0.0f);
@@ -85,9 +53,7 @@ int main()
         window.swapBuffers();
         glfwPollEvents();
     }
-
-    baseTexture.destroy();
-    waterTexture.destroy();
+    
     game.destroy();
 
     window.destroy();

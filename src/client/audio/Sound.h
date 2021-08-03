@@ -15,6 +15,7 @@ class Sound
     bool m_loop{false};
 
 public:
+    Sound() = default;
     Sound(const std::string &path);
 
     ~Sound();

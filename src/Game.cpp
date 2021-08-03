@@ -15,14 +15,26 @@
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
-          m_heroTexture(Texture::create("../res/textures/hero.png"))
+          m_heroTexture(Texture::create("../res/textures/hero.png")),
+          m_baseTexture(Texture::create("../res/textures/base.png"))
 {
+    m_pallet.setTexture(&m_baseTexture);
+    m_pallet.setCellSize({32.f, 32.f});
+    m_pallet.setCellOrigin({16.f, 16.f});
+    m_pallet.setCellScale({2.f, 2.f});
+
+    m_pallet.addTile(IntRect(64, 4256 - 64, 32, 32));
+    m_pallet.addTile(IntRect(192, 4256 - 32, 32, 32));
+    m_pallet.addTile(IntRect(96, 4256 - 32, 32, 32));
+    m_pallet.addTile(IntRect(160, 4256 - 32, 32, 32));
+
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
 
 
     Entity tileMapEntity = m_scene.createEntity("TileMapComponent");
     auto& tileMap = tileMapEntity.addComponent<TileMapComponent>(IntRect(-10, -10, 10, 10));
+    tileMap.setTilePallet(&m_pallet);
     tileMapEntity.addComponent<NativeScriptComponent>().bind<WorldGenScript>();
 
 
@@ -79,4 +91,5 @@ void Game::destroy()
     m_scene.destroy();
     m_font.destroy();
     m_heroTexture.destroy();
+    m_baseTexture.destroy();
 }

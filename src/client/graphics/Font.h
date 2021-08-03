@@ -24,6 +24,7 @@ class Font
     std::vector<unsigned char> m_pixelBuffer;
 
 public:
+    Font() = default;
     Font(const std::string& path, int size);
 
     std::string getPath() const;

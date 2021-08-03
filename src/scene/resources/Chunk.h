@@ -48,13 +48,6 @@ public:
      * @param tile устанавлеваемый тайл
     */
     void setTile(const glm::ivec2& tilePos, const Tile& tile);
-    
-    /**
-     * <p>Рисуте чанк</p>
-     * 
-     * @param batch Пакетный рендер
-    */
-    void draw(SpriteBatch& batch);
 };
 
 
