@@ -23,3 +23,5 @@ add_subdirectory(libs/miniaudio)
 set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
+
+target_include_directories(${PROJECT_NAME} PUBLIC libs/entt/include)

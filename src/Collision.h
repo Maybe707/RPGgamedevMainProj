@@ -1,15 +1,17 @@
 #ifndef COLLISION_H
 #define COLLISION_H
 
-#include "MapObject.h"
-#include "Player.h"
-#include "Map.h"
+// #include "Player.h"
+// #include "scene/components/TileMapComponent.h"
 
-class Collision
-{
-public:
-    bool detectionBox(Player& player, MapObject& mapObjects, float& deltaTime);
-    void detection(MapObject** mapObjects, Player& player, float& deltaTime, WorldMap& worldmap);
-};
+// // TODO: Нуэно изменить коллизию. 
+
+// class Collision
+// {
+// public:
+//     static void detection(const TileMapComponent& world, Player& player, float& deltaTime);
+// private:
+//     static bool detectionBox(Player& player, const glm::ivec2& tilePos, float& deltaTime);
+// };
 
 #endif
