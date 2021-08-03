@@ -4,8 +4,6 @@
 #include "Types.h"
 #include <array>
 
-#define STRETCH_CONSTANT_2D -0.211324865405187
-#define DEFAULT_SEED 0
 #define PSIZE 2048
 #define MAX_OCTAVES 6
 
@@ -18,8 +16,7 @@ private:
         i16 m_perm[PSIZE];
     } m_contexts[MAX_OCTAVES];
 
-    const std::array<i8, 16> m_gradients2D;
-    i16 m_perm[PSIZE];
+    static const std::array<i8, 16> m_gradients2D;
     u64 m_seed;
     i32 m_octaves;
     float m_lacunarity;

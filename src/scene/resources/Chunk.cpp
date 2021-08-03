@@ -1,5 +1,5 @@
 #include "Chunk.h"
-#include "../utils/Coordinate.h"
+#include "../../utils/Coordinate.h"
 #include <cstring>
 
 

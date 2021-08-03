@@ -5,7 +5,8 @@
 #include <glm/vec2.hpp>
 #include "../../utils/Types.h"
 #include "../../utils/Coordinate.h"
-#include "../../world/Chunk.h"
+#include "../resources/Chunk.h"
+#include "../resources/TilePallet.h"
 
 struct ChunkHash
 {
@@ -18,20 +19,13 @@ struct ChunkHash
 
 using ChunkHashMap = std::unordered_map<glm::ivec2, Chunk, ChunkHash>;
 
-class TilePallet
-{
-    
-
-};
-
 struct TileMapComponent
 {
     ChunkHashMap chunks;
     IntRect bounds;
     IntRect globalBounds;
-
-    // временная реализация через указатель.
-    TilePallet* tilePallet;
+    
+    const TilePallet* tilePallet;
 
     TileMapComponent(const IntRect& startBounds) : bounds(startBounds), globalBounds(bounds * CHUNK_SIZE)
     {

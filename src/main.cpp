@@ -3,11 +3,11 @@
 #include <algorithm>
 #include "window/Window.h"
 #include "RTime.h"
-#include "graphics/Texture.h"
-#include "graphics/SpriteBatch.h"
+#include "client/graphics/Texture.h"
+#include "client/graphics/SpriteBatch.h"
 #include "Collision.h"
 #include "Game.h"
-#include "audio/AudioDevice.h"
+#include "client/audio/AudioDevice.h"
 
 // Никто не забыт, ничто не забыто
 
@@ -61,10 +61,10 @@ int main()
     dirtSprite.setOrigin(glm::vec2(16, 16));
 
     // TODO: Лучше сделать нормальный настраиваемый компонент, а не манипулировать тут сырыми спрайтами
-    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, waterSprite, 0, false));
-    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, sandSprite, 1, false));
-    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, grassSprite, 2, false));
-    TilesData.emplace_back(std::make_unique<Tile>(TileType::GROUND, dirtSprite, 3, false));
+    TilesData.emplace_back(std::make_unique<Tile>(waterSprite, 0, false));
+    TilesData.emplace_back(std::make_unique<Tile>(sandSprite, 1, false));
+    TilesData.emplace_back(std::make_unique<Tile>(grassSprite, 2, false));
+    TilesData.emplace_back(std::make_unique<Tile>(dirtSprite, 3, false));
 
     // Game timer
     RTime time(0.0f, 0.0f, 0.0f);

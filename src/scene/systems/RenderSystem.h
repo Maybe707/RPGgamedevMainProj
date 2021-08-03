@@ -2,7 +2,7 @@
 #define RPG_RENDERSYSTEM_H
 
 #include <entt.hpp>
-#include "../../graphics/SpriteBatch.h"
+#include "../../client/graphics/SpriteBatch.h"
 #include "../components/TransformComponent.h"
 
 class RenderSystem

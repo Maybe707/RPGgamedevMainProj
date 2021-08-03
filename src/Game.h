@@ -3,8 +3,8 @@
 
 #include "scene/Scene.h"
 #include "scene/Entity.h"
-#include "graphics/SpriteBatch.h"
-#include "graphics/Font.h"
+#include "client/graphics/SpriteBatch.h"
+#include "client/graphics/Font.h"
 
 class Game
 {

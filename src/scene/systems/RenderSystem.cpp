@@ -2,7 +2,7 @@
 
 #include <entt.hpp>
 #include <glm/ext/matrix_transform.hpp>
-#include "../../graphics/Text.h"
+#include "../../client/graphics/Text.h"
 #include "../components/CameraComponent.h"
 #include "../components/TileMapComponent.h"
 #include "../components/SpriteRendererComponent.h"

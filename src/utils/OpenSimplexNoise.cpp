@@ -12,11 +12,14 @@
         initContext(m_contexts[i], m_seed + i * 2);}\
     })
 
+const std::array<i8, 16> OpenSimplexNoise::m_gradients2D = {
+     5,  2,  2,  5,
+    -5,  2, -2,  5,
+     5, -2,  2, -5,
+    -5, -2, -2, -5 
+};
+
 OpenSimplexNoise::OpenSimplexNoise(u64 seed, i32 octaves, float lacunarity, float persistence, float period) :
-    m_gradients2D{ 5,  2,  2,  5,
-                  -5,  2, -2,  5,
-                   5, -2,  2, -5,
-                  -5, -2, -2, -5 },
     m_octaves(octaves), 
     m_lacunarity(lacunarity), 
     m_persistence(persistence), 

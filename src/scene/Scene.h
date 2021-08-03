@@ -2,7 +2,7 @@
 #define RPG_SCENE_H
 
 #include <entt.hpp>
-#include "../graphics/SpriteBatch.h"
+#include "../client/graphics/SpriteBatch.h"
 
 #include "systems/ScriptSystem.h"
 #include "systems/RenderSystem.h"

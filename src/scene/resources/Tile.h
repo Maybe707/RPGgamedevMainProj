@@ -3,26 +3,31 @@
 
 #include <vector>
 #include <memory>
-#include "../graphics/Sprite.h"
-#include "../utils/Types.h"
+#include "../../client/graphics/Sprite.h"
+#include "../../utils/Types.h"
 
-enum class TileType
+class Tilee
 {
-    EMPTY = 0,
-    WALL,
-    GROUND
+private:
+    u8 m_id;
+    FloatRect m_aabb;
+    bool m_collide;
+public:
+    Tilee() = default;
+    Tilee(u8 id, FloatRect aabb, bool collide) : 
+        m_id(id), 
+        m_aabb(aabb),
+        m_collide(collide) { }
 };
 
 // TODO: Заготовка для информации о тайле. 
 struct Tile
 {
-    TileType m_type;
     Sprite& m_sprite;
     u8 m_id;
     bool m_collide;
 
-    Tile(TileType type, Sprite& sprite, u8 id, bool collide) 
-        : m_type(type),
+    Tile(Sprite& sprite, u8 id, bool collide) :
         m_sprite(sprite),
         m_id(id),
         m_collide(collide) {};
@@ -38,12 +43,6 @@ struct Tile
      * @return Sprite&
     */
     inline Sprite& getSprite() const { return m_sprite; }
-    /**
-     * <p>Возвращает тип тайла</p>
-     * 
-     * @return TileType
-    */
-    inline TileType getType() const { return m_type; }
     /**
      * <p>Возвращает id тайла</p>
      * 

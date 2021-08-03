@@ -1,9 +1,9 @@
 #ifndef UNIT_INTERFACE_H
 #define UNIT_INTERFACE_H
 
-#include "graphics/Shader.h"
-#include "graphics/Texture.h"
-#include "graphics/SpriteBatch.h"
+#include "client/graphics/Shader.h"
+#include "client/graphics/Texture.h"
+#include "client/graphics/SpriteBatch.h"
 
 // TODO: удалить
 class IUnit

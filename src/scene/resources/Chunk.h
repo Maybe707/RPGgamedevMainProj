@@ -5,9 +5,9 @@
 #include <unordered_map>
 #include <glm/vec2.hpp>
 #include "Tile.h"
-#include "../graphics/SpriteBatch.h"
-#include "../utils/WorldConst.h"
-#include "../utils/Types.h"
+#include "../../client/graphics/SpriteBatch.h"
+#include "../../utils/WorldConst.h"
+#include "../../utils/Types.h"
 
 
 using TileArray = u8[CHUNK_VOLUME];

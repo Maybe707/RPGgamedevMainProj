@@ -2,7 +2,7 @@
 #define PLAYER_IMPLEMENTATION
 
 #include "IUnit.h"
-#include "graphics/Sprite.h"
+#include "client/graphics/Sprite.h"
 
 // TODO: удалить
 class Player : public IUnit

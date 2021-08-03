@@ -3,8 +3,10 @@
 
 #include "../scene/Script.h"
 #include "../scene/components/TileMapComponent.h"
-#include "../graphics/Rect.h"
+#include "../client/graphics/Rect.h"
 #include "../utils/OpenSimplexNoise.h"
+
+#define DEBUG_SEED INT_MAX
 
 struct LvlRoom
 {
@@ -22,7 +24,7 @@ private:
     TileMapComponent* m_map = nullptr;
     OpenSimplexNoise* m_simplexNoise;
 public:
-    WorldGenScript() : m_simplexNoise(new OpenSimplexNoise()) { }
+    WorldGenScript() : m_simplexNoise(new OpenSimplexNoise(DEBUG_SEED)) { }
 
     void onCreate() 
     {
