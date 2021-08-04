@@ -20,8 +20,18 @@ public:
         m_aabb(aabb),
         m_texRect(texRect),
         m_collide(collide) { }
-
+    
+    /**
+     * <p>Возвращает id тайла</p>
+     * 
+     * @return id тайла
+    */
     u8 getId() const { return m_id; }
+    /**
+     * <p>Возвращает размер и положение тайла</p>
+     * 
+     * @return размер и положение тайла
+    */
     const IntRect& getRect() const { return m_texRect; }
 };
 
