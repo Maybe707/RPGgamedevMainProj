@@ -26,4 +26,7 @@ git clone --recurse-submodules https://github.com/rpgdeveloper707/TrueRPG
 - [x] Добавить ECS.
 - [ ] Новая система анимации.
 - [x] Звук.
+- [ ] Генерация данжей.
+- [ ] Оружие.
+- [ ] Враги.
 - [ ] ...
