@@ -12,11 +12,14 @@
 #include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
 #include "scripts/WorldGenScript.h"
+#include "scripts/MusicScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
           m_heroTexture(Texture::create("../res/textures/hero.png")),
-          m_baseTexture(Texture::create("../res/textures/base.png"))
+          m_baseTexture(Texture::create("../res/textures/base.png")),
+          m_steps("../res/audio/steps.mp3"),
+          m_music("../res/audio/music.mp3")
 {
     m_pallet.setTexture(&m_baseTexture);
     m_pallet.setCellSize({32.f, 32.f});
@@ -71,14 +74,28 @@ Game::Game()
     heroTransform.scale = glm::vec2(2.f, 2.f);
     heroTransform.origin = glm::vec2(16, 16);
 
-    // Крепим к игроку спрайт, текст и камеру
+    auto stepsSoundEntity = m_scene.createEntity("stepsSound");
+    auto &stepsComponent = stepsSoundEntity.addComponent<AudioSourceComponent>(m_steps);
+    stepsComponent.volume = 0.1f;
+    stepsComponent.loop = true;
+
+    // Крепим к игроку спрайт, звук, текст и камеру
     Hierarchy::addChild(playerEntity, spriteEntity);
+    Hierarchy::addChild(playerEntity, stepsSoundEntity);
     Hierarchy::addChild(playerEntity, textEntity);
     Hierarchy::addChild(playerEntity, debugInfoEntity);
     Hierarchy::addChild(playerEntity, m_cameraEntity);
 
     // Биндим скрипт к игроку
     playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
+
+
+    // Музычка
+    Entity musicEntity = m_scene.createEntity("music");
+    auto &musicComponent = musicEntity.addComponent<AudioSourceComponent>(m_music);
+    musicComponent.volume = 0.1f;
+    musicComponent.play();
+    musicEntity.addComponent<NativeScriptComponent>().bind<MusicScript>();
 }
 
 void Game::update(float deltaTime)

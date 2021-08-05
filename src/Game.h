@@ -6,6 +6,8 @@
 #include "client/graphics/SpriteBatch.h"
 #include "client/graphics/Font.h"
 #include "scene/resources/TilePallet.h"
+#include "client/audio/StreamAudioClip.h"
+#include "client/audio/CachedAudioClip.h"
 
 class Game
 {
@@ -13,6 +15,9 @@ class Game
     Texture m_heroTexture;
     Texture m_baseTexture;
     TilePallet m_pallet;
+
+    StreamAudioClip m_steps;
+    StreamAudioClip m_music;
 
     Scene m_scene;
 

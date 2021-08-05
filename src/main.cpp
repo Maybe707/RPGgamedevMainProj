@@ -1,13 +1,8 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include <algorithm>
 #include "window/Window.h"
 #include "RTime.h"
-#include "client/graphics/Texture.h"
-#include "client/graphics/SpriteBatch.h"
 #include "Game.h"
-#include "client/audio/AudioDevice.h"
-#include "scene/resources/Tile.h"
 
 // Никто не забыт, ничто не забыто
 
@@ -26,13 +21,6 @@ int main()
     window.setResizeCallback(resizeCallback);
 
     Game game;
-
-    AudioDevice audioDevice;
-
-    Sound music("../res/audio/music.mp3");
-    music.setLoop(true);
-    music.setVolume(0.5f);
-    audioDevice.play(music);
 
     // Game timer
     RTime time(0.0f, 0.0f, 0.0f);

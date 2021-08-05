@@ -6,7 +6,8 @@
 
 Scene::Scene()
         : m_scriptSystem(m_registry, this),
-          m_renderSystem(m_registry) {}
+          m_renderSystem(m_registry),
+          m_audioSystem(m_registry) {}
 
 Entity Scene::createEntity(const std::string &name)
 {
@@ -29,10 +30,12 @@ void Scene::update(float deltaTime)
 {
     m_scriptSystem.update(deltaTime);
     m_renderSystem.draw();
+    m_audioSystem.update();
 }
 
 void Scene::destroy()
 {
     m_scriptSystem.destroy();
     m_renderSystem.destroy();
+    m_audioSystem.destroy();
 }
