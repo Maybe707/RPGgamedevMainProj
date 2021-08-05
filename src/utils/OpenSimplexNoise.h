@@ -48,6 +48,8 @@ private:
     void initContext(SimplexCtx& ctx, u64 seed);
     double eval(const SimplexCtx& ctx, double x, double y) const;
     double extrapolate(const SimplexCtx& ctx, i32 xsb, i32 ysb, double dx, double dy) const;
+
+    void updateSeed();
 };
 
 #endif

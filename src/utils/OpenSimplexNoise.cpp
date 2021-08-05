@@ -3,14 +3,8 @@
 #include <ctime>
 #include <glm/glm.hpp>
 
-#define STRETCH_2D -0.211324865405187 
+#define STRETCH_2D -0.211324865405187
 #define SQUISH_2D 0.366025403784439
-
-#define UPDATE_SEED() ({\
-    for (size_t i = 0; i < MAX_OCTAVES; i++)\
-    {\
-        initContext(m_contexts[i], m_seed + i * 2);}\
-    })
 
 const std::array<i8, 16> OpenSimplexNoise::m_gradients2D = {
      5,  2,  2,  5,
@@ -26,7 +20,7 @@ OpenSimplexNoise::OpenSimplexNoise(u64 seed, i32 octaves, float lacunarity, floa
     m_seed(seed),
     m_period(period)
 {
-    UPDATE_SEED();
+    updateSeed();
 }
 
 OpenSimplexNoise::OpenSimplexNoise() : OpenSimplexNoise(time(nullptr)) { }
@@ -76,7 +70,7 @@ double OpenSimplexNoise::getNoise(double x, double y) const
 void OpenSimplexNoise::setSeed(u64 seed)
 {
     m_seed = seed;
-    UPDATE_SEED();
+    updateSeed();
 }
 
 u64 OpenSimplexNoise::getSeed() const
@@ -250,4 +244,12 @@ double OpenSimplexNoise::extrapolate(const SimplexCtx& ctx, i32 xsb, i32 ysb, do
 {
     i32 index = ctx.m_perm[(ctx.m_perm[xsb & 0xFF] + ysb) & 0xFF] & 0x0E;
     return m_gradients2D[index] * dx * m_gradients2D[index + 1] * dy;
+}
+
+void OpenSimplexNoise::updateSeed()
+{
+    for (size_t i = 0; i < MAX_OCTAVES; i++)
+    {
+        initContext(m_contexts[i], m_seed + i * 2);
+    }
 }
