@@ -23,11 +23,16 @@ public:
     Chunk(const glm::ivec2& pos);
     ~Chunk() = default;
     
+    /**
+     * <p>Возвращает массив тайлов чанка</p>
+     * 
+     * @return размер тайлов чанка
+    */
     const TileArray& getTiles() const;
     /**
      * <p>Возвращает позицию в мире</p>
      * 
-     * @return const glm::ivec2&
+     * @return позицию в карте тайлов
     */
     const glm::ivec2& getPosition() const;
     
@@ -37,7 +42,7 @@ public:
      * <p>Возвращает id тайла по позиции в чанке</p>
      * 
      * @param tilePos Позиция тайла в чанке
-     * @return u8 id
+     * @return id тайла
     */
     u8 getTile(const glm::ivec2& tilePos) const;
     
