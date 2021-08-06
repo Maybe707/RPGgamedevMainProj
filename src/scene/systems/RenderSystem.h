@@ -16,9 +16,6 @@ public:
     void draw();
 
     void destroy();
-
-private:
-    TransformComponent computeTransform(entt::entity entity);
 };
 
 #endif //RPG_RENDERSYSTEM_H

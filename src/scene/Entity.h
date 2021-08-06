@@ -7,35 +7,35 @@
 class Entity
 {
     entt::entity m_entity{entt::null};
-    Scene *m_scene = nullptr;
+    entt::registry *m_registry = nullptr;
 
 public:
     Entity() = default;
 
-    Entity(entt::entity entity, Scene *scene);
+    Entity(entt::entity entity, entt::registry *registry);
 
     template<typename T, typename... Args>
-    T &addComponent(Args &&... args)
+    decltype(auto) addComponent(Args &&... args)
     {
-        return m_scene->m_registry.emplace<T>(m_entity, std::forward<Args>(args)...);
+        return m_registry->emplace<T>(m_entity, std::forward<Args>(args)...);
     }
 
     template<typename T>
     T &getComponent()
     {
-        return m_scene->m_registry.get<T>(m_entity);
+        return m_registry->get<T>(m_entity);
     }
 
     template<typename T>
     bool hasComponent()
     {
-        return m_scene->m_registry.all_of<T>(m_entity);
+        return m_registry->all_of<T>(m_entity);
     }
 
     template<typename T>
     void removeComponent()
     {
-        m_scene->m_registry.remove<T>(m_entity);
+        m_registry->remove<T>(m_entity);
     }
 
     operator bool() const { return m_entity != entt::null; }

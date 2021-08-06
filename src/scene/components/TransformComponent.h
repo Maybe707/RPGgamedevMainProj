@@ -1,6 +1,8 @@
 #ifndef RPG_TRANSFORMCOMPONENT_H
 #define RPG_TRANSFORMCOMPONENT_H
 
+#include <glm/glm.hpp>
+
 struct TransformComponent
 {
     glm::vec2 position{};

@@ -21,7 +21,7 @@ struct TextRendererComponent
     HorizontalAlign horizontalAlign = HorizontalAlign::Left;
     VerticalAlign verticalAlign = VerticalAlign::Bottom;
 
-    TextRendererComponent(Font *font, std::string text);
+    TextRendererComponent(Font *font, std::string text = "");
 };
 
 #endif //RPG_TEXTRENDERERCOMPONENT_H

@@ -1,7 +1,7 @@
 #ifndef RPG_HIERARCHY_H
 #define RPG_HIERARCHY_H
 
-#include "Entity.h"
+#include "../Entity.h"
 
 /**
  * Утилитный класс для работы с иерархией энтити.
@@ -25,6 +25,14 @@ public:
      * @return найденный или пустой энтити
      */
     static Entity find(Entity parent, std::string name);
+
+    /**
+     * Вычислить трансформации с учетом иерархии.
+     *
+     * @param entity энтити
+     * @return трансформации с учетом иерархии
+     */
+    static TransformComponent computeTransform(Entity entity);
 };
 
 

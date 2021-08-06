@@ -27,8 +27,6 @@ public:
     void update(float deltaTime);
 
     void destroy();
-
-    friend class Entity;
 };
 
 #endif //RPG_SCENE_H

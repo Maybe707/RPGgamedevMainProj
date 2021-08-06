@@ -22,6 +22,7 @@ class Game
     Scene m_scene;
 
     Entity m_cameraEntity;
+    Entity m_playerEntity;
 public:
     Game();
     void update(float deltaTime);

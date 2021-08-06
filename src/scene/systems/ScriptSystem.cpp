@@ -17,7 +17,7 @@ void ScriptSystem::update(float deltaTime)
         if (!nativeScriptComponent.instance)
         {
             nativeScriptComponent.instantiateFunction();
-            nativeScriptComponent.instance->m_entity = Entity(entity, m_scene);
+            nativeScriptComponent.instance->m_entity = {entity, &m_registry};
             nativeScriptComponent.onCreateFunction(nativeScriptComponent.instance);
         }
 

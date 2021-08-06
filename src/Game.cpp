@@ -6,13 +6,14 @@
 #include "scene/components/SpriteRendererComponent.h"
 #include "scene/components/TextRendererComponent.h"
 #include "scene/components/TileMapComponent.h"
-#include "scene/Hierarchy.h"
+#include "scene/utils/Hierarchy.h"
 
 #include "scripts/PlayerScript.h"
 #include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
 #include "scripts/WorldGenScript.h"
-#include "scripts/MusicScript.h"
+#include "scene/components/AudioListenerComponent.h"
+#include "scripts/PumpkinScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -62,9 +63,10 @@ Game::Game()
 
 
     // Создание игрока
-    Entity playerEntity = m_scene.createEntity("player");
-    auto &playerTransform = playerEntity.getComponent<TransformComponent>();
+    m_playerEntity = m_scene.createEntity("player");
+    auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
     playerTransform.position = glm::vec2(0.0f, 0.0f);
+    m_playerEntity.addComponent<AudioListenerComponent>();
 
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
@@ -76,26 +78,44 @@ Game::Game()
 
     auto stepsSoundEntity = m_scene.createEntity("stepsSound");
     auto &stepsComponent = stepsSoundEntity.addComponent<AudioSourceComponent>(m_steps);
-    stepsComponent.volume = 0.1f;
+    stepsComponent.volume = 0.25f;
     stepsComponent.loop = true;
 
     // Крепим к игроку спрайт, звук, текст и камеру
-    Hierarchy::addChild(playerEntity, spriteEntity);
-    Hierarchy::addChild(playerEntity, stepsSoundEntity);
-    Hierarchy::addChild(playerEntity, textEntity);
-    Hierarchy::addChild(playerEntity, debugInfoEntity);
-    Hierarchy::addChild(playerEntity, m_cameraEntity);
+    Hierarchy::addChild(m_playerEntity, spriteEntity);
+    Hierarchy::addChild(m_playerEntity, stepsSoundEntity);
+    Hierarchy::addChild(m_playerEntity, textEntity);
+    Hierarchy::addChild(m_playerEntity, debugInfoEntity);
+    Hierarchy::addChild(m_playerEntity, m_cameraEntity);
 
     // Биндим скрипт к игроку
-    playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
+    m_playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
 
 
-    // Музычка
-    Entity musicEntity = m_scene.createEntity("music");
-    auto &musicComponent = musicEntity.addComponent<AudioSourceComponent>(m_music);
-    musicComponent.volume = 0.1f;
-    musicComponent.play();
-    musicEntity.addComponent<NativeScriptComponent>().bind<MusicScript>();
+    // Музыкальная тыква
+    Entity pumpkinEntity = m_scene.createEntity("pumpkin");
+    auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(m_baseTexture);
+    pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
+
+    auto &pumpkinTransform = pumpkinEntity.getComponent<TransformComponent>();
+    pumpkinTransform.position = glm::vec2(384.f, 256.f);
+    pumpkinTransform.scale = glm::vec2(2.f, 2.f);
+    pumpkinTransform.origin = glm::vec2(16, 16);
+
+    auto &musicComponent = pumpkinEntity.addComponent<AudioSourceComponent>(m_music);
+    musicComponent.volume = 1.0f;
+
+    // Настройка текста тыквы
+    Entity pumpkinTextEntity = m_scene.createEntity("text");
+    auto &pumpkinTextRenderer = pumpkinTextEntity.addComponent<TextRendererComponent>(&m_font);
+    pumpkinTextRenderer.horizontalAlign = HorizontalAlign::Center;
+
+    auto &pumpkinTextTransform = pumpkinTextEntity.getComponent<TransformComponent>();
+    pumpkinTextTransform.scale = glm::vec2(0.5f);
+
+    Hierarchy::addChild(pumpkinEntity, pumpkinTextEntity);
+
+    pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
 }
 
 void Game::update(float deltaTime)
