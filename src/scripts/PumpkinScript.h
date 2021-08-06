@@ -1,6 +1,14 @@
 #ifndef RPG_PUMPKINSCRIPT_H
 #define RPG_PUMPKINSCRIPT_H
 
+#include "../scene/Script.h"
+#include <glm/glm.hpp>
+#include "../scene/utils/Hierarchy.h"
+#include "../window/Window.h"
+#include "../scene/components/TransformComponent.h"
+#include "../scene/components/TextRendererComponent.h"
+#include "../scene/components/AudioSourceComponent.h"
+
 class PumpkinScript : public Script
 {
     Entity m_playerEntity;
