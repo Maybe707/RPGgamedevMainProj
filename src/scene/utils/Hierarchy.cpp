@@ -1,6 +1,7 @@
 #include "Hierarchy.h"
-#include "components/HierarchyComponent.h"
-#include "components/NameComponent.h"
+
+#include "../components/HierarchyComponent.h"
+#include "../components/NameComponent.h"
 
 void Hierarchy::addChild(Entity parent, Entity child)
 {
@@ -35,5 +36,24 @@ Entity Hierarchy::find(Entity parent, std::string name)
         if (entity) return entity;
         current = current.getComponent<HierarchyComponent>().next;
     }
-    return Entity();
+    return {};
+}
+
+TransformComponent Hierarchy::computeTransform(Entity entity)
+{
+    auto entityTransform = entity.getComponent<TransformComponent>();
+
+    auto &entityHierarchy = entity.getComponent<HierarchyComponent>();
+    auto current = entityHierarchy.parent;
+
+    while (current)
+    {
+        auto currentTransform = current.getComponent<TransformComponent>();
+        entityTransform.position += currentTransform.position;
+        entityTransform.scale *= currentTransform.scale;
+
+        current = current.getComponent<HierarchyComponent>().parent;
+    }
+
+    return entityTransform;
 }

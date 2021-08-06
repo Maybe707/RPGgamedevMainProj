@@ -8,6 +8,7 @@
 #include "../components/SpriteRendererComponent.h"
 #include "../components/TextRendererComponent.h"
 #include "../components/HierarchyComponent.h"
+#include "../utils/Hierarchy.h"
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
@@ -27,7 +28,7 @@ void RenderSystem::draw()
         for (auto entity : view)
         {
             cameraComponent = &view.get<CameraComponent>(entity);
-            auto transformComponent = computeTransform(entity);
+            auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
             viewMatrix = glm::translate(glm::mat4(1), glm::vec3(-transformComponent.position, 0));
         }
     }
@@ -81,7 +82,7 @@ void RenderSystem::draw()
                 sprite.setTextureRect(spriteComponent.textureRect);
                 sprite.setColor(spriteComponent.color);
 
-                auto transformComponent = computeTransform(entity);
+                auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
                 sprite.setPosition(transformComponent.position);
                 sprite.setOrigin(transformComponent.origin);
@@ -100,7 +101,7 @@ void RenderSystem::draw()
                 Text text(*textComponent.font, textComponent.text);
                 text.setColor(textComponent.color);
 
-                auto transformComponent = computeTransform(entity);
+                auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
                 text.setPosition(transformComponent.position);
                 FloatRect localBound = text.getLocalBounds();
@@ -135,24 +136,4 @@ void RenderSystem::destroy()
 {
     m_batch.destroy();
     m_shader.destroy();
-}
-
-TransformComponent RenderSystem::computeTransform(entt::entity entity)
-{
-    auto entityTransform = m_registry.get<TransformComponent>(entity);
-
-    auto &entityHierarchy = m_registry.get<HierarchyComponent>(entity);
-    auto current = entityHierarchy.parent;
-
-    while (current)
-    {
-        auto currentTransform = current.getComponent<TransformComponent>();
-        entityTransform.position += currentTransform.position;
-        entityTransform.origin += currentTransform.origin;
-        entityTransform.scale *= currentTransform.scale;
-
-        current = current.getComponent<HierarchyComponent>().parent;
-    }
-
-    return entityTransform;
 }

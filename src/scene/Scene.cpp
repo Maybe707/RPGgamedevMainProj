@@ -6,12 +6,13 @@
 
 Scene::Scene()
         : m_scriptSystem(m_registry, this),
-          m_renderSystem(m_registry) {}
+          m_renderSystem(m_registry),
+          m_audioSystem(m_registry) {}
 
 Entity Scene::createEntity(const std::string &name)
 {
-    Entity entity(m_registry.create(), this);
-    // Добавляем обязательные компоненты, которые должны быть у всех энитити
+    Entity entity(m_registry.create(), &m_registry);
+    // Добавляем обязательные компоненты, которые должны быть у всех энтити
     entity.addComponent<TransformComponent>();
     entity.addComponent<HierarchyComponent>();
     auto &nameComponent = entity.addComponent<NameComponent>();
@@ -29,10 +30,12 @@ void Scene::update(float deltaTime)
 {
     m_scriptSystem.update(deltaTime);
     m_renderSystem.draw();
+    m_audioSystem.update();
 }
 
 void Scene::destroy()
 {
     m_scriptSystem.destroy();
     m_renderSystem.destroy();
+    m_audioSystem.destroy();
 }
