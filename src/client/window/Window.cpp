@@ -34,6 +34,8 @@ Window::Window(int width, int height, const std::string &title) : m_keys()
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, glfwKeyCallback);
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
+
+    glfwMakeContextCurrent(m_window);
 }
 
 bool Window::isOpen() const
@@ -52,14 +54,14 @@ void Window::destroy() const
     glfwTerminate();
 }
 
-void Window::makeContextCurrent() const noexcept
-{
-    glfwMakeContextCurrent(m_window);
-}
-
 void Window::swapBuffers() const noexcept
 {
     glfwSwapBuffers(m_window);
+}
+
+void Window::pollEvents() const
+{
+    glfwPollEvents();
 }
 
 int Window::getWidth() const

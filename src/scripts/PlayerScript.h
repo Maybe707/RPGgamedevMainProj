@@ -1,7 +1,7 @@
 #ifndef RPG_PLAYER_H
 #define RPG_PLAYER_H
 
-#include "../window/Window.h"
+#include "../client/window/Window.h"
 
 class PlayerScript : public Script
 {

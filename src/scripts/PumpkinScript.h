@@ -4,7 +4,7 @@
 #include "../scene/Script.h"
 #include <glm/glm.hpp>
 #include "../scene/utils/Hierarchy.h"
-#include "../window/Window.h"
+#include "../client/window/Window.h"
 #include "../scene/components/TransformComponent.h"
 #include "../scene/components/TextRendererComponent.h"
 #include "../scene/components/AudioSourceComponent.h"

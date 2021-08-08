@@ -2,6 +2,7 @@
 
 #include <entt.hpp>
 #include <glm/ext/matrix_transform.hpp>
+#include "../../client/window/Window.h"
 #include "../../client/graphics/Text.h"
 #include "../components/CameraComponent.h"
 #include "../components/TileMapComponent.h"
@@ -10,10 +11,23 @@
 #include "../components/HierarchyComponent.h"
 #include "../utils/Hierarchy.h"
 
+// всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
+void resizeCallback(Window *window, int width, int height)
+{
+    // Убеждаемся, что окно просмотра соответствует новым размерам окна.
+    // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
+    glViewport(0, 0, width, height);
+}
+
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
           m_shader(Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs")),
-          m_batch(m_shader, 30000) {}
+          m_batch(m_shader, 30000)
+{
+    Window::getInstance().setResizeCallback(resizeCallback);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
 
 void RenderSystem::draw()
 {
@@ -34,10 +48,14 @@ void RenderSystem::draw()
     }
     if (cameraComponent != nullptr)
     {
+        glm::vec4 back = cameraComponent->background;
+        glClearColor(back.r, back.g, back.b, back.a);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         m_batch.setViewMatrix(viewMatrix);
         m_batch.setProjectionMatrix(cameraComponent->getProjectionMatrix());
         m_batch.begin();
-        
+
         // Рендеринг карты тайлов
         {
             auto view = m_registry.view<TileMapComponent>();
@@ -61,9 +79,9 @@ void RenderSystem::draw()
                             int realY = chunk.getPosition().y * CHUNK_SIZE + y;
 
                             tSprite.setPosition({
-                                realX * tSprite.getGlobalBounds().getWidth(),
-                                realY * tSprite.getGlobalBounds().getHeight()
-                            });
+                                                        realX * tSprite.getGlobalBounds().getWidth(),
+                                                        realY * tSprite.getGlobalBounds().getHeight()
+                                                });
 
                             m_batch.draw(tSprite);
                         }
