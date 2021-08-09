@@ -8,7 +8,6 @@ class Scene;
 class ScriptSystem
 {
     entt::registry &m_registry;
-    Scene *m_scene;
 public:
     ScriptSystem(entt::registry &registry, Scene *scene);
 

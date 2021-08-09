@@ -19,12 +19,12 @@ public:
     PumpkinScript(Entity playerEntity)
             : m_playerEntity(playerEntity) {}
 
-    void onCreate()
+    void onCreate() override
     {
         m_textEntity = Hierarchy::find(getEntity(), "text");
     }
 
-    void onUpdate(float deltaTime)
+    void onUpdate(float deltaTime) override
     {
         static float t = 0;
         t += 5 * deltaTime;
@@ -58,8 +58,6 @@ public:
             textRenderer.color = glm::vec4(1.f, 1.f, 1.f, std::clamp(textRenderer.color.a - 6.f * deltaTime, 0.f, 1.f));
         }
     }
-
-    void onDestroy() {}
 };
 
 #endif //RPG_PUMPKINSCRIPT_H

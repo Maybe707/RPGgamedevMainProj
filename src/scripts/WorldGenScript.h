@@ -26,14 +26,14 @@ private:
 public:
     WorldGenScript() : m_simplexNoise(new OpenSimplexNoise(DEBUG_SEED)) { }
 
-    void onCreate() 
+    void onCreate() override
     {
         m_map = &getComponent<TileMapComponent>();
         
         generateWorld();
     }
 
-    void onUpdate(float deltaTime) 
+    void onUpdate(float deltaTime) override
     {
         if (Window::getInstance().getKey(GLFW_KEY_U))
         {
@@ -42,7 +42,7 @@ public:
         }
     }
 
-    void onDestroy() 
+    void onDestroy() override
     {
         delete m_simplexNoise;
     }

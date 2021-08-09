@@ -1,6 +1,7 @@
 #ifndef RPG_PLAYER_H
 #define RPG_PLAYER_H
 
+#include "../scene/Script.h"
 #include "../client/window/Window.h"
 
 class PlayerScript : public Script
@@ -15,13 +16,13 @@ class PlayerScript : public Script
     int m_frame{0};
 
 public:
-    void onCreate()
+    void onCreate() override
     {
         m_spriteEntity = Hierarchy::find(getEntity(), "sprite");
         m_stepsEntity = Hierarchy::find(getEntity(), "stepsSound");
     }
 
-    void onUpdate(float deltaTime)
+    void onUpdate(float deltaTime) override
     {
         Window &window = Window::getInstance();
         float dt = deltaTime * 200;
@@ -86,8 +87,6 @@ public:
             stepsSound.play();
         }
     }
-
-    void onDestroy() {}
 };
 
 #endif //RPG_PLAYER_H
