@@ -11,6 +11,8 @@ struct SpriteRendererComponent
     IntRect textureRect{0, 0, 0, 0};
     glm::vec4 color{1.f};
 
+    int layer{0};
+
     SpriteRendererComponent(Texture texture);
 };
 

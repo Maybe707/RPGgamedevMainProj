@@ -20,7 +20,7 @@ struct Vertex
 
 static const size_t MaxTextures = 16;
 
-// TODO: Класс пока еще сырой, его стоит дальше дорабатывать и оптимизировать
+// TODO: optimize this
 class SpriteBatch
 {
     Shader m_shader;
@@ -30,15 +30,16 @@ class SpriteBatch
     Buffer m_vbo;
     Buffer m_ibo;
 
-    std::vector<Vertex> m_vertices;
+    // layer -> vertices
+    std::map<int, std::vector<Vertex>> m_vertices;
 
-    // Функция сравнения текстур, хз куда ее лучше положить
+    // Texture comparator, idk where to place it
     inline static bool compareTextures(const Texture &texture1, const Texture &texture2)
     {
         return texture1.getId() < texture2.getId();
     }
 
-    // Мапа с текстурами. Нужна для проверки дубликатов и биндинга
+    // Map with textures. We need this to check for duplicates and for texture binding
     std::map<Texture, unsigned int, decltype(&compareTextures)> m_textures;
 
 public:
@@ -49,7 +50,7 @@ public:
 
     void end();
 
-    void draw(const Sprite &sprite);
+    void draw(const Sprite &sprite, int layer = 0);
 
     void setProjectionMatrix(glm::mat4 projMat);
 

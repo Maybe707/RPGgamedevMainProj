@@ -49,6 +49,7 @@ Game::Game()
     // Некоторые настройки текста для примера
     textRenderer.horizontalAlign = HorizontalAlign::Center;
     textRenderer.verticalAlign = VerticalAlign::Top;
+    textRenderer.layer = 10;
 
     // Биндим скрипт к энтити и передаем туда камеру
     textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_cameraEntity);
@@ -56,7 +57,8 @@ Game::Game()
 
     // Создание fps счетчика
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
-    debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
+    auto &debugText = debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
+    debugText.layer = 10;
     auto &fpsTransform = debugInfoEntity.getComponent<TransformComponent>();
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
@@ -71,6 +73,7 @@ Game::Game()
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
     heroRenderer.textureRect = IntRect(32, 96, 32, 32);
+    heroRenderer.layer = 1;
 
     auto &heroTransform = spriteEntity.getComponent<TransformComponent>();
     heroTransform.scale = glm::vec2(2.f, 2.f);
@@ -96,6 +99,7 @@ Game::Game()
     Entity pumpkinEntity = m_scene.createEntity("pumpkin");
     auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(m_baseTexture);
     pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
+    pumpkinRenderer.layer = 1;
 
     auto &pumpkinTransform = pumpkinEntity.getComponent<TransformComponent>();
     pumpkinTransform.position = glm::vec2(384.f, 256.f);
@@ -109,6 +113,7 @@ Game::Game()
     Entity pumpkinTextEntity = m_scene.createEntity("text");
     auto &pumpkinTextRenderer = pumpkinTextEntity.addComponent<TextRendererComponent>(&m_font);
     pumpkinTextRenderer.horizontalAlign = HorizontalAlign::Center;
+    pumpkinTextRenderer.layer = 10;
 
     auto &pumpkinTextTransform = pumpkinTextEntity.getComponent<TransformComponent>();
     pumpkinTextTransform.scale = glm::vec2(0.5f);

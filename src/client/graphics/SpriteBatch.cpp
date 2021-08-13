@@ -14,30 +14,30 @@ SpriteBatch::SpriteBatch(Shader shader, int spriteCount)
     m_vao.bind();
     m_vbo.bind();
 
-    // Небольшой трюк.
-    // Вместо того, чтобы сразу закидывать данные в vbo, мы выделим в нем память для дальнейшего использования
+    // This is a little trick.
+    // Instead of putting the data into vbo, we just allocate memory for later use
     m_vbo.setData(nullptr, sizeof(Vertex) * vertexCount, GL_DYNAMIC_DRAW);
 
-    // Координатные атрибуты
+    // Coords
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) 0);
     glEnableVertexAttribArray(0);
 
-    // Атрибуты цвета
+    // Color
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // Атрибуты текстурных координат
+    // Texture coords
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (7 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    // Атрибуты индекса текстуры
+    // Texture index
     glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (9 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
-    // Паттерн такой:
+    // Pattern:
     // 0, 1, 2, 2, 3, 0
     // 4, 5, 6, 6, 7, 4
-    // и т.д.
+    // etc.
     auto *indices = new unsigned int[indexCount];
     unsigned int offset = 0;
     for (int i = 0; i < indexCount; i += 6)
@@ -69,11 +69,19 @@ void SpriteBatch::begin()
 
 void SpriteBatch::end()
 {
-    // В этом методе происходит отрисовка всех спрайтов разом
+    // In this method we draw all vertices at once with a single draw call
     m_vbo.bind();
 
+    // Insert everything into one vector
+    std::vector<Vertex> vertices;
+
+    for (const auto &item : m_vertices)
+    {
+        vertices.insert(std::end(vertices), std::begin(item.second), std::end(item.second));
+    }
+
     // Закидываем наши вершины в заранее выделенную память
-    m_vbo.setSubData(m_vertices, 0);
+    m_vbo.setSubData(vertices, 0);
 
     m_shader.use();
 
@@ -89,14 +97,14 @@ void SpriteBatch::end()
     }
 
     m_vao.bind();
-    glDrawElements(GL_TRIANGLES, m_vertices.size() / 4 * 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, vertices.size() / 4 * 6, GL_UNSIGNED_INT, nullptr);
 
     delete[] ids;
 }
 
-void SpriteBatch::draw(const Sprite &sprite)
+void SpriteBatch::draw(const Sprite &sprite, int layer)
 {
-    // Тут мы ничего не рисуем, а просто сохраняем наши спрайты, чтобы потом отрисовать их все вместе
+    // Actually we draw nothing here. In this method we just collect the sprites to draw them later
     if (m_vertices.size() / 4 >= m_spriteCount)
     {
         std::cerr << "Cannot draw a sprite! Maximum number of sprites reached!" << std::endl;
@@ -106,10 +114,10 @@ void SpriteBatch::draw(const Sprite &sprite)
     glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin() * sprite.getScale();
     IntRect rect = sprite.getTextureRect();
 
-    // Чтобы не сохранять дубликаты текстур, решил складывать их в мапу
-    Texture& texture = sprite.getTexture();
-    auto result = m_textures.find(texture);
-    if (result == m_textures.end())
+    // We need to avoid duplicating textures, so we use the texture map here
+    Texture &texture = sprite.getTexture();
+    auto resultTexture = m_textures.find(texture);
+    if (resultTexture == m_textures.end())
     {
         if (m_textures.size() >= MaxTextures)
         {
@@ -117,35 +125,43 @@ void SpriteBatch::draw(const Sprite &sprite)
                       << "! Maximum number of textures reached!" << std::endl;
             return;
         }
-        // Если такой текстуры еще нет, то добавляем ее в кэш
-        result = m_textures.insert({texture, m_textures.size()}).first;
+        // If we can't find the given texture, insert it in the map
+        resultTexture = m_textures.insert({texture, m_textures.size()}).first;
     }
-    auto texId = static_cast<float>(result->second);
+    auto texId = static_cast<float>(resultTexture->second);
 
-    float w = std::abs(rect.getWidth()) * sprite.getScale().x;
-    float h = std::abs(rect.getHeight()) * sprite.getScale().y;
+    float w = (float) std::abs(rect.getWidth()) * sprite.getScale().x;
+    float h = (float) std::abs(rect.getHeight()) * sprite.getScale().y;
 
-    m_vertices.push_back(
+    // Create a layer if absent
+    auto resultVector = m_vertices.find(layer);
+    if (resultVector == m_vertices.end())
+    {
+        resultVector = m_vertices.insert({layer, {}}).first;
+    }
+    std::vector<Vertex> &vector = resultVector->second;
+
+    vector.push_back(
             {
-                    glm::vec3(quadPos, 0.f), // низ лево
+                    glm::vec3(quadPos, 0.f), // bottom left
                     sprite.getColor(),
                     glm::vec2(rect.getLeft(), rect.getBottom()), texId
             });
-    m_vertices.push_back(
+    vector.push_back(
             {
-                    glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // низ право
+                    glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // bottom right
                     sprite.getColor(),
                     glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
             });
-    m_vertices.push_back(
+    vector.push_back(
             {
-                    glm::vec3(quadPos + glm::vec2(w, h),0.f), // верх право
+                    glm::vec3(quadPos + glm::vec2(w, h), 0.f), // top right
                     sprite.getColor(),
                     glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
             });
-    m_vertices.push_back(
+    vector.push_back(
             {
-                    glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // верх лево
+                    glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // top left
                     sprite.getColor(),
                     glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
             });

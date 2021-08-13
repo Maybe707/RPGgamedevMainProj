@@ -31,10 +31,7 @@ RenderSystem::RenderSystem(entt::registry &registry)
 
 void RenderSystem::draw()
 {
-    // TODO: Пока не очень понятно, как быть с приоритетом отрисовки.
-    //  Например, если нам нужно нарисовать спрайт поверх текста.
-
-    // Находим камеру
+    // Find the camera
     glm::mat4 viewMatrix(1.f);
     CameraComponent *cameraComponent = nullptr;
     {
@@ -56,7 +53,7 @@ void RenderSystem::draw()
         m_batch.setProjectionMatrix(cameraComponent->getProjectionMatrix());
         m_batch.begin();
 
-        // Рендеринг карты тайлов
+        // Tile map rendering
         {
             auto view = m_registry.view<TileMapComponent>();
             for (auto entity : view)
@@ -90,7 +87,7 @@ void RenderSystem::draw()
             }
         }
 
-        // Рендеринг спрайтов
+        // Sprites rendering
         {
             auto view = m_registry.view<SpriteRendererComponent>();
             for (auto entity : view)
@@ -106,11 +103,11 @@ void RenderSystem::draw()
                 sprite.setOrigin(transformComponent.origin);
                 sprite.setScale(transformComponent.scale);
 
-                m_batch.draw(sprite);
+                m_batch.draw(sprite, spriteComponent.layer );
             }
         }
 
-        // Рендеринг текста
+        // Text rendering
         {
             auto view = m_registry.view<TextRendererComponent>();
             for (auto entity : view)
@@ -143,7 +140,7 @@ void RenderSystem::draw()
                 text.setOrigin(textOrigin);
                 text.setScale(transformComponent.scale);
 
-                text.draw(m_batch);
+                text.draw(m_batch, textComponent.layer);
             }
         }
         m_batch.end();
