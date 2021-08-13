@@ -21,6 +21,8 @@ struct TextRendererComponent
     HorizontalAlign horizontalAlign = HorizontalAlign::Left;
     VerticalAlign verticalAlign = VerticalAlign::Bottom;
 
+    int layer{0};
+
     TextRendererComponent(Font *font, std::string text = "");
 };
 
