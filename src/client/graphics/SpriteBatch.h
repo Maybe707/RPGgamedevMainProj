@@ -20,7 +20,6 @@ struct Vertex
 
 static const size_t MaxTextures = 16;
 
-// TODO: optimize this
 class SpriteBatch
 {
     Shader m_shader;
@@ -33,17 +32,12 @@ class SpriteBatch
     // layer -> vertices
     std::map<int, std::vector<Vertex>> m_vertices;
 
-    // Texture comparator, idk where to place it
-    inline static bool compareTextures(const Texture &texture1, const Texture &texture2)
-    {
-        return texture1.getId() < texture2.getId();
-    }
-
-    // Map with textures. We need this to check for duplicates and for texture binding
-    std::map<Texture, unsigned int, decltype(&compareTextures)> m_textures;
+    Texture m_textures[MaxTextures];
+    int m_texturesSize{0};
 
 public:
     SpriteBatch() = default;
+
     SpriteBatch(Shader shader, int spriteCount = 2000);
 
     void begin();

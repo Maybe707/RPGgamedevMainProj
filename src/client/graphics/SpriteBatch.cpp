@@ -5,8 +5,7 @@
 
 SpriteBatch::SpriteBatch(Shader shader, int spriteCount)
         : m_shader(shader), m_spriteCount(spriteCount),
-          m_vbo(GL_ARRAY_BUFFER), m_ibo(GL_ELEMENT_ARRAY_BUFFER),
-          m_textures(&compareTextures)
+          m_vbo(GL_ARRAY_BUFFER), m_ibo(GL_ELEMENT_ARRAY_BUFFER)
 {
     const int vertexCount = m_spriteCount * 4;
     const int indexCount = m_spriteCount * 6;
@@ -63,7 +62,7 @@ SpriteBatch::SpriteBatch(Shader shader, int spriteCount)
 void SpriteBatch::begin()
 {
     m_vertices.clear();
-    m_textures.clear();
+    m_texturesSize = 0;
     m_shader.use();
 }
 
@@ -80,20 +79,20 @@ void SpriteBatch::end()
         vertices.insert(std::end(vertices), std::begin(item.second), std::end(item.second));
     }
 
-    // Закидываем наши вершины в заранее выделенную память
+    // Put our vertices into the allocated memory
     m_vbo.setSubData(vertices, 0);
 
     m_shader.use();
 
-    int *ids = new int[m_textures.size()];
-    std::iota(ids, ids + m_textures.size(), 0);
-    m_shader.setUniform("textures", ids, m_textures.size());
+    int *ids = new int[m_texturesSize];
+    std::iota(ids, ids + m_texturesSize, 0);
+    m_shader.setUniform("textures", ids, m_texturesSize);
 
     m_shader.setUniform("model", glm::mat4(1));
 
-    for (auto &item : m_textures)
+    for (int i = 0; i < m_texturesSize; i++)
     {
-        item.first.bind(item.second);
+        m_textures[i].bind(i);
     }
 
     m_vao.bind();
@@ -114,21 +113,32 @@ void SpriteBatch::draw(const Sprite &sprite, int layer)
     glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin() * sprite.getScale();
     IntRect rect = sprite.getTextureRect();
 
-    // We need to avoid duplicating textures, so we use the texture map here
     Texture &texture = sprite.getTexture();
-    auto resultTexture = m_textures.find(texture);
-    if (resultTexture == m_textures.end())
+
+    int i;
+    for (i = 0; i < m_texturesSize; i++)
     {
-        if (m_textures.size() >= MaxTextures)
+        if (m_textures[i].getId() == texture.getId())
         {
-            std::cerr << "Cannot draw a sprite with texture " << texture.getPath()
-                      << "! Maximum number of textures reached!" << std::endl;
-            return;
+            break;
         }
-        // If we can't find the given texture, insert it in the map
-        resultTexture = m_textures.insert({texture, m_textures.size()}).first;
     }
-    auto texId = static_cast<float>(resultTexture->second);
+
+    if (i >= MaxTextures)
+    {
+        std::cerr << "Cannot draw a sprite with texture " << texture.getPath()
+                  << "! Maximum number of m_texturesSize reached!" << std::endl;
+        return;
+    }
+
+    // If we get to the end, add a new texture
+    if (i == m_texturesSize)
+    {
+        m_textures[i] = texture;
+        m_texturesSize++;
+    }
+
+    auto texId = static_cast<float>(i);
 
     float w = (float) std::abs(rect.getWidth()) * sprite.getScale().x;
     float h = (float) std::abs(rect.getHeight()) * sprite.getScale().y;
