@@ -47,6 +47,13 @@ public:
         m_map = &getComponent<WorldMapComponent>();
         m_map->generator = &m_worldMapGenerator;
     }
+
+    void onUpdate(float deltaTime) override
+    {
+        Window &window = Window::getInstance();
+        float width = window.getWidth() > window.getHeight() ? window.getWidth() : window.getHeight();
+        m_map->renderRadius = width / m_map->tileSize / 2;
+    }
 };
 
 #endif //RPG_WORLDMAPSCRIPT_H
