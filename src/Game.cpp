@@ -5,13 +5,13 @@
 #include "scene/components/NativeScriptComponent.h"
 #include "scene/components/SpriteRendererComponent.h"
 #include "scene/components/TextRendererComponent.h"
-#include "scene/components/TileMapComponent.h"
-#include "scene/utils/Hierarchy.h"
+#include "scene/components/WorldMapComponent.h"
 
+#include "scene/utils/Hierarchy.h"
 #include "scripts/PlayerScript.h"
 #include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
-#include "scripts/WorldGenScript.h"
+#include "scripts/WorldMapScript.h"
 #include "scene/components/AudioListenerComponent.h"
 #include "scripts/PumpkinScript.h"
 
@@ -22,24 +22,22 @@ Game::Game()
           m_steps("../res/audio/steps.mp3"),
           m_music("../res/audio/music.mp3")
 {
-    m_pallet.setTexture(&m_baseTexture);
-    m_pallet.setCellSize({32.f, 32.f});
-    m_pallet.setCellOrigin({16.f, 16.f});
-    m_pallet.setCellScale({2.f, 2.f});
+    Entity worldMapEntity = m_scene.createEntity("worldMap");
 
-    m_pallet.addTile({192, 4256 - 32});
-    m_pallet.addTile({96, 4256 - 32});
-    m_pallet.addTile({160, 4256 - 32});
-    m_pallet.addTile({64, 4256 - 64});
+    auto &worldTransform = worldMapEntity.getComponent<TransformComponent>();
+    worldTransform.scale = glm::vec2(2.f, 2.f);
+    worldTransform.origin = glm::vec2(0.5f, 0.5f);
+
+    auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
+    worldMap.addTile(0, {&m_baseTexture, IntRect(192, 4256 - 32, 32, 32)});
+    worldMap.addTile(1, {&m_baseTexture, IntRect(96, 4256 - 32, 32, 32)});
+    worldMap.addTile(2, {&m_baseTexture, IntRect(160, 4256 - 32, 32, 32)});
+    worldMap.addTile(3, {&m_baseTexture, IntRect(64, 4256 - 64, 32, 32)});
+    worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>();
+
 
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
-
-
-    Entity tileMapEntity = m_scene.createEntity("TileMapComponent");
-    auto& tileMap = tileMapEntity.addComponent<TileMapComponent>(IntRect(-10, -10, 10, 10));
-    tileMap.setTilePallet(&m_pallet);
-    tileMapEntity.addComponent<NativeScriptComponent>().bind<WorldGenScript>();
 
 
     // Создание текста

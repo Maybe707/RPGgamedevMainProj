@@ -5,11 +5,11 @@
 #include "../../client/window/Window.h"
 #include "../../client/graphics/Text.h"
 #include "../components/CameraComponent.h"
-#include "../components/TileMapComponent.h"
 #include "../components/SpriteRendererComponent.h"
 #include "../components/TextRendererComponent.h"
 #include "../components/HierarchyComponent.h"
 #include "../utils/Hierarchy.h"
+#include "../components/WorldMapComponent.h"
 
 // всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
 void resizeCallback(Window *window, int width, int height)
@@ -32,15 +32,14 @@ RenderSystem::RenderSystem(entt::registry &registry)
 void RenderSystem::draw()
 {
     // Find the camera
-    glm::mat4 viewMatrix(1.f);
     CameraComponent *cameraComponent = nullptr;
+    TransformComponent cameraTransform;
     {
         auto view = m_registry.view<CameraComponent>();
         for (auto entity : view)
         {
             cameraComponent = &view.get<CameraComponent>(entity);
-            auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
-            viewMatrix = glm::translate(glm::mat4(1), glm::vec3(-transformComponent.position, 0));
+            cameraTransform = Hierarchy::computeTransform({entity, &m_registry});
         }
     }
     if (cameraComponent != nullptr)
@@ -49,39 +48,34 @@ void RenderSystem::draw()
         glClearColor(back.r, back.g, back.b, back.a);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glm::mat4 viewMatrix = glm::translate(glm::mat4(1), glm::vec3(-cameraTransform.position, 0));
         m_batch.setViewMatrix(viewMatrix);
         m_batch.setProjectionMatrix(cameraComponent->getProjectionMatrix());
         m_batch.begin();
 
-        // Tile map rendering
+        // World map rendering
         {
-            auto view = m_registry.view<TileMapComponent>();
+            auto view = m_registry.view<WorldMapComponent>();
             for (auto entity : view)
             {
-                auto &tilemapComponent = view.get<TileMapComponent>(entity);
-                for (auto &chunkPair : tilemapComponent.chunks)
+                auto &worldMapComponent = view.get<WorldMapComponent>(entity);
+                auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
+
+                int currentX = (int) std::round(cameraTransform.position.x / ((float) worldMapComponent.tileSize * transformComponent.scale.x));
+                int currentY = (int) std::round(cameraTransform.position.y / ((float) worldMapComponent.tileSize * transformComponent.scale.y));
+
+                for (int y = currentY - worldMapComponent.renderRadius + 1; y < currentY + worldMapComponent.renderRadius; y++)
                 {
-                    auto &chunk = chunkPair.second;
-                    for (size_t y = 0; y < CHUNK_SIZE; y++)
+                    for (int x = currentX - worldMapComponent.renderRadius + 1; x < currentX + worldMapComponent.renderRadius; x++)
                     {
-                        for (size_t x = 0; x < CHUNK_SIZE; x++)
-                        {
-                            u8 tileId = chunk.getTile({x, y});
-                            Sprite tSprite(*tilemapComponent.getPallet()->getTexture());
-                            tSprite.setTextureRect(tilemapComponent.getPallet()->getTile(tileId).getRect());
-                            tSprite.setScale(tilemapComponent.getPallet()->getCellScale());
-                            tSprite.setOrigin(tilemapComponent.getPallet()->getCellOrigin());
+                        int tileId = worldMapComponent.generator->generate(x, y);
+                        Tile tile = worldMapComponent.tileSet[tileId];
+                        Sprite tileSprite(*tile.texture);
+                        tileSprite.setTextureRect(tile.textureRect);
+                        tileSprite.setPosition((glm::vec2(x, y) - transformComponent.origin) * (float) worldMapComponent.tileSize * transformComponent.scale);
+                        tileSprite.setScale(transformComponent.scale);
 
-                            int realX = chunk.getPosition().x * CHUNK_SIZE + x;
-                            int realY = chunk.getPosition().y * CHUNK_SIZE + y;
-
-                            tSprite.setPosition({
-                                                        realX * tSprite.getGlobalBounds().getWidth(),
-                                                        realY * tSprite.getGlobalBounds().getHeight()
-                                                });
-
-                            m_batch.draw(tSprite);
-                        }
+                        m_batch.draw(tileSprite);
                     }
                 }
             }
@@ -103,7 +97,7 @@ void RenderSystem::draw()
                 sprite.setOrigin(transformComponent.origin);
                 sprite.setScale(transformComponent.scale);
 
-                m_batch.draw(sprite, spriteComponent.layer );
+                m_batch.draw(sprite, spriteComponent.layer);
             }
         }
 
