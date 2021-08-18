@@ -1,6 +1,7 @@
 #ifndef RPG_PLAYER_H
 #define RPG_PLAYER_H
 
+#include <vector>
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
 
@@ -10,6 +11,8 @@ class PlayerScript : public Script
 
     Entity m_spriteEntity{};
     Entity m_stepsEntity{};
+
+    std::vector<int> m_inputStack;
 
     float m_animationDelay{0.f};
     int m_currentAnimation{3};
@@ -36,24 +39,27 @@ public:
         auto &transform = getComponent<TransformComponent>();
         auto &stepsSound = m_stepsEntity.getComponent<AudioSourceComponent>();
 
+        updateInput();
+        int currentKey = m_inputStack.empty() ? -1 : m_inputStack.back();
+
         // Управление
         glm::ivec2 movement(0);
-        if (window.getKey(GLFW_KEY_W))
+        if (currentKey == GLFW_KEY_W)
         {
             movement = glm::ivec2(0, 1);
             m_currentAnimation = 0;
         }
-        if (window.getKey(GLFW_KEY_S))
-        {
-            movement = glm::ivec2(0, -1);
-            m_currentAnimation = 3;
-        }
-        if (window.getKey(GLFW_KEY_A))
+        if (currentKey == GLFW_KEY_A)
         {
             movement = glm::ivec2(-1, 0);
             m_currentAnimation = 2;
         }
-        if (window.getKey(GLFW_KEY_D))
+        if (currentKey == GLFW_KEY_S)
+        {
+            movement = glm::ivec2(0, -1);
+            m_currentAnimation = 3;
+        }
+        if (currentKey == GLFW_KEY_D)
         {
             movement = glm::ivec2(1, 0);
             m_currentAnimation = 1;
@@ -85,6 +91,31 @@ public:
         else
         {
             stepsSound.play();
+        }
+    }
+
+private:
+    void updateInput()
+    {
+        Window &window = Window::getInstance();
+
+        int keys[] = {GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D};
+
+        for (const auto &key : keys)
+        {
+            if (window.getKey(key))
+            {
+                if (std::find(m_inputStack.begin(), m_inputStack.end(), key) == m_inputStack.end())
+                {
+                    m_inputStack.push_back(key);
+                }
+            }
+            else
+            {
+                auto newEnd = std::remove_if(m_inputStack.begin(), m_inputStack.end(),
+                                          [key](const int &k){return k == key;});
+                m_inputStack.erase(newEnd, m_inputStack.end());
+            }
         }
     }
 };
