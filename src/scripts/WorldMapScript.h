@@ -65,6 +65,7 @@ class WorldMapScript : public Script
 {
 private:
     WorldMapComponent *m_worldMap{};
+    TransformComponent *m_worldTransform{};
     WorldMapGenerator m_worldMapGenerator;
 public:
     WorldMapScript(Texture texture, Entity player)
@@ -73,14 +74,16 @@ public:
     void onCreate() override
     {
         m_worldMap = &getComponent<WorldMapComponent>();
+        m_worldTransform = &getComponent<TransformComponent>();
         m_worldMap->generator = &m_worldMapGenerator;
     }
 
     void onUpdate(float deltaTime) override
     {
         Window &window = Window::getInstance();
-        float width = window.getWidth() > window.getHeight() ? window.getWidth() : window.getHeight();
-        m_worldMap->renderRadius = width / m_worldMap->tileSize / 2;
+        float radius = std::max(window.getWidth(), window.getHeight()) / 2;
+        float scale = std::max(m_worldTransform->scale.x, m_worldTransform->scale.y);
+        m_worldMap->renderRadius = radius / (scale * m_worldMap->tileSize) + 2;
     }
 };
 

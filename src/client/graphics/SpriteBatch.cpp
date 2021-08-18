@@ -151,6 +151,9 @@ void SpriteBatch::draw(const Sprite &sprite, int layer)
     }
     std::vector<Vertex> &vector = resultVector->second;
 
+    // We need this offset to prevent strange artifacts with textures
+    float texOffset = 0.1f;
+
     vector.push_back(
             {
                     glm::vec3(quadPos, 0.f), // bottom left
@@ -161,19 +164,19 @@ void SpriteBatch::draw(const Sprite &sprite, int layer)
             {
                     glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // bottom right
                     sprite.getColor(),
-                    glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom()), texId
+                    glm::vec2(rect.getLeft() + rect.getWidth() - texOffset, rect.getBottom()), texId
             });
     vector.push_back(
             {
                     glm::vec3(quadPos + glm::vec2(w, h), 0.f), // top right
                     sprite.getColor(),
-                    glm::vec2(rect.getLeft() + rect.getWidth(), rect.getBottom() + rect.getHeight()), texId
+                    glm::vec2(rect.getLeft() + rect.getWidth() - texOffset, rect.getBottom() + rect.getHeight() - texOffset), texId
             });
     vector.push_back(
             {
                     glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // top left
                     sprite.getColor(),
-                    glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight()), texId
+                    glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight() - texOffset), texId
             });
 }
 

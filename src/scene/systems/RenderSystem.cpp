@@ -40,8 +40,6 @@ void RenderSystem::draw()
         {
             cameraComponent = &view.get<CameraComponent>(entity);
             cameraTransform = Hierarchy::computeTransform({entity, &m_registry});
-            // A little trick to prevent artifacts because of OpenGL rasterization rules
-            cameraTransform.position = glm::vec2(std::round(cameraTransform.position.x), std::round(cameraTransform.position.y));
         }
     }
     if (cameraComponent != nullptr)
