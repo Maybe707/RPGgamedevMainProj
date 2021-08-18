@@ -40,6 +40,8 @@ void RenderSystem::draw()
         {
             cameraComponent = &view.get<CameraComponent>(entity);
             cameraTransform = Hierarchy::computeTransform({entity, &m_registry});
+            // A little trick to prevent artifacts because of OpenGL rasterization rules
+            cameraTransform.position = glm::vec2(std::round(cameraTransform.position.x), std::round(cameraTransform.position.y));
         }
     }
     if (cameraComponent != nullptr)
@@ -64,18 +66,21 @@ void RenderSystem::draw()
                 int currentX = (int) std::round(cameraTransform.position.x / ((float) worldMapComponent.tileSize * transformComponent.scale.x));
                 int currentY = (int) std::round(cameraTransform.position.y / ((float) worldMapComponent.tileSize * transformComponent.scale.y));
 
-                for (int y = currentY - worldMapComponent.renderRadius + 1; y < currentY + worldMapComponent.renderRadius; y++)
+                for (int y = currentY + worldMapComponent.renderRadius - 1; y >= currentY - worldMapComponent.renderRadius + 1; y--)
                 {
                     for (int x = currentX - worldMapComponent.renderRadius + 1; x < currentX + worldMapComponent.renderRadius; x++)
                     {
-                        int tileId = worldMapComponent.generator->generate(x, y);
-                        Tile tile = worldMapComponent.tileSet[tileId];
-                        Sprite tileSprite(*tile.texture);
-                        tileSprite.setTextureRect(tile.textureRect);
-                        tileSprite.setPosition((glm::vec2(x, y) - transformComponent.origin) * (float) worldMapComponent.tileSize * transformComponent.scale);
-                        tileSprite.setScale(transformComponent.scale);
+                        std::vector<Tile> tiles = worldMapComponent.generator->generate(x, y);
+                        for (const auto &tile : tiles)
+                        {
+                            Sprite tileSprite(*tile.texture);
+                            tileSprite.setTextureRect(tile.textureRect);
+                            tileSprite.setPosition((glm::vec2(x, y) - transformComponent.origin) * (float) worldMapComponent.tileSize * transformComponent.scale);
+                            tileSprite.setOrigin(tile.origin);
+                            tileSprite.setScale(transformComponent.scale);
 
-                        m_batch.draw(tileSprite);
+                            m_batch.draw(tileSprite, tile.layer);
+                        }
                     }
                 }
             }

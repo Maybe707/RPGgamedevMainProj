@@ -1,6 +1,7 @@
 #ifndef RPG_WORLDMAPSCRIPT_H
 #define RPG_WORLDMAPSCRIPT_H
 
+#include <vector>
 #include "../scene/Script.h"
 #include "../scene/components/WorldMapComponent.h"
 #include "../client/graphics/Rect.h"
@@ -12,47 +13,74 @@ class WorldMapGenerator : public IWorldMapGenerator
 {
     OpenSimplexNoise m_simplexNoise;
 
-public:
-    WorldMapGenerator()
-            : m_simplexNoise(DEBUG_SEED) {}
+    Texture m_texture;
 
-    int generate(int x, int y) override
+    Tile sandTile{&m_texture, IntRect(192, 4256 - 32, 32, 32)};
+    Tile grassTile{&m_texture, IntRect(96, 4256 - 32, 32, 32)};
+    Tile dirtTile{&m_texture, IntRect(160, 4256 - 32, 32, 32)};
+    Tile treeTile{
+            &m_texture, IntRect(160 - 96, 4256 - 96, 64, 64),
+            1, glm::vec2(16, -8)
+    };
+
+    Entity m_player;
+
+public:
+    WorldMapGenerator(Texture texture, Entity player)
+            : m_simplexNoise(DEBUG_SEED), m_texture(texture), m_player(player) {}
+
+    std::vector<Tile> generate(int x, int y) override
     {
+        auto& transform = m_player.getComponent<TransformComponent>();
+
         double value = m_simplexNoise.getNoise(x, y);
-        u8 id = 0;
+
+        if (value > 0.3f)
+        {
+            return {dirtTile};
+        }
         if (value > -0.2f)
         {
-            id = 1;
+            std::vector grass = {grassTile};
+
+            // Strange condition to make the forest more rare
+            if (value > -0.15f && ((int) (value * 10000) % 5) == 2)
+            {
+                Tile currentTree = treeTile;
+                // We need -16 offset to make the layer change more accurate
+                // This offset depends on the texture we are using
+                if ((transform.position.y - 16) / 64 > y)
+                {
+                    currentTree.layer = 3;
+                }
+                grass.push_back(currentTree);
+            }
+            return grass;
         }
-        if (value > 0.f)
-        {
-            id = 2;
-        }
-        if (value > 1.f)
-        {
-            id = 3;
-        }
-        return id;
+        return {sandTile};
     }
 };
 
 class WorldMapScript : public Script
 {
 private:
-    WorldMapComponent *m_map;
+    WorldMapComponent *m_worldMap{};
     WorldMapGenerator m_worldMapGenerator;
 public:
+    WorldMapScript(Texture texture, Entity player)
+            : m_worldMapGenerator(texture, player) {}
+
     void onCreate() override
     {
-        m_map = &getComponent<WorldMapComponent>();
-        m_map->generator = &m_worldMapGenerator;
+        m_worldMap = &getComponent<WorldMapComponent>();
+        m_worldMap->generator = &m_worldMapGenerator;
     }
 
     void onUpdate(float deltaTime) override
     {
         Window &window = Window::getInstance();
         float width = window.getWidth() > window.getHeight() ? window.getWidth() : window.getHeight();
-        m_map->renderRadius = width / m_map->tileSize / 2;
+        m_worldMap->renderRadius = width / m_worldMap->tileSize / 2;
     }
 };
 

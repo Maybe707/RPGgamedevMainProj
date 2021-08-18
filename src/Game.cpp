@@ -29,11 +29,7 @@ Game::Game()
     worldTransform.origin = glm::vec2(0.5f, 0.5f);
 
     auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
-    worldMap.addTile(0, {&m_baseTexture, IntRect(192, 4256 - 32, 32, 32)});
-    worldMap.addTile(1, {&m_baseTexture, IntRect(96, 4256 - 32, 32, 32)});
-    worldMap.addTile(2, {&m_baseTexture, IntRect(160, 4256 - 32, 32, 32)});
-    worldMap.addTile(3, {&m_baseTexture, IntRect(64, 4256 - 64, 32, 32)});
-    worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>();
+    worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
 
 
     m_cameraEntity = m_scene.createEntity("camera");
@@ -71,7 +67,7 @@ Game::Game()
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
     heroRenderer.textureRect = IntRect(32, 96, 32, 32);
-    heroRenderer.layer = 1;
+    heroRenderer.layer = 2;
 
     auto &heroTransform = spriteEntity.getComponent<TransformComponent>();
     heroTransform.scale = glm::vec2(2.f, 2.f);
