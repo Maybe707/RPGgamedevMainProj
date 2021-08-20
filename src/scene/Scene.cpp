@@ -5,7 +5,8 @@
 #include "components/NameComponent.h"
 
 Scene::Scene()
-        : m_scriptSystem(m_registry, this),
+        : m_luaScriptSystem(m_registry),
+		  m_scriptSystem(m_registry, this),
           m_renderSystem(m_registry),
           m_audioSystem(m_registry) {}
 
@@ -28,6 +29,7 @@ void Scene::destroyEntity(Entity entity)
 
 void Scene::update(float deltaTime)
 {
+	m_luaScriptSystem.update(deltaTime);
     m_scriptSystem.update(deltaTime);
     m_renderSystem.draw();
     m_audioSystem.update();

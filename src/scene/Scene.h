@@ -4,6 +4,7 @@
 #include <entt.hpp>
 #include "../client/graphics/SpriteBatch.h"
 
+#include "systems/LuaScriptSystem.h"
 #include "systems/ScriptSystem.h"
 #include "systems/RenderSystem.h"
 #include "systems/AudioSystem.h"
@@ -14,6 +15,7 @@ class Scene
 {
     entt::registry m_registry;
 
+	LuaScriptSystem m_luaScriptSystem;
     ScriptSystem m_scriptSystem;
     RenderSystem m_renderSystem;
     AudioSystem m_audioSystem;

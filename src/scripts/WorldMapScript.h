@@ -2,6 +2,7 @@
 #define RPG_WORLDMAPSCRIPT_H
 
 #include <vector>
+#include "../client/window/Window.h"
 #include "../scene/Script.h"
 #include "../scene/components/WorldMapComponent.h"
 #include "../client/graphics/Rect.h"
@@ -81,7 +82,7 @@ public:
     void onUpdate(float deltaTime) override
     {
         Window &window = Window::getInstance();
-        float radius = std::max(window.getWidth(), window.getHeight()) / 2;
+        float radius = std::max(window.getWidth(), window.getHeight()) / 2.f;
         float scale = std::max(m_worldTransform->scale.x, m_worldTransform->scale.y);
         m_worldMap->renderRadius = radius / (scale * m_worldMap->tileSize) + 2;
     }

@@ -19,9 +19,10 @@ add_subdirectory(libs/stb_image)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/freetype)
 add_subdirectory(libs/miniaudio)
+add_subdirectory(libs/sol2)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio sol2_single ${CMAKE_CURRENT_SOURCE_DIR}/libs/luaJIT/src/libluajit.a)
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
 
-target_include_directories(${PROJECT_NAME} PUBLIC libs/entt/include)
+target_include_directories(${PROJECT_NAME} PUBLIC libs/entt/include libs/luaJIT/include)
